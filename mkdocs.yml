@@ -1,0 +1,24 @@
+﻿edit_uri: edit/master/docs/
+site_author: Zachary Loeber
+copyright: ModuleBuild is licensed under the <a href='https://github.com/zloeber/ModuleBuild/master/LICENSE.md'> license
+theme: readthedocs
+site_name: ModuleBuild Docs
+Pages:
+  Home: Home\index.md
+  Introduction: Introduction\Introduction.md
+  Usage:
+  - 1 - Initialization: Usage\1 - Initialization.md
+  - 2 - Make Your Module: Usage\2 - Make Your Module.md
+  - 3 - Build A Release: Usage\3 - Build A Release.md
+  - 4 - Test A Release: Usage\4 - Test A Release.md
+  - 5 - Publish A Release: Usage\5 - Publish A Release.md
+  - 6 - Your Next Release: Usage\6 - Your Next Release.md
+  - 7 - Project Documentation: Usage\7 - Project Documentation.md
+  - 8 - Special Files: Usage\8 - Special Files.md
+  - 9 - PSModuleBuild Configuration: Usage\9 - PSModuleBuild Configuration.md
+  Functions:
+  - Get-BuildEnvironment: release\ModuleBuild/docs/Get-BuildEnvironment.md
+  - Initialize-ModuleBuild: release\ModuleBuild/docs/Initialize-ModuleBuild.md
+  - Set-BuildEnvironment: release\ModuleBuild/docs/Set-BuildEnvironment.md
+repo_url: https://github.com/zloeber/ModuleBuild
+

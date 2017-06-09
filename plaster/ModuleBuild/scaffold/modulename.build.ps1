@@ -393,7 +393,7 @@ task AnalyzePublic {
 }
 
 # Synopsis: Build help files for module
-task CreateHelp CreateMarkdownHelp, CreateExternalHelp, CreateUpdateableHelpCAB, {
+task CreateHelp CreateMarkdownHelp, CreateExternalHelp, CreateUpdateableHelpCAB, CreateProjectHelp,AddAdditionalDocFiles, {
     Write-Build White '      Create help files'
 }
 
