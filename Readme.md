@@ -1,4 +1,4 @@
-#ModuleBuild
+# ModuleBuild
 
 A scaffolding framework which can be used to kickstart a generic PowerShell module project.
 
@@ -18,7 +18,7 @@ Powershell Gallery (PS 5.0, Preferred method)
 Manual Installation
 `iex (New-Object Net.WebClient).DownloadString("https://github.com/zloeber/ModuleBuild/raw/master/Install.ps1")`
 
-Or clone this repository to your local machine, extract, go to the .\releases\ModuleBuild directory 
+Or clone this repository to your local machine, extract, go to the .\releases\ModuleBuild directory
 and import the module to your session to test, but not install this module.
 
 ## Features

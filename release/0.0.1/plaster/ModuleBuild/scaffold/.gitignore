@@ -1,5 +1,5 @@
 # ignore any temp directory (used in build steps)
-temp/
+<%=$PLASTER_PARAM_ScratchFolder%>/
 
 # PSGallery publishing file can contain personal API key and paths and thus we want to ignore it if it exists
 .psgallery

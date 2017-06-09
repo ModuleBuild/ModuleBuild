@@ -1,4 +1,4 @@
-#<%=$PLASTER_PARAM_ModuleName%>
+# <%=$PLASTER_PARAM_ModuleName%>
 
 <%=$PLASTER_PARAM_ModuleDescription%>
 
@@ -18,7 +18,7 @@ Powershell Gallery (PS 5.0, Preferred method)
 Manual Installation
 `iex (New-Object Net.WebClient).DownloadString("<%=$PLASTER_PARAM_ModuleWebsite%>/raw/master/Install.ps1")`
 
-Or clone this repository to your local machine, extract, go to the .\releases\<%=$PLASTER_PARAM_ModuleName%> directory 
+Or clone this repository to your local machine, extract, go to the .\releases\<%=$PLASTER_PARAM_ModuleName%> directory
 and import the module to your session to test, but not install this module.
 
 ## Features

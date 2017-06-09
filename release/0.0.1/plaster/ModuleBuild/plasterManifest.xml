@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>68ca6ce3-e023-4240-a574-c624ada75d7d</id>
+    <id>46e29b8e-e57e-4950-822f-7e295e9f1456</id>
     <version>0.0.1</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -168,7 +168,7 @@
       moduleVersion="${PLASTER_PARAM_ModuleVersion}"
       encoding="UTF8-NoBOM"
       destination="${PLASTER_PARAM_ModuleName}.psd1" />
-    <file
+    <templateFile
       source="scaffold\.gitignore"
       destination=".gitignore" />
     <file

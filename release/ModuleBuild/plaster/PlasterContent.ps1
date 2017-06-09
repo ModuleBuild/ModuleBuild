@@ -18,7 +18,7 @@ $Content = @(
         encoding = 'UTF8-NoBOM'
     },
     @{
-        ContentType = 'file'
+        ContentType = 'templateFile'
         Source = 'scaffold\.gitignore'
         Destination = '.gitignore'
     },
