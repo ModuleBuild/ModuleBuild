@@ -1,0 +1,254 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<plasterManifest
+  schemaVersion="1.1"
+  templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
+  <metadata>
+    <name>ModuleBuild</name>
+    <id>070cc2b1-1090-4a23-9aa6-8720c67a91c9</id>
+    <version>0.0.1</version>
+    <title>New ModuleBuild Project</title>
+    <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
+    <author>Zachary Loeber</author>
+    <tags>Module, ModuleManifest, ModuleBuild</tags>
+  </metadata>
+  <parameters>
+    <parameter
+      name="ModuleName"
+      type="text"
+      prompt="Enter the name of the module. No space, underscores, or special characters are allowed" />
+    <parameter
+      name="ModuleDescription"
+      type="text"
+      prompt="Enter a description of your module" />
+    <parameter
+      name="ModuleAuthor"
+      type="text"
+      prompt="Enter a module author" />
+    <parameter
+      name="ModuleWebsite"
+      type="text"
+      prompt="Enter a project website (ie. https://www.github.com/&lt;author&gt;/&lt;modulename&gt;)" />
+    <parameter
+      name="ModuleVersion"
+      type="text"
+      prompt="Enter the version number of the module"
+      default="0.0.1" />
+    <parameter
+      name="ModuleTags"
+      type="text"
+      prompt="Comma separate list of tags that describe this module. This is required for the PowerShell Gallery" />
+    <parameter
+      name="AdditionalModulePaths"
+      type="text"
+      prompt="Comma separate list of paths that will be included with the final module release (ie. .\libs,.\data)"
+      default=" " />
+    <parameter
+      name="PublicFunctionSource"
+      type="text"
+      prompt="Public functions path. This path contains all exportable script code functions for your module"
+      default="public" />
+    <parameter
+      name="PrivateFunctionSource"
+      type="text"
+      prompt="Private functions path. This path contains all script code not exposed by your module"
+      default="private" />
+    <parameter
+      name="OtherModuleSource"
+      type="text"
+      prompt="Other module source path. This includes module pre and post load scripts"
+      default="other" />
+    <parameter
+      name="BaseReleaseFolder"
+      type="text"
+      prompt="Releases directory"
+      default="release" />
+    <parameter
+      name="ScratchFolder"
+      type="text"
+      prompt="Scratch path - this is where all our scratch work occurs. It will be cleared out at every run."
+      default="temp" />
+    <parameter
+      name="NugetAPIKey"
+      type="text"
+      prompt="Enter a PowerShell Gallery (aka Nuget) API key. Without this you will not be able to upload your module to the Gallery"
+      default=" " />
+    <parameter
+      name="ProjectLicense"
+      type="choice"
+      prompt="What license would you like for this module to have?"
+      default="0">
+      <choice
+        label="&amp;Creative Commons"
+        help="This license lets others distribute, remix, tweak, and build upon your work, even commercially, as long as they credit you for the original creation."
+        value="CreativeCommons" />
+      <choice
+        label="&amp;MIT"
+        help="A short, permissive software license. Basically, you can do whatever you want as long as you include the original copyright and license notice in any copy of the software/source."
+        value="MIT" />
+      <choice
+        label="&amp;Apache 2.0"
+        help="You can do what you like with the software, as long as you include the required notices. This permissive license contains a patent license from the contributors of the code."
+        value="Apache" />
+      <choice
+        label="&amp;GPL 3.0"
+        help="You may copy, distribute and modify the software as long as you track changes/dates in source files. Any modifications to or software including (via compiler) GPL-licensed code must also be made available under the GPL along with build &amp; install instructions."
+        value="GPL" />
+    </parameter>
+    <parameter
+      name="OptionAnalyzeCode"
+      type="choice"
+      prompt="Use PSScriptAnalyzer in the module build process (Recommended for Gallery uploading)?"
+      default="0">
+      <choice
+        label="&amp;Yes"
+        help="Enable script analysis"
+        value="True" />
+      <choice
+        label="&amp;No"
+        help="Disable script analysis"
+        value="False" />
+    </parameter>
+    <parameter
+      name="OptionCombineFiles"
+      type="choice"
+      prompt="Combine scripts into one psm1 in the module build process (Recommended for Gallery uploading)?"
+      default="0">
+      <choice
+        label="&amp;Yes"
+        help="Combine source files"
+        value="True" />
+      <choice
+        label="&amp;No"
+        help="Do not combine source files"
+        value="False" />
+    </parameter>
+    <parameter
+      name="OptionSanitizeSensitiveTerms"
+      type="choice"
+      prompt="Scan for sensitive terms (like your user id or company domain) in the module build process (Recommended for Gallery uploading)?"
+      default="0">
+      <choice
+        label="&amp;Yes"
+        help="Sanitize sensitive terms"
+        value="True" />
+      <choice
+        label="&amp;No"
+        help="Do not sanitize sensitive terms"
+        value="False" />
+    </parameter>
+    <parameter
+      name="OptionGenerateReadTheDocs"
+      type="choice"
+      prompt="Generate YML file in build process for ReadTheDocs.org integration?"
+      default="0">
+      <choice
+        label="&amp;Yes"
+        help="The YML file will get regenerated at every build. This file gets saved in the root folder of your project."
+        value="True" />
+      <choice
+        label="&amp;No"
+        help="No YML file will be generated."
+        value="False" />
+    </parameter>
+  </parameters>
+  <content>
+    <newModuleManifest
+      description="${PLASTER_PARAM_ModuleDescription}"
+      copyright="(c) ${PLASTER_Year} ${PLASTER_PARAM_ModuleAuthor}. All rights reserved."
+      tags="${PLASTER_PARAM_ModuleTags}"
+      companyName="${PLASTER_PARAM_ModuleAuthor}"
+      author="${PLASTER_PARAM_ModuleAuthor}"
+      licenseUri="${PLASTER_PARAM_ModuleWebsite}/raw/master/license.md"
+      projectUri="${PLASTER_PARAM_ModuleWebsite}"
+      rootModule="${PLASTER_PARAM_ModuleName}.psm1"
+      variablesToExport=""
+      aliasesToExport=""
+      iconUri="${PLASTER_PARAM_ModuleWebsite}/raw/master/src/other/powershell-project.png"
+      functionsToExport="*"
+      moduleVersion="${PLASTER_PARAM_ModuleVersion}"
+      encoding="UTF8-NoBOM"
+      destination="${PLASTER_PARAM_ModuleName}.psd1" />
+    <templateFile
+      source="scaffold\.gitignore"
+      destination=".gitignore" />
+    <file
+      source="scaffold\.gitattributes"
+      destination=".gitattributes" />
+    <templateFile
+      source="scaffold\.vscode\*"
+      destination=".vscode" />
+    <file
+      source="scaffold\src\other\*"
+      destination="src\${PLASTER_PARAM_OtherModuleSource}" />
+    <file
+      source="scaffold\src\private\*"
+      destination="src\${PLASTER_PARAM_PrivateFunctionSource}" />
+    <file
+      source="scaffold\src\public\*"
+      destination="src\${PLASTER_PARAM_PublicFunctionSource}" />
+    <file
+      source="scaffold\tests\*"
+      destination="src\tests" />
+    <file
+      source="scaffold\build\cleanup\*"
+      destination="build\cleanup" />
+    <file
+      source="scaffold\build\dotsource\*"
+      destination="build\dotsource" />
+    <file
+      source="scaffold\build\tools\*"
+      destination="build\tools" />
+    <templateFile
+      source="scaffold\licenses\CreativeCommons.md"
+      destination="License.md"
+      condition="$PLASTER_PARAM_ProjectLicense -eq &quot;CreativeCommons&quot;" />
+    <templateFile
+      source="scaffold\licenses\MIT.md"
+      destination="License.md"
+      condition="$PLASTER_PARAM_ProjectLicense -eq &quot;MIT&quot;" />
+    <templateFile
+      source="scaffold\licenses\Apache.md"
+      destination="License.md"
+      condition="$PLASTER_PARAM_ProjectLicense -eq &quot;Apache&quot;" />
+    <templateFile
+      source="scaffold\licenses\GPL.md"
+      destination="License.md"
+      condition="$PLASTER_PARAM_ProjectLicense -eq &quot;GPL&quot;" />
+    <templateFile
+      source="scaffold\ModuleName.psm1"
+      destination="${PLASTER_PARAM_ModuleName}.psm1" />
+    <templateFile
+      source="scaffold\modulename.build.ps1"
+      destination="${PLASTER_PARAM_ModuleName}.build.ps1" />
+    <templateFile
+      source="scaffold\build\modulename.buildenvironment.ps1"
+      destination="build\${PLASTER_PARAM_ModuleName}.buildenvironment.ps1" />
+    <templateFile
+      source="scaffold\build\modulename.template.json"
+      destination="build\${PLASTER_PARAM_ModuleName}.buildenvironment.json" />
+    <templateFile
+      source="scaffold\readme.md"
+      destination="Readme.md" />
+    <templateFile
+      source="scaffold\Build.ps1"
+      destination="Build.ps1" />
+    <templateFile
+      source="scaffold\Install.ps1"
+      destination="Install.ps1" />
+    <templateFile
+      source="scaffold\build\docs\*"
+      destination="build\docs" />
+    <templateFile
+      source="scaffold\build\docs\ReadTheDocs\*"
+      destination="build\docs\ReadTheDocs" />
+    <templateFile
+      source="scaffold\build\docs\en-US\*"
+      destination="build\docs\en-US" />
+    <templateFile
+      source="scaffold\build\docs\ReadTheDocs\Acknowledgements\*"
+      destination="build\docs\ReadTheDocs\Acknowledgements" />
+    <templateFile
+      source="scaffold\build\docs\Additional\*"
+      destination="build\docs\Additional" />
+  </content>
+</plasterManifest>

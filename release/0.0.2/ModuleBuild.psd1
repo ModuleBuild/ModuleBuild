@@ -12,7 +12,7 @@
 RootModule = 'ModuleBuild.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.1'
+ModuleVersion = '0.0.2'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -69,7 +69,8 @@ Description = 'A scaffolding framework which can be used to kickstart a generic 
 # NestedModules = @()
 
 # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-FunctionsToExport = @()
+FunctionsToExport = 'Get-BuildEnvironment', 'Initialize-ModuleBuild', 
+               'Set-BuildEnvironment'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
@@ -107,7 +108,7 @@ PrivateData = @{
         IconUri = 'https://github.com/zloeber/ModuleBuild/raw/master/src/other/powershell-project.png'
 
         # ReleaseNotes of this module
-        # ReleaseNotes = ''
+        ReleaseNotes = 'First release'
 
         # External dependent modules of this module
         # ExternalModuleDependencies = ''
