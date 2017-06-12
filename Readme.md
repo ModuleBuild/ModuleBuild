@@ -7,13 +7,16 @@ A scaffolding framework which can be used to kickstart a generic PowerShell modu
 A scaffolding framework which can be used to kickstart a generic PowerShell module project.
 
 ## Introduction
+A scaffolding framework which can be used to kickstart a generic PowerShell module project with an Invoke-Build backend for regular deployments and other automated tasks.
 
 ## Requirements
+PowerShell 5.0
+All other module requirements will be automatically installed ()
 
 ## Installation
 
 Powershell Gallery (PS 5.0, Preferred method)
-`install-module ModuleBuild`
+`install-module ModuleBuild -Scope:CurrentUser`
 
 Manual Installation
 `iex (New-Object Net.WebClient).DownloadString("https://github.com/zloeber/ModuleBuild/raw/master/Install.ps1")`
@@ -22,10 +25,35 @@ Or clone this repository to your local machine, extract, go to the .\releases\Mo
 and import the module to your session to test, but not install this module.
 
 ## Features
+This build framework for PowerShell modules comes with several appealing baked in features which include;
+- Fully portable project directory structure and build process. So portable that you can copy it to another PowerShell 5.0 capable system and it should run the same.
+- Automatically combine your public and private functions into one clean psm1 file at build time.
+- Automatically update your psd1 file with public functions at build time.
+- Automatically scan your module release with PSScriptAnalyzer
+- Automatically upload your script to the PowerShell Gallery (with appropriate API key)
+- Automatically create project documentation folder structure and yml definition file for ReadTheDocs.org integration
+- Visual Studio Code integration (tasks)
+- Easy to manage build configuration with forward compatible design and easy to use commands
+- Includes ability to scan for sensitive terms (like your company domain name or other items that you may not want published)
 
 ## Versions
 
-0.0.1 - Initial Release
+### Version 0.0.1
+- Initial release
+
+### Version 0.0.2
+- Structural changes
+
+### Version 0.0.3
+- Eliminated all '-Before' and '-After' in task definitions
+- Added 'Write-Description' helper function and converted all write-build lines to use it instead (for a quick indented output that is easier on the eyes)
+- Eliminated a large number of global variables in favor of simply redefining them in local tasks when required
+- Setup readthedocs.net yml file generation to fail with warning if the file already exists.
+- Fixed the version check to automatically fail if the build you are running already exists in the powershell gallery.
+- Applied the -force flag to several tasks where it made sense to do so (need to manually build with Invoke-Build and the -force parameter to use)
+- Fixed up Visual Studio Code tasks.json settings
+- Added a prebuild folder for processing dependant/separate scripts prior to starting your build
+- Updated much of the documentation.
 
 ## Contribute
 
@@ -36,10 +64,7 @@ Studio Code and ensure that the PowerShell extension is installed.
 * [Visual Studio Code]
 * [PowerShell Extension]
 
-This module is tested with the PowerShell testing framework Pester. To run all
-tests, just start the included test script `.\Build.ps1 -test` or invoke Pester
-directly with the `Invoke-Pester` cmdlet in the tests directory. The tests will automatically download
-the latest meta test from the claudiospizzi/PowerShellModuleBase repository.
+More contributing information can be found [here](https://github.com/zloeber/ModuleBuild/blob/master/docs/Contributing.md).
 
 ## Other Information
 
