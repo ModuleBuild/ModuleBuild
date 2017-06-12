@@ -21,4 +21,3 @@ Pages:
   - Initialize-ModuleBuild: release\ModuleBuild/docs/Initialize-ModuleBuild.md
   - Set-BuildEnvironment: release\ModuleBuild/docs/Set-BuildEnvironment.md
 repo_url: https://github.com/zloeber/ModuleBuild
-

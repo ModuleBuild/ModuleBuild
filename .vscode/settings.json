@@ -5,7 +5,8 @@
     "files.trimTrailingWhitespace": true,
 
     "search.exclude": {
-        "Release": true
+        "release": true,
+        "temp": true
     },
 
     //-------- PowerShell Configuration --------

@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>070cc2b1-1090-4a23-9aa6-8720c67a91c9</id>
+    <id>09fb670c-1fc6-4d73-99c9-8b2a44a45a6e</id>
     <version>0.0.1</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -190,8 +190,11 @@
       source="scaffold\tests\*"
       destination="src\tests" />
     <file
-      source="scaffold\build\cleanup\*"
-      destination="build\cleanup" />
+      source="scaffold\build\shutdown\*"
+      destination="build\shutdown" />
+    <file
+      source="scaffold\build\startup\*"
+      destination="build\startup" />
     <file
       source="scaffold\build\dotsource\*"
       destination="build\dotsource" />

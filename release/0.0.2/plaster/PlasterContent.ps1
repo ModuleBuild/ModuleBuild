@@ -54,8 +54,13 @@ $Content = @(
     },
     @{
         ContentType = 'file'
-        Source = 'scaffold\build\cleanup\*'
-        Destination = 'build\cleanup'
+        Source = 'scaffold\build\shutdown\*'
+        Destination = 'build\shutdown'
+    },
+    @{
+        ContentType = 'file'
+        Source = 'scaffold\build\startup\*'
+        Destination = 'build\startup'
     },
     @{
         ContentType = 'file'

@@ -8,16 +8,12 @@ param (
     [parameter(Position = 2, ParameterSetName = 'Build')]
     [switch]$UploadPSGallery,
     [parameter(Position = 3, ParameterSetName = 'Build')]
-    [switch]$GitCheckin,
-    [parameter(Position = 4, ParameterSetName = 'Build')]
-    [switch]$GitPush,
-    [parameter(Position = 5, ParameterSetName = 'Build')]
     [switch]$InstallAndTestModule,
-    [parameter(Position = 6, ParameterSetName = 'Build')]
+    [parameter(Position = 4, ParameterSetName = 'Build')]
     [version]$NewVersion,
-    [parameter(Position = 7, ParameterSetName = 'Build')]
+    [parameter(Position = 5, ParameterSetName = 'Build')]
     [string]$ReleaseNotes,
-    [parameter(Position = 8, ParameterSetName = 'CBH')]
+    [parameter(Position = 6, ParameterSetName = 'CBH')]
     [switch]$InsertCBH
 )
 
@@ -119,16 +115,6 @@ switch ($psCmdlet.ParameterSetName) {
             catch {
                 throw 'Unable to upload project to the PowerShell Gallery!'
             }
-        }
-
-        # Not implemented yet
-        if ($GitCheckin) {
-            # Finish me
-        }
-
-        # Not implemented yet
-        if ($GitPush) {
-            # Finish me
         }
 
         CleanUp

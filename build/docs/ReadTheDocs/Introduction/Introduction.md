@@ -7,13 +7,9 @@ There are a few premises which should be known about this project.
 
 - I use serveral PowerShell 5 features but this doesn't mean that the underlying modules being created need to require PowerShell 5 (the default manifest file that gets created sets the required version to 3).
 
-- Most documentation for the module gets automatically created as part of the build process. This documentation is created from the comment based help associated with every function. I personally find this to be the easiest way to keep my documentation up to date. All the code and tasks are open to be changed though. The beauty of a task based engine like invoke-build is that you can very easily use the existing tasks and create your own customizations.
-
-- Parts of this scaffolding were written specifically around the premise that the project is hosted in github.
+- Most documentation for the module gets automatically created as part of the build process. This documentation is created from the comment based help associated with every function.
 
 - The general idea of the base module is that you will develop and test it out without having to worry about keeping your manifest file up to date with your public functions. When you finally build the module, then the functions are explicitly injected into the manifest file and the source files are all (optionally) combined into one psm1 for distribution.
-
-- I've included a handful of other tasks that can be run directly with invoke-build. This includes testing out the documentation generation and code formatting. They are not included in the wrapper script at this time as it felt a bit like recreating a wheel (becase invoke-build is so easy to use as it is).
 
 ## Folder Structure
 A default ModuleBuild project scaffold will look like the following for a project named 'ModuleName' with build version 0.0.1 sucessfully built.
@@ -22,8 +18,6 @@ ProjectRootFolder
 	- .vscode
 		settings.json
         tasks.json
-    - EN-us
-    	about_ModuleName.help.txt
 	- src
 		- other
 			preload.ps1
@@ -50,13 +44,21 @@ ProjectRootFolder
         ModuleName-0.0.1.zip
         ModuleName-current.zip
 	- build
-		- cleanup
+		- startup
+		- shutdown
         - dotsource
         - docs
 			- Additional
+				Acknowledgements.md
+				ChangeLog.md
+				Contributing.md
+				Index.md
+				ReleaseNotes.md
         	- ReadTheDocs
         		- Home
         			index.md
+			- EN-us
+    			about_ModuleName.help.txt
         ModuleName.buildenvironment.json
         ModuleName.buildenvironment.ps1
 	- tests

@@ -122,21 +122,15 @@ else {
         $Script:BuildEnv | ConvertTo-Json | Out-File -FilePath $PersistentBuildFile -Encoding $Script:BuildEnv.Encoding -Force
     }
 
-    # If you will be attempting to autogenerate comment based help this is the base template that will be used
-    # You need to leave the %%<string>%% tags to automatically be populated.
-    $CBHTemplate = @'
-    <#
-    .SYNOPSIS
-        TBD
-    .DESCRIPTION
-        TBD
-    %%PARAMETER%%
-    .EXAMPLE
-        TBD
-    .NOTES
-        Author: %%AUTHOR%%
-    .LINK
-        %%LINK%%
-    #>
-'@ -replace '%%LINK%%', $BuildEnv.ModuleWebsite -replace '%%AUTHOR%%', $BuildEnv.ModuleAuthor
+    $RequiredModules = @('PlatyPS', 'Pester')
+
+    # Some optional modules
+    if ($Script:BuildEnv.OptionAnalyzeCode) {
+        $RequiredModules += 'PSScriptAnalyzer'
+    }
+
+    if ($Script:BuildEnv.OptionGenerateReadTheDocs) {
+        $RequiredModules += 'Powershell-YAML'
+    }
+
 }

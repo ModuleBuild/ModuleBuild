@@ -951,10 +951,19 @@ function Set-BuildEnvironment {
     DynamicParam {
         # Create dictionary
         $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+        if ([String]::isnullorempty($Path)) {
+            $BuildPaths = @()
+            $BuildPaths += (Get-ChildItem .\*.buildenvironment.json).FullName
+            $BuildPaths += (Get-ChildItem .\build\*.buildenvironment.json).FullName
+            $BuildPath = $BuildPaths | Select-Object -First 1
+        }
+        else {
+            $BuildPath = $Path
+        }
 
-        if ((Test-Path $Path) -and ($Path -like "*.buildenvironment.json")) {
+        if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
             try {
-                $LoadedBuildEnv = Get-Content $Path | ConvertFrom-Json
+                $LoadedBuildEnv = Get-Content $BuildPath | ConvertFrom-Json
                 $NewParams = (Get-Member -Type 'NoteProperty' -InputObject $LoadedBuildEnv).Name
                 $NewParams | ForEach-Object {
 
@@ -962,6 +971,7 @@ function Set-BuildEnvironment {
                         Name = $_
                         Type = $LoadedBuildEnv.$_.gettype().Name.toString()
                         ValueFromPipeline = $TRUE
+                        HelpMessage = "Update the setting for $($_)"
                     }
 
                     # Add new dynamic parameter to dictionary
@@ -969,7 +979,7 @@ function Set-BuildEnvironment {
                 }
             }
             catch {
-                #throw "Unable to load the build file in $Path"
+                #throw "Unable to load the build file in $BuildPath"
             }
         }
 
@@ -979,19 +989,33 @@ function Set-BuildEnvironment {
 
     process {
         New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
-
-        try {
-            $LoadedBuildEnv = Get-BuildEnvironment $Path
-            Foreach ($ParamKey in ($PSBoundParameters.Keys | Where-Object {$_ -ne 'Path'})) {
-                $LoadedBuildEnv.$ParamKey = $PSBoundParameters[$ParamKey]
-                Write-Output "Updating $ParamKey to be $($PSBoundParameters[$ParamKey])"
-            }
-
-            $LoadedBuildEnv | ConvertTo-Json | Out-File -FilePath $Path -Encoding:utf8 -Force
-            Write-Output "Saved configuration file - $Path"
+        if ([String]::isnullorempty($Path)) {
+            $BuildPaths = @()
+            $BuildPaths += (Get-ChildItem .\*.buildenvironment.json).FullName
+            $BuildPaths += (Get-ChildItem .\build\*.buildenvironment.json).FullName
+            $BuildPath = $BuildPaths | Select-Object -First 1
         }
-        catch {
-            throw "Unable to load the build file in $Path"
+        else {
+            $BuildPath = $Path
+        }
+
+        if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
+            try {
+                $LoadedBuildEnv = Get-BuildEnvironment $Path
+                Foreach ($ParamKey in ($PSBoundParameters.Keys | Where-Object {$_ -ne 'Path'})) {
+                    $LoadedBuildEnv.$ParamKey = $PSBoundParameters[$ParamKey]
+                    Write-Output "Updating $ParamKey to be $($PSBoundParameters[$ParamKey])"
+                }
+
+                $LoadedBuildEnv | ConvertTo-Json | Out-File -FilePath $Path -Encoding:utf8 -Force
+                Write-Output "Saved configuration file - $Path"
+            }
+            catch {
+                throw "Unable to load the build file in $Path"
+            }
+        }
+        else {
+            Write-Error "Unable to find or process a buildenvironment.json file!"
         }
     }
 }

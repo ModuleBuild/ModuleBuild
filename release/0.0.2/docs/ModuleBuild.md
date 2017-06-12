@@ -1,6 +1,6 @@
 ---
 Module Name: ModuleBuild
-Module Guid: 8f6090b4-6411-4949-a717-96d64a1cc5b3 00000000-0000-0000-0000-000000000000
+Module Guid: 00000000-0000-0000-0000-000000000000
 Download Help Link: https://github.com/zloeber/ModuleBuild/release/ModuleBuild/docs/ModuleBuild.md
 Help Version: 0.0.3
 Locale: en-US
