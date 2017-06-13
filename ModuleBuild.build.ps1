@@ -663,6 +663,7 @@ task CreateProjectHelp BuildProjectHelpFiles, AddAdditionalDocFiles, UpdateReadT
 task PublishPSGallery LoadBuildTools, {
     Write-Description White 'Publishing recent module release to the PowerShell Gallery' -accent
 
+    $ReleasePath = Join-Path $BuildRoot $Script:BuildEnv.BaseReleaseFolder
     $CurrentReleasePath = Join-Path $ReleasePath $Script:BuildEnv.ModuleToBuild
     if (Get-Module $Script:BuildEnv.ModuleToBuild) {
         # If the module is already loaded then unload it.

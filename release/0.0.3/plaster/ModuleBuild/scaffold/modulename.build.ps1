@@ -349,7 +349,7 @@ task CreateModulePSM1 RemoveScriptSignatures, UpdateCBH, {
 
 # Synopsis: Removes script signatures before creating a combined PSM1 file
 task RemoveScriptSignatures {
-    Write-Build White 'Removing any script signatures for function files (if they exist)' -Accent
+    Write-Description White 'Removing any script signatures for function files (if they exist)' -Accent
 
     $ScratchPath = Join-Path $BuildRoot $Script:BuildEnv.ScratchFolder
 
@@ -380,7 +380,7 @@ task SanitizeCode -if {$Script:BuildEnv.OptionSanitizeSensitiveTerms} {
 
 # Synopsis: Replace comment based help with external help in all public functions for this project
 task UpdateCBH {
-    Write-Build White 'Updating Comment Based Help in functions to point to external help links' -accent
+    Write-Description White 'Updating Comment Based Help in functions to point to external help links' -accent
 
     $ExternalHelp = @"
 <#
@@ -425,10 +425,10 @@ task AnalyzePublic {
     $AnalysisErrors = @($Analysis | Where-Object {@('Information', 'Warning') -notcontains $_.Severity})
 
     if ($AnalysisErrors.Count -ne 0) {
-        Write-Build White 'The following errors came up in the script analysis:' -level 2
+        Write-Description White 'The following errors came up in the script analysis:' -level 2
         $AnalysisErrors
-        Write-Build
-        Write-Build White "Note that this was from the script analysis run against $($Script:BuildEnv.PublicFunctionSource)" -level 2
+        Write-Description
+        Write-Description White "Note that this was from the script analysis run against $($Script:BuildEnv.PublicFunctionSource)" -level 2
     }
 }
 
@@ -663,6 +663,7 @@ task CreateProjectHelp BuildProjectHelpFiles, AddAdditionalDocFiles, UpdateReadT
 task PublishPSGallery LoadBuildTools, {
     Write-Description White 'Publishing recent module release to the PowerShell Gallery' -accent
 
+    $ReleasePath = Join-Path $BuildRoot $Script:BuildEnv.BaseReleaseFolder
     $CurrentReleasePath = Join-Path $ReleasePath $Script:BuildEnv.ModuleToBuild
     if (Get-Module $Script:BuildEnv.ModuleToBuild) {
         # If the module is already loaded then unload it.

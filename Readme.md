@@ -1,20 +1,16 @@
 # ModuleBuild
 
-A scaffolding framework which can be used to kickstart a generic PowerShell module project.
+A scaffolding framework which can be used to kickstart a generic PowerShell module project with a bunch of extras.
 
 ## Description
 
-A scaffolding framework which can be used to kickstart a generic PowerShell module project and much more. This project helps make everything about starting, documenting, building, and eventually releasing your module to the PSGallary a breeze.
-
-## Introduction
-
-A scaffolding framework which can be used to kickstart a generic PowerShell module project with an Invoke-Build backend for regular deployments and other automated tasks.
+A scaffolding framework which can be used to kickstart a generic PowerShell module project with an Invoke-Build backend for regular deployments and other automated tasks. This project helps make everything about starting, documenting, building, and eventually releasing your module to the PSGallary a breeze.
 
 ## Requirements
 
 - PowerShell 5.0
 
-- All other module requirements will be automatically installed at build time if they are not available.
+- All other module requirements will be automatically installed at build time if they are not available. (This is one of the reasons PowerShell 5 or greater is required)
 
 ## Installation
 
