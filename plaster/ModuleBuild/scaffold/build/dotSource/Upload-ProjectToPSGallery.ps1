@@ -27,7 +27,7 @@ function Script:Upload-ProjectToPSGallery {
         [string]$NuGetApiKey
     )
     # if no API key is defined then look for psgalleryapi.txt in the local profile directory and try to use it instead.
-    if ([string]::IsNullOrEmpty($PublishParams.NuGetApiKey)) {
+    if ([string]::IsNullOrEmpty($NuGetApiKey)) {
         $psgalleryapipath = "$(Split-Path $Profile)\psgalleryapi.txt"
         Write-Verbose "No PSGallery API key specified. Attempting to load one from the following location: $($psgalleryapipath)"
         if (-not (test-path $psgalleryapipath)) {

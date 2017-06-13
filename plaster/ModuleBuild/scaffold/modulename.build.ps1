@@ -660,7 +660,7 @@ task CreateProjectHelp BuildProjectHelpFiles, AddAdditionalDocFiles, UpdateReadT
 }
 
 # Synopsis: Push the current release of the project to PSScriptGallery
-task PublishPSGallery LoadBuildTools, {
+task PublishPSGallery LoadBuildTools, InstallModule, {
     Write-Description White 'Publishing recent module release to the PowerShell Gallery' -accent
 
     $ReleasePath = Join-Path $BuildRoot $Script:BuildEnv.BaseReleaseFolder
@@ -671,9 +671,9 @@ task PublishPSGallery LoadBuildTools, {
     }
 
     # Try to import the current module
-    $CurrentModule = Join-Path $CurrentReleasePath "$($Script:BuildEnv.ModuleToBuild)\$($Script:BuildEnv.ModuleToBuild).psd1"
+    $CurrentModule = Join-Path $CurrentReleasePath "$($Script:BuildEnv.ModuleToBuild).psd1"
     if (Test-Path $CurrentModule) {
-        Import-Module -Name (Join-Path $CurrentReleasePath "$($Script:BuildEnv.ModuleToBuild).psd1")
+        Import-Module -Name $CurrentModule
 
         Write-Description White "Uploading project to PSGallery: $($Script:BuildEnv.ModuleToBuild)"
         Upload-ProjectToPSGallery -Name $Script:BuildEnv.ModuleToBuild -NuGetApiKey $Script:BuildEnv.NuGetApiKey
