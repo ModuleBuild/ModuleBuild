@@ -4,14 +4,17 @@ A scaffolding framework which can be used to kickstart a generic PowerShell modu
 
 ## Description
 
-A scaffolding framework which can be used to kickstart a generic PowerShell module project.
+A scaffolding framework which can be used to kickstart a generic PowerShell module project and much more. This project helps make everything about starting, documenting, building, and eventually releasing your module to the PSGallary a breeze.
 
 ## Introduction
+
 A scaffolding framework which can be used to kickstart a generic PowerShell module project with an Invoke-Build backend for regular deployments and other automated tasks.
 
 ## Requirements
-PowerShell 5.0
-All other module requirements will be automatically installed ()
+
+- PowerShell 5.0
+
+- All other module requirements will be automatically installed at build time if they are not available.
 
 ## Installation
 
@@ -25,6 +28,7 @@ Or clone this repository to your local machine, extract, go to the .\releases\Mo
 and import the module to your session to test, but not install this module.
 
 ## Features
+
 This build framework for PowerShell modules comes with several appealing baked in features which include;
 - Fully portable project directory structure and build process. So portable that you can copy it to another PowerShell 5.0 capable system and it should run the same.
 - Automatically combine your public and private functions into one clean psm1 file at build time.
@@ -35,6 +39,10 @@ This build framework for PowerShell modules comes with several appealing baked i
 - Visual Studio Code integration (tasks)
 - Easy to manage build configuration with forward compatible design and easy to use commands
 - Includes ability to scan for sensitive terms (like your company domain name or other items that you may not want published)
+
+## Documentation
+
+Visit the [ReadTheDocs.org documentation](http://modulebuild.readthedocs.io/en/latest/) that this module created a manifest for automatically.
 
 ## Versions
 
