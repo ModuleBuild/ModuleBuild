@@ -4,8 +4,8 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>1198ffce-a6dc-4aa5-9257-aaf3b2397e37</id>
-    <version>0.0.1</version>
+    <id>b273ffe6-1e45-4c57-a4fd-75fcb0666aee</id>
+    <version>0.0.5</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
     <author>Zachary Loeber</author>
@@ -42,31 +42,6 @@
       type="text"
       prompt="Comma separate list of paths that will be included with the final module release (ie. .\libs,.\data)"
       default=" " />
-    <parameter
-      name="PublicFunctionSource"
-      type="text"
-      prompt="Public functions path. This path contains all exportable script code functions for your module"
-      default="public" />
-    <parameter
-      name="PrivateFunctionSource"
-      type="text"
-      prompt="Private functions path. This path contains all script code not exposed by your module"
-      default="private" />
-    <parameter
-      name="OtherModuleSource"
-      type="text"
-      prompt="Other module source path. This includes module pre and post load scripts"
-      default="other" />
-    <parameter
-      name="BaseReleaseFolder"
-      type="text"
-      prompt="Releases directory"
-      default="release" />
-    <parameter
-      name="ScratchFolder"
-      type="text"
-      prompt="Scratch path - this is where all our scratch work occurs. It will be cleared out at every run."
-      default="temp" />
     <parameter
       name="NugetAPIKey"
       type="text"
@@ -169,23 +144,23 @@
       encoding="UTF8-NoBOM"
       destination="${PLASTER_PARAM_ModuleName}.psd1" />
     <templateFile
-      source="scaffold\.gitignore"
+      source="scaffold\gitignore"
       destination=".gitignore" />
     <file
-      source="scaffold\.gitattributes"
+      source="scaffold\gitattributes"
       destination=".gitattributes" />
     <templateFile
-      source="scaffold\.vscode\*"
+      source="scaffold\vscode\*"
       destination=".vscode" />
     <file
       source="scaffold\src\other\*"
-      destination="src\${PLASTER_PARAM_OtherModuleSource}" />
+      destination="src\other" />
     <file
       source="scaffold\src\private\*"
-      destination="src\${PLASTER_PARAM_PrivateFunctionSource}" />
+      destination="src\private" />
     <file
       source="scaffold\src\public\*"
-      destination="src\${PLASTER_PARAM_PublicFunctionSource}" />
+      destination="src\public" />
     <file
       source="scaffold\tests\*"
       destination="src\tests" />

@@ -19,33 +19,33 @@ $Content = @(
     },
     @{
         ContentType = 'templateFile'
-        Source = 'scaffold\.gitignore'
+        Source = 'scaffold\gitignore'
         Destination = '.gitignore'
     },
     @{
         ContentType = 'file'
-        Source = 'scaffold\.gitattributes'
+        Source = 'scaffold\gitattributes'
         Destination = '.gitattributes'
     },
     @{
         ContentType = 'templateFile'
-        Source = 'scaffold\.vscode\*'
+        Source = 'scaffold\vscode\*'
         Destination = '.vscode'
     },
     @{
         ContentType = 'file'
         Source = 'scaffold\src\other\*'
-        Destination = 'src\${PLASTER_PARAM_OtherModuleSource}'
+        Destination = 'src\other'
     },
     @{
         ContentType = 'file'
         Source = 'scaffold\src\private\*'
-        Destination = 'src\${PLASTER_PARAM_PrivateFunctionSource}'
+        Destination = 'src\private'
     },
     @{
         ContentType = 'file'
         Source = 'scaffold\src\public\*'
-        Destination = 'src\${PLASTER_PARAM_PublicFunctionSource}'
+        Destination = 'src\public'
     },
     @{
         ContentType = 'file'

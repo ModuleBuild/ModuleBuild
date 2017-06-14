@@ -38,36 +38,6 @@ $Parameters = @(
         Default = ' '
     },
     @{
-        ParameterName = "PublicFunctionSource"
-        ParameterType = "text"
-        ParameterPrompt = "Public functions path. This path contains all exportable script code functions for your module"
-        Default = "public"
-    },
-    @{
-        ParameterName = "PrivateFunctionSource"
-        ParameterType = "text"
-        ParameterPrompt = "Private functions path. This path contains all script code not exposed by your module"
-        Default = "private"
-    },
-    @{
-        ParameterName = "OtherModuleSource"
-        ParameterType = "text"
-        ParameterPrompt = "Other module source path. This includes module pre and post load scripts"
-        Default = "other"
-    },
-    @{
-        ParameterName = "BaseReleaseFolder"
-        ParameterType = "text"
-        ParameterPrompt = "Releases directory"
-        Default = "release"
-    },
-    @{
-        ParameterName = "ScratchFolder"
-        ParameterType = "text"
-        ParameterPrompt = "Scratch path - this is where all our scratch work occurs. It will be cleared out at every run."
-        Default = "temp"
-    },
-    @{
         ParameterName = "NugetAPIKey"
         ParameterType = "text"
         ParameterPrompt = "Enter a PowerShell Gallery (aka Nuget) API key. Without this you will not be able to upload your module to the Gallery"

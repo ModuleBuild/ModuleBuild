@@ -754,7 +754,6 @@ task BuildSessionCleanup {
     }
 }
 
-<#
 # Synopsis: Push with a version tag.
 task GitPushRelease VersionCheck, {
     $changes = exec { git status --short }
@@ -778,7 +777,7 @@ task GithubPush VersionCheck, {
     $changes = exec { git status --short }
     assert (-not $changes) "Please, commit changes."
 }
-#>
+
 # Synopsis: Install and test load the module.
 task InstallAndTestModule InstallModule, TestInstalledModule
 

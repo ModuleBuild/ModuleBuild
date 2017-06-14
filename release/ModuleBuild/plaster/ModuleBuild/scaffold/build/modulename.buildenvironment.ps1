@@ -56,12 +56,12 @@ else {
         OptionGenerateReadTheDocs = $<%=$PLASTER_PARAM_OptionGenerateReadTheDocs%>
         # Most of the following options you probably don't need to change
         BaseSourceFolder = 'src'        # Base source path
-        PublicFunctionSource = "src\<%=$PLASTER_PARAM_PublicFunctionSource%>"         # Public functions (to be exported by file name as the function name)
-        PrivateFunctionSource = "src\<%=$PLASTER_PARAM_PrivateFunctionSource%>"        # Private function source
-        OtherModuleSource = "src\<%=$PLASTER_PARAM_OtherModuleSource%>"        # Other module source
-        BaseReleaseFolder = '<%=$PLASTER_PARAM_BaseReleaseFolder%>'        # Releases directory.
+        PublicFunctionSource = "src\public"         # Public functions (to be exported by file name as the function name)
+        PrivateFunctionSource = "src\private"        # Private function source
+        OtherModuleSource = "src\other"        # Other module source
+        BaseReleaseFolder = 'release'        # Releases directory.
         BuildToolFolder = 'build'        # Build tool path (these scripts are dot sourced)
-        ScratchFolder = '<%=$PLASTER_PARAM_ScratchFolder%>'        # Scratch path - this is where all our scratch work occurs. It will be cleared out at every run.
+        ScratchFolder = 'temp'        # Scratch path - this is where all our scratch work occurs. It will be cleared out at every run.
 
         # If you will be publishing to the PowerShell Gallery you will need a Nuget API key (can get from the website)
         # You should not actually enter this key here but should manually enter it in the <%=$PLASTER_PARAM_ModuleName%>.buildenvironment.json file

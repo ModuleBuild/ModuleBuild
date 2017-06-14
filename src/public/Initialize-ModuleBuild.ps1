@@ -33,7 +33,10 @@ A few items to consider doing next:
 5. But remember that the markdown files in .\build\docs\Additional need some love too. These get dropped into your project .\docs directory at build time (overwriting anything there in the process!)
 6. Update any bits within your *.psd1 that are appropriate to your module but don't mess with the exported function names as those get handled automatically when you do the build.
 7. If you enabled sensitive terminology scanning then review and update your terms defined in your buildenvironment.json file (using get-buildenvironment & set-buildenvironment).
-8. Build your project with .\Build.ps1
+8. Change your project logo at src\other\powershell-project.png
+9. Build your project with .\Build.ps1
+
+Run Update-Module ModuleBuild every so often to get more recent releases of this project.
 
 Enjoy!
 '@

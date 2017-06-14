@@ -1,0 +1,17 @@
+TOPIC
+    about_ModuleBuild
+
+SHORT DESCRIPTION
+    A scaffolding framework which can be used to kickstart a generic PowerShell module project.
+
+LONG DESCRIPTION
+    A scaffolding framework which can be used to kickstart a generic PowerShell module project.
+
+EXAMPLES
+    TBD
+
+KEYWORDS
+    scaffold, Module, Invoke-Build
+
+SEE ALSO
+    https://github.com/zloeber/ModuleBuild

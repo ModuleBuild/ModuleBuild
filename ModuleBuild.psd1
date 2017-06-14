@@ -12,7 +12,7 @@
 RootModule = 'ModuleBuild.psm1'
 
 # Version number of this module.
-ModuleVersion = '0.0.4'
+ModuleVersion = '0.0.5'
 
 # Supported PSEditions
 # CompatiblePSEditions = @()
@@ -107,7 +107,7 @@ PrivateData = @{
         IconUri = 'https://github.com/zloeber/ModuleBuild/raw/master/src/other/powershell-project.png'
 
         # ReleaseNotes of this module
-        ReleaseNotes = '0.0.4 release'
+        ReleaseNotes = '0.0.5 updates'
 
         # External dependent modules of this module
         # ExternalModuleDependencies = ''
