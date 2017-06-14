@@ -108,7 +108,7 @@ PrivateData = @{
         IconUri = 'https://github.com/zloeber/ModuleBuild/raw/master/src/other/powershell-project.png'
 
         # ReleaseNotes of this module
-        ReleaseNotes = '0.0.4 release'
+        ReleaseNotes = '0.0.5 updates'
 
         # External dependent modules of this module
         # ExternalModuleDependencies = ''

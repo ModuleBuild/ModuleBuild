@@ -2,16 +2,16 @@
 [string]$ModulePath = Split-Path (get-variable myinvocation -scope script).value.Mycommand.Definition -Parent
 
 # Module Pre-Load code
-. (Join-Path $ModulePath 'src\<%=$PLASTER_PARAM_OtherModuleSource%>\PreLoad.ps1') @ProfilePathArg
+. (Join-Path $ModulePath 'src\other\PreLoad.ps1') @ProfilePathArg
 
 # Private and other methods and variables
-Get-ChildItem (Join-Path $ModulePath 'src\<%=$PLASTER_PARAM_PrivateFunctionSource%>') -Recurse -Filter "*.ps1" -File | Sort-Object Name | ForEach-Object {
+Get-ChildItem (Join-Path $ModulePath 'src\private') -Recurse -Filter "*.ps1" -File | Sort-Object Name | ForEach-Object {
     Write-Verbose "Dot sourcing private script file: $($_.Name)"
     . $_.FullName
 }
 
 # Load and export public methods
-Get-ChildItem (Join-Path $ModulePath 'src\<%=$PLASTER_PARAM_PublicFunctionSource%>') -Recurse -Filter "*.ps1" -File | Sort-Object Name | ForEach-Object {
+Get-ChildItem (Join-Path $ModulePath 'src\public') -Recurse -Filter "*.ps1" -File | Sort-Object Name | ForEach-Object {
     Write-Verbose "Dot sourcing public script file: $($_.Name)"
     . $_.FullName
 
@@ -23,4 +23,4 @@ Get-ChildItem (Join-Path $ModulePath 'src\<%=$PLASTER_PARAM_PublicFunctionSource
 }
 
 # Module Post-Load code
-. (Join-Path $ModulePath 'src\<%=$PLASTER_PARAM_OtherModuleSource%>\PostLoad.ps1')
+. (Join-Path $ModulePath 'src\other\PostLoad.ps1')

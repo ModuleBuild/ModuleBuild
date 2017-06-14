@@ -133,7 +133,7 @@ task VersionCheck LoadModuleManifest, {
 
     assert ( ($Script:Manifest).Version.ToString() -eq (($Script:BuildEnv.ModuleVersion)) ) "The module manifest version ( $(($Script:Manifest).Version.ToString()) ) and release version ($($Script:BuildEnv.ModuleVersion)) are mismatched. These must be the same before continuing. Consider running the UpdateRelease task to make the module manifest version the same as the release version."
     Write-Description White 'Manifest version and the release version in the build configuration file are the same.' -Level 2
-    $GalleryVersion = find-module ModuleBuild -ErrorAction:SilentlyContinue
+    $GalleryVersion = find-module ($Script:BuildEnv.ModuleToBuild) -ErrorAction:SilentlyContinue
     if ($null -ne $GalleryVersion) {
         assert ( ($GalleryVersion.Version -lt [version]($Script:BuildEnv.ModuleVersion)) -and (-not $Force) ) "The current module version is less than or equal to the one published in powershell gallary. You should bump up your module version to be at least greater than $($GalleryVersion.Version.ToString()) before building this module."
     }
