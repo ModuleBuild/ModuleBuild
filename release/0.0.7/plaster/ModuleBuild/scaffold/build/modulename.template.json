@@ -1,0 +1,3 @@
+﻿{
+    "NugetAPIKey":  "<%=$PLASTER_PARAM_NugetAPIKey%>"
+}
