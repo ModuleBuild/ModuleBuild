@@ -127,6 +127,7 @@ task LoadModuleManifest {
     $Script:Manifest = Test-ModuleManifest -Path $ModuleManifestFullPath
 }
 
+# Synopsis: Valiates there is no version mismatch.
 task VersionCheck LoadModuleManifest, {
     Write-Description White 'Validating manifest, build, and gallery module versions.' -accent
 
@@ -148,11 +149,21 @@ task Configure ValidateRequirements, PreBuildTasks, LoadRequiredModules, LoadMod
 }
 
 # Synopsis: Set a new version of the module
-task NewVersion -if {$null -ne $NewVersion} LoadBuildTools, LoadModuleManifest, {
+task NewVersion LoadBuildTools, LoadModuleManifest, {
     Write-Description White 'Updating module build version' -accent
+    $ModuleManifestFullPath = Join-Path $BuildRoot "$($Script:BuildEnv.ModuleToBuild).psd1"
     $ReleasePath = Join-Path $BuildRoot $Script:BuildEnv.BaseReleaseFolder
     $AllReleases = @((Get-ChildItem $ReleasePath -Directory | Where-Object {$_.Name -match '^([0-9].[0-9].[0-9])$'} | Select-Object).Name | ForEach-Object {[version]$_})
 
+    # if a new version wasn't passed as a parameter then prompt for one
+    if ($null -eq $NewVersion) {
+        do {
+            $NewVersion = Read-Host -Prompt 'Enter the version (ie 0.0.8) for your build release'
+            if ([string]::IsNullOrEmpty($NewVersion)) {
+                Write-Build Red "You need to enter a valid module version (ie. 1.2.0)" -level 2
+            }
+        } while ( [string]::IsNullOrEmpty($NewVersion) -and ($NewVersion -notmatch '\d+\.\d+\.\d+') )
+    }
     if (($AllReleases -contains $NewVersion) -and (-not $Force)) {
         Write-Build Red 'The module version already has been released (the folder exists within the releases folder. In order to set your build project to this version you will need to pass the -Force switch to this build script with the -NewVersion parameter' -Level 2
         throw 'Unable to update build project version!'
@@ -162,14 +173,21 @@ task NewVersion -if {$null -ne $NewVersion} LoadBuildTools, LoadModuleManifest, 
 
     Write-Description White 'Saving persistent build file with new module version' -level 2
     Save-BuildData
+
+    Write-Description White 'Updating module manifest with new module version' -level 2
+    try {
+        Update-ModuleManifest -Path $ModuleManifestFullPath -ModuleVersion $NewVersion
+    }
+    catch {
+        throw $_
+    }
 }
 
 # Synopsis: Update current module manifest with the version defined in the build config file (if they differ)
 task UpdateRelease LoadBuildTools, LoadModuleManifest, {
-    Write-Description White 'Updating the version release of this module in the release directory' -accent
+    Write-Description White 'Updating the release notes of this module' -accent
 
     $ModuleManifestFullPath = Join-Path $BuildRoot "$($Script:BuildEnv.ModuleToBuild).psd1"
-
     # If there is a version mismatch then we need to put in some release notes and update the module manifest
     if ($null -eq $ReleaseNotes) {
         do {
@@ -177,16 +195,19 @@ task UpdateRelease LoadBuildTools, LoadModuleManifest, {
             if ([string]::IsNullOrEmpty($ReleaseNotes)) {
                 Write-Build Red "You need to enter some kind of notes for your new release to update the manifest with!" -level 2
             }
-        } while ([string]::IsNullOrEmpty($NewReleaseNotes))
+        } while ([string]::IsNullOrEmpty($ReleaseNotes))
     }
 
     try {
-        Update-ModuleManifest -Path $ModuleManifestFullPath -ModuleVersion $Script:BuildEnv.ModuleVersion -ReleaseNotes $ReleaseNotes
+        Update-ModuleManifest -Path $ModuleManifestFullPath -ReleaseNotes $ReleaseNotes
     }
     catch {
         throw $_
     }
 }
+
+# Synopsis: Update the current working module version and release notes
+task UpdateVersion NewVersion, UpdateRelease
 
 # Synopsis: Regenerate scratch staging directory
 task Clean {
@@ -432,9 +453,7 @@ task AnalyzePublic {
 }
 
 # Synopsis: Build help files for module
-task CreateHelp CreateMarkdownHelp, CreateExternalHelp, CreateUpdateableHelpCAB, CreateProjectHelp, AddAdditionalDocFiles, {
-    Write-Description White 'Create help files' -accent
-}
+task CreateHelp CreateMarkdownHelp, CreateExternalHelp, CreateUpdateableHelpCAB, CreateProjectHelp, AddAdditionalDocFiles
 
 # Synopsis: Build the markdown help files with PlatyPS
 task CreateMarkdownHelp GetPublicFunctions, {
@@ -654,9 +673,7 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
 }
 
 # Synopsis: Put together all the various projecet help files
-task CreateProjectHelp BuildProjectHelpFiles, AddAdditionalDocFiles, UpdateReadTheDocs, CreateReadTheDocsYML, {
-    Write-Description White 'Creating project help' -accent
-}
+task CreateProjectHelp BuildProjectHelpFiles, AddAdditionalDocFiles, UpdateReadTheDocs, CreateReadTheDocsYML
 
 # Synopsis: Push the current release of the project to PSScriptGallery
 task PublishPSGallery LoadBuildTools, InstallModule, {
@@ -753,7 +770,6 @@ task BuildSessionCleanup {
     }
 }
 
-<#
 # Synopsis: Push with a version tag.
 task GitPushRelease VersionCheck, {
     $changes = exec { git status --short }
@@ -777,7 +793,7 @@ task GithubPush VersionCheck, {
     $changes = exec { git status --short }
     assert (-not $changes) "Please, commit changes."
 }
-#>
+
 # Synopsis: Install and test load the module.
 task InstallAndTestModule InstallModule, TestInstalledModule
 

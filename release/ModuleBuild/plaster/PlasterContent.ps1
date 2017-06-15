@@ -98,17 +98,17 @@ $Content = @(
     },
     @{
         ContentType = 'templateFile'
-        Source = 'scaffold\ModuleName.psm1'
+        Source = 'scaffold\ModuleName.template'
         Destination = '${PLASTER_PARAM_ModuleName}.psm1'
     },
     @{
         ContentType = 'templateFile'
-        Source = 'scaffold\modulename.build.ps1'
+        Source = 'scaffold\modulename.build.template'
         Destination = '${PLASTER_PARAM_ModuleName}.build.ps1'
     },
     @{
         ContentType = 'templateFile'
-        Source = 'scaffold\build\modulename.buildenvironment.ps1'
+        Source = 'scaffold\build\modulename.buildenvironment.template'
         Destination = 'build\${PLASTER_PARAM_ModuleName}.buildenvironment.ps1'
     },
     @{
@@ -123,12 +123,12 @@ $Content = @(
     },
     @{
         ContentType = 'templateFile'
-        Source = 'scaffold\Build.ps1'
+        Source = 'scaffold\Build.template'
         Destination = 'Build.ps1'
     },
     @{
         ContentType = 'templateFile'
-        Source = 'scaffold\Install.ps1'
+        Source = 'scaffold\Install.template'
         Destination = 'Install.ps1'
     },
     @{

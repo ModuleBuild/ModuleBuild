@@ -18,3 +18,16 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 - Fixed up Visual Studio Code tasks.json settings
 - Added a prebuild folder for processing dependant/separate scripts prior to starting your build
 - Updated much of the documentation.
+
+## Version 0.0.4
+- fixes to psgallery upload
+
+## Version 0.0.5
+- fixes to plaster template creation
+
+## Version 0.0.6
+- Changed all template files from .ps1 or psm1 to .template and changed the plaster manifest accordingly
+- Change all .<filename> files to remove the period so uploads to the gallery will work properly
+- Combined the UpdateRelease and NewVersion tasks and made both promptable
+- Fixed git version tag issue with the build script for the plaster manifest file.
+- Removed options to prompt for different folder names (like public/private/other/temp) and updated all template files and plaster manifest file accordinly.
