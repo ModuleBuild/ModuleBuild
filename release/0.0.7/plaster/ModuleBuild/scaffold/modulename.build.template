@@ -543,7 +543,7 @@ task PushVersionRelease {
     $null = Remove-Item $ThisReleasePath -Force -Recurse -ErrorAction 0
     $null = New-Item $ThisReleasePath -ItemType:Directory -Force
     Copy-Item -Path "$($StageReleasePath)\*" -Destination $ThisReleasePath -Recurse
-    Out-Zip $StageReleasePath (Join-Path $ReleasePath "$($Script:BuildEnv.ModuleToBuild)-$Version.zip") -overwrite
+    #Out-Zip $StageReleasePath (Join-Path $ReleasePath "$($Script:BuildEnv.ModuleToBuild)-$($Script:BuildEnv.ModuleVersion).zip") -overwrite
 }
 
 # Synopsis: Create the current release directory and copy this build to it.
@@ -639,9 +639,9 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
         $Pages = [ordered]@{}
 
         $RTDFolders = Get-ChildItem -Path $ProjectDocsPath -Directory | Sort-Object -Property Name
+        $RTDPages = Get-ChildItem -Path $ProjectDocsPath -File -Filter '*.md' | Sort-Object -Property Name
 
         ForEach ($RTDFolder in $RTDFolders) {
-
             $RTDocs = @(Get-ChildItem -Path $RTDFolder.FullName -Filter '*.md' | Sort-Object Name)
             if ($RTDocs.Count -gt 1) {
                 $NewSection = @()
@@ -653,6 +653,10 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
             else {
                 $Pages[$RTDFolder.Name] = "$($RTDFolder.Name)\$($RTDocs.Name)"
             }
+        }
+
+        ForEach ($RTDPage in $RTDPages) {
+            $Pages[$RTDPage.BaseName] = $RTDPage.Name
         }
 
         $RTD = @{

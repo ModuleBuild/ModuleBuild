@@ -12,6 +12,8 @@ or
 
 Once this has been kicked off and all answers have been entered the initialization of your new project directory will start. Several template files are copied out to appropriate locations. Additionally, the default module manifest file gets created.
 
+**Note:** *Much of the ModuleBuild initial settings are not set in stone. If you do make changes to something like the included directories, or other settings which you would like to ensure others have access to when building your project you will have to update them in build\YourModuleName.buildenvironment.ps1*
+
 ## Quick Start
 With your new module folder all created there are several steps still left to take in order to make your new project more world class. There are several sections of the following documentation that go over fleshing out the module with public functions, building a release, testing things, out and starting another release. Here are some quick next step tips if you aren't feeling like reading all of that.
 
@@ -22,5 +24,5 @@ With your new module folder all created there are several steps still left to ta
 5. But remember that the markdown files in .\build\docs\Additional need some love too. These get dropped into your project .\docs directory at build time (overwriting anything there in the process!)
 6. Update any bits within your *.psd1 that are appropriate to your module but don't mess with the exported function names as those get handled automatically when you do the build.
 7. If you enabled sensitive terminology scanning then review and update your terms defined in your buildenvironment.json file (using get-buildenvironment & set-buildenvironment).
-8. Build your project with .\Build.ps1
-9. If you have ReadTheDocs integration enabled make sure to re-organize mkdocs.yml to be ordered how you like then disable ReadTheDocs integration so the yml file doesn't get overwritten at next build time.
+8. Build your project with .\Build.ps1 (or in VS Code Ctrl+Shift+B)
+9. If you have ReadTheDocs integration enabled make sure to re-organize the generated mkdocs.yml to be ordered how you like before pushing your code to github.

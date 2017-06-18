@@ -11,6 +11,14 @@ There are a few premises which should be known about this project.
 
 - The general idea of the base module is that you will develop and test it out without having to worry about keeping your manifest file up to date with your public functions. When you finally build the module, then the functions are explicitly injected into the manifest file and the source files are all (optionally) combined into one psm1 for distribution.
 
+## How it Works
+
+Firstly, this module uses everything it creates in its own build process. Since this module is only mildly more complex than a simple script module that works out perfectly.
+
+Aside from the handful of helper functions there is an included 'plaster' folder that includes a customized version of the module of the same name and a manifest folder named ModuleBuild. This ModuleBuild folder contains a scaffold directory structure used to create your projects. The questions asked as well as the actions taken when copying over the scaffold folder items are both contained in the root of the plaster directory in 'plastercontent.ps1' and 'plasterparameters.ps1' and are made into the plaster manifest file at build time.
+
+The scaffolding itself is mostly a big invoke-build script.
+
 ## Folder Structure
 A default ModuleBuild project scaffold will look like the following for a project named 'ModuleName' with build version 0.0.1 sucessfully built.
 ```

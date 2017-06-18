@@ -153,6 +153,150 @@ function Get-CallerPreference {
     }
 }
 
+function Get-Function {
+    <#
+    .SYNOPSIS
+        Enumerates all functions within lines of code.
+    .DESCRIPTION
+        Enumerates all functions within lines of code.
+    .PARAMETER Code
+        Multiline or piped lines of code to process.
+    .EXAMPLE
+        TBD
+    .NOTES
+       Author: Zachary Loeber
+       Site: http://www.the-little-things.net/
+       Requires: Powershell 3.0
+
+       Version History
+       1.0.0 - Initial release
+    .LINK
+        http://www.the-little-things.net
+    #>
+    [CmdletBinding()]
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
+        [AllowEmptyString()]
+        [string[]]$Code
+    )
+    begin {
+        $ThisFunc = $MyInvocation.MyCommand.Name
+        Write-Verbose "$($ThisFunc): Begin."
+
+        $Codeblock = @()
+        $ParseError = $null
+        $Tokens = $null
+
+        $predicate = {
+            $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAST]
+        }
+
+        $FunctionsFound = @()
+    }
+    process {
+        $Codeblock += $Code
+    }
+    end {
+        $ScriptText = ($Codeblock | Out-String).trim("`r`n")
+        Write-Verbose "$($ThisFunc): Attempting to parse AST."
+        $AST = [System.Management.Automation.Language.Parser]::ParseInput($ScriptText, [ref]$Tokens, [ref]$ParseError)
+
+        if($ParseError) {
+            $ParseError | Write-Error
+            throw "$($ThisFunc): Will not work properly with errors in the script, please modify based on the above errors and retry."
+        }
+
+        # First get all blocks
+        $Blocks = $AST.FindAll($predicate, $true)
+
+        Foreach ($Block in $Blocks) {
+            $FunctionProps = @{
+                Name = $Block.Name
+                Definition = $Block.Extent.Text
+                IsEmbedded = $false
+            }
+
+            if (@(Get-ParentASTTypes $Block) -contains 'FunctionDefinitionAst') {
+                $FunctionProps.IsEmbedded = $true
+            }
+
+            New-Object -TypeName psobject -Property $FunctionProps
+        }
+
+        Write-Verbose "$($ThisFunc): End."
+    }
+}
+
+function Get-ParentASTTypes {
+    <#
+    .SYNOPSIS
+        Retrieves all parent types of a given AST element.
+    .DESCRIPTION
+        
+    .PARAMETER Code
+        Multiline or piped lines of code to process.
+    .EXAMPLE
+       
+       Description
+       -----------
+
+    .NOTES
+       Author: Zachary Loeber
+       Site: http://www.the-little-things.net/
+       Requires: Powershell 3.0
+
+       Version History
+       1.0.0 - Initial release
+    #>
+    [CmdletBinding()]
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline=$true, HelpMessage='AST element to process.')]
+        $AST
+    )
+    # Pull in all the caller verbose,debug,info,warn and other preferences
+    if ($script:ThisModuleLoaded -eq $true) { Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState }
+    $FunctionName = $MyInvocation.MyCommand.Name
+    Write-Verbose "$($FunctionName): Begin."
+    $ASTParents = @()
+    if ($AST.Parent -ne $null) {
+        $CurrentParent = $AST.Parent
+        $KeepProcessing = $true
+    }
+    else {
+        $KeepProcessing = $false
+    }
+    while ($KeepProcessing) {
+        $ASTParents += $CurrentParent.GetType().Name.ToString()
+        if ($CurrentParent.Parent -ne $null) {
+            $CurrentParent = $CurrentParent.Parent
+            $KeepProcessing = $true
+        }
+        else {
+            $KeepProcessing = $false
+        }
+    }
+
+    $ASTParents
+    Write-Verbose "$($FunctionName): End."
+}
+
+Function Get-ScriptPath {
+        $Invocation = (Get-Variable MyInvocation -Scope 1).Value
+        if($Invocation.PSScriptRoot) {
+            $Invocation.PSScriptRoot
+        }
+        Elseif($Invocation.MyCommand.Path) {
+            Split-Path $Invocation.MyCommand.Path
+        }
+        elseif ($Invocation.InvocationName.Length -eq 0) {
+            (Get-Location).Path
+        }
+        else {
+            $Invocation.InvocationName.Substring(0,$Invocation.InvocationName.LastIndexOf("\"));
+        }
+    }
+
+
 function New-DynamicParameter {
     <#
     .SYNOPSIS
@@ -832,6 +976,42 @@ function New-DynamicParameter {
     }
 }
 
+function Read-HostContinue {
+    param (
+        [Parameter(Position=0)]
+        [String]$PromptTitle = '',
+        [Parameter(Position=1)]
+        [string]$PromptQuestion = 'Continue?',
+        [Parameter(Position=2)]
+        [string]$YesDescription = 'Do this.',
+        [Parameter(Position=3)]
+        [string]$NoDescription = 'Do not do this.',
+        [Parameter(Position=4)]
+        [switch]$DefaultToNo,
+        [Parameter(Position=5)]
+        [switch]$Force
+    )
+    if ($Force) {
+        (-not $DefaultToNo)
+        return
+    }
+    $yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", $YesDescription
+    $no = New-Object System.Management.Automation.Host.ChoiceDescription "&No", $NoDescription
+
+    if ($DefaultToNo) {
+        $ConsolePrompt = [System.Management.Automation.Host.ChoiceDescription[]]($no,$yes)
+    }
+    else {
+        $ConsolePrompt = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
+    }
+    if (($host.ui.PromptForChoice($PromptTitle, $PromptQuestion , $ConsolePrompt, 0)) -eq 0) {
+        $true
+    }
+    else {
+        $false
+    }
+}
+
 ## PUBLIC MODULE FUNCTIONS AND DATA ##
 
 function Get-BuildEnvironment {
@@ -867,6 +1047,189 @@ function Get-BuildEnvironment {
         catch {
             throw "Unable to load the build file in $Path"
         }
+    }
+}
+
+
+function Import-ModulePrivateFunction {
+    <#
+    .EXTERNALHELP ModuleBuild-help.xml
+    .LINK
+        https://github.com/zloeber/ModuleBuild/tree/master/release/0.0.7/docs/Functions/Import-ModulePrivateFunction.md
+    #>
+
+    [CmdletBinding()]
+    param(
+        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
+        [String]$Path,
+        [parameter(Position = 1, ValueFromPipeline = $TRUE, Mandatory = $TRUE)]
+        [String]$ModulePath,
+        [parameter(Position = 2)]
+        [String]$Name = '*',
+        [parameter(Position = 3)]
+        [Switch]$Force
+    )
+    begin {
+        if ($ModulePath -notmatch '.*\.psd1') {
+            throw 'Please provide the full path to a *.psm1 file to process'
+        }
+        else {
+            try {
+                $LoadedModule = Import-Module -Name $ModulePath -Force -PassThru
+                $PublicFunctions =  $LoadedModule.ExportedCommands.Keys
+                $SourceModuleBasePath = Resolve-Path -Path (Split-path $ModulePath)
+                Remove-Module -Name $LoadedModule.Name -Force
+                Write-Verbose "Exported Functions for module = $PublicFunctions"
+            }
+            catch {
+                throw "Unable to import $ModulePath"
+            }
+        }
+        Write-Verbose "Source Module Base Path = $SourceModuleBasePath"
+        $AllSourceFiles = Get-ChildItem -Path $SourceModuleBasePath -File -Recurse -Include '*.ps1','*.psm1'
+
+        $PrivateFunctions = @()
+    }
+    process {
+        # If no path was specified take a few guesses
+        if ([string]::IsNullOrEmpty($Path)) {
+            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+
+            if ([string]::IsNullOrEmpty($Path)) {
+                throw 'Unable to locate a *.buildenvironment.json file to parse!'
+            }
+        }
+        if (-not (Test-Path $Path)) {
+            throw "Unable to find the file: $Path"
+        }
+
+        try {
+            $LoadedBuildEnv = Get-Content $Path | ConvertFrom-Json
+            $ProjectPath = Split-Path (Split-Path $Path)
+            $PrivateSrcPath = Join-Path $ProjectPath $LoadedBuildEnv.PrivateFunctionSource
+            Write-Verbose "Destination Private Function Base Path = $PrivateSrcPath"
+
+        }
+        catch {
+            throw "Unable to load the build file in $Path"
+        }
+
+        # Gather all the nonembedded function definitions that are not defined as public functions
+        Foreach ($SourceFile in $AllSourceFiles) {
+            Write-Verbose "Processing $($SourceFile.FullName)"
+            Get-Content -Path $SourceFile.FullName | Get-Function | ForEach-Object {
+                if ((-not $_.IsEmbedded) -and ($PublicFunctions -notcontains $_.Name) -and ($_.Name -like $Name)) {
+                    Write-Verbose "Adding private function definition for $($_.Name)"
+                    $PrivateFunctions += $_ | Select Name,Definition,@{n='SourcePath';e={$SourceFile.FullName}}
+                }
+            }
+        }
+        Foreach ($PrivFunc in $PrivateFunctions) {
+            $DestPath = Join-Path $PrivateSrcPath "$($PrivFunc.Name).ps1"
+            if (-not (Test-Path $DestPath)) {
+                if ($Force) {
+                    $Continue = $true
+                }
+                else {
+                    $Continue = Read-HostContinue -PromptTitle "Function Name = $($PrivFunc.Name), Source File = $($PrivFunc.SourcePath)" -PromptQuestion "Import this as a private function?"
+                }
+                if ($Continue) {
+                    $PrivFunc.definition | Out-File -FilePath $DestPath -Encoding:utf8
+                }
+            }
+            else {
+                Write-Warning "The following private function already exists: $DestPath"
+            }
+        }
+    }
+}
+
+
+function Import-ModulePublicFunction {
+    <#
+    .EXTERNALHELP ModuleBuild-help.xml
+    .LINK
+        https://github.com/zloeber/ModuleBuild/tree/master/release/0.0.7/docs/Functions/Import-ModulePublicFunction.md
+    #>
+
+    [CmdletBinding()]
+    param(
+        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
+        [String]$Path,
+        [parameter(Position = 1, ValueFromPipeline = $TRUE, Mandatory = $TRUE)]
+        [String]$ModulePath,
+        [parameter(Position = 2)]
+        [String]$Name = '*',
+        [parameter(Position = 3)]
+        [Switch]$Force
+    )
+    begin {
+        if ($ModulePath -notmatch '.*\.psm1') {
+            throw 'Please provide the full path to a *.psm1 file to process'
+        }
+        else {
+            try {
+                $LoadedModule = Import-Module -Name $ModulePath -Force -PassThru
+                $LoadedFunctions = Get-Command -Module $LoadedModule.Name -CommandType:Function
+            }
+            catch {
+                throw "Unable to import $ModulePath"
+            }
+        }
+    }
+    process {
+        # If no path was specified take a few guesses
+        if ([string]::IsNullOrEmpty($Path)) {
+            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+
+            if ([string]::IsNullOrEmpty($Path)) {
+                throw 'Unable to locate a *.buildenvironment.json file to parse!'
+            }
+        }
+        if (-not (Test-Path $Path)) {
+            throw "Unable to find the file: $Path"
+        }
+
+        try {
+            $LoadedBuildEnv = Get-Content $Path | ConvertFrom-Json
+            $ProjectPath = Split-Path (Split-Path $Path)
+            $PublicSrcPath = Join-Path $ProjectPath $LoadedBuildEnv.PublicFunctionSource
+        }
+        catch {
+            throw "Unable to load the build file in $Path"
+        }
+
+        Foreach ($LoadedFunction in $LoadedFunctions) {
+            if ($LoadedFunction.Name -like $Name) {
+                $NewScriptFile = Join-Path $PublicSrcPath "$($LoadedFunction.Name).ps1"
+                if (-not (Test-Path $NewScriptFile)) {
+                    $NewScript = "function $($LoadedFunction.Name) {"
+                    $NewScript += $LoadedFunction.Definition
+                    $NewScript += '}'
+                    if ($Force) {
+                        $Continue = $true
+                    }
+                    else {
+                        $Continue = Read-HostContinue -PromptTitle "Function Name = $($LoadedFunction.Name)" -PromptQuestion "Import this as a public function?"
+                    }
+                    if ($Continue) {
+                        try {
+                            Write-Verbose "Writing public script file to $NewScriptFile"
+                            $NewScript | Out-File -FilePath $NewScriptFile -Encoding:utf8
+                        }
+                        catch {
+                            throw "Unable to save file $NewScriptFile"
+                        }
+                    }
+                }
+                else {
+                    Write-Warning "Skipping the following file as it already exists: $NewScriptFile"
+                }
+            }
+        }
+    }
+    end {
+        Remove-Module -Name $LoadedModule.Name
     }
 }
 

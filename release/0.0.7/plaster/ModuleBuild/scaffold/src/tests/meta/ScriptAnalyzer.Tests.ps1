@@ -1,4 +1,4 @@
-# Requires -Modules Pester
+
 <#
     Check all scripts files in the sources folder against all script analyzer
     rules. It should comply with all rules.

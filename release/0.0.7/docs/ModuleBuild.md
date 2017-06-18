@@ -14,6 +14,12 @@ A scaffolding framework which can be used to kickstart a generic PowerShell modu
 ### [Get-BuildEnvironment](Get-BuildEnvironment.md)
 Retrieves all the stored settings in a buildenvironment.json file.
 
+### [Import-ModulePrivateFunction](Import-ModulePrivateFunction.md)
+Retrieves private module function definitions and recreates them in your modulebuild based project.
+
+### [Import-ModulePublicFunction](Import-ModulePublicFunction.md)
+Retrieves public module function definitions and recreates them in your modulebuild based project.
+
 ### [Initialize-ModuleBuild](Initialize-ModuleBuild.md)
 Set up the framework for a ModuleBuild project.
 

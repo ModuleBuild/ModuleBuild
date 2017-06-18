@@ -17,9 +17,11 @@ This build framework for PowerShell modules comes with several appealing baked i
 - Automatically scan your module release with PSScriptAnalyzer
 - Automatically upload your script to the PowerShell Gallery (with appropriate API key)
 - Automatically create project documentation folder structure and yml definition file for ReadTheDocs.org integration
+- Automatically generate module documentation with PlatyPS
 - Visual Studio Code integration (tasks)
 - Easy to manage build configuration with forward compatible design and easy to use commands
 - Includes ability to scan for sensitive terms (like your company domain name or other items that you may not want published)
+- Helper functions to import existing project private and public functions into your ModuleBuild based project
 
 ## Installation
 ModuleBuild is available on the [PowerShell Gallery](https://www.powershellgallery.com/packages/ModuleBuild/).
