@@ -38,6 +38,22 @@
             ]
         },
         {
+            "taskName": "Install and Test Module",
+            "suppressTaskName": true,
+            "isBuildCommand": true,
+            "args": [
+              "Invoke-Build -Task InstallAndTestModule"
+            ]
+        },
+        {
+            "taskName": "Build, Install, and Test Module",
+            "suppressTaskName": true,
+            "isBuildCommand": true,
+            "args": [
+              "Invoke-Build -Task BuildInstallAndTestModule"
+            ]
+        },
+        {
             "taskName": "PublishPSGallery",
             "suppressTaskName": true,
             "args": [

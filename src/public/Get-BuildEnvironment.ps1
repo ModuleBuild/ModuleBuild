@@ -13,7 +13,10 @@ function Get-BuildEnvironment {
     https://github.com/zloeber/ModuleBuild
 
     .EXAMPLE
-    TBD
+    Get-buildenvironment
+
+    If a buildenvironment.json file exists in .\build then the settings within it will be displayed on the screen
+    Otherwise nothing happens.
     #>
 
     [CmdletBinding()]
@@ -21,7 +24,11 @@ function Get-BuildEnvironment {
         [parameter(Position = 0, ValueFromPipeline = $TRUE)]
         [String]$Path
     )
-
+    begin {
+        if ($script:ThisModuleLoaded -eq $true) {
+            Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+        }
+    }
     process {
         # If no path was specified take a few guesses
         if ([string]::IsNullOrEmpty($Path)) {
@@ -36,8 +43,7 @@ function Get-BuildEnvironment {
         }
 
         try {
-            $LoadedBuildEnv = Get-Content $Path | ConvertFrom-Json
-            $LoadedBuildEnv
+            Get-Content $Path | ConvertFrom-Json
         }
         catch {
             throw "Unable to load the build file in $Path"

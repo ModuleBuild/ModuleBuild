@@ -28,6 +28,9 @@ $ExecutionContext.SessionState.Module.OnRemove = {
 $null = Register-EngineEvent -SourceIdentifier ( [System.Management.Automation.PsEngineEvent]::Exiting ) -Action {
     # Action to take if the whole pssession is killed
 }
+
+$ThisModuleLoaded = $true
+
 #endregion Module Cleanup
 
 # Non-function exported public module members might go here.

@@ -1,15 +1,17 @@
 ## Introduction
 This is a scaffolding framework which can be used to kickstart a generic PowerShell module project. It includes the base files and scripts required to perform regular build releases, uploading to the powershell gallery, and other such fun. All the hard work is done with the excellent invoke-build project engine, a rather large set of build tasks for it, and a custom Plaster template.
 
+The general idea of the base module is that you will develop and test without having to worry about keeping your manifest file up to date with your public functions. When you finally build the module, then the functions are explicitly injected into the manifest file and the source files are all (optionally) combined into one psm1 for distribution.
+
+The starting module is that every private and public function will be saved as separate files in specific directorys (src\public and src\private). Then the module will be build into one monolithic distributable psm1 file with an updated manifect file to reflect your exported functions.
+
 There are a few premises which should be known about this project.
 
-- This scaffolding works best with simple script modules where only public functions are being exported. This is largely due to the nature of how modules behave the moment you have to use export-modulemember. When you use this command to export anything then you must also define your functions or none of them will be exported. [This is all defined in the technet article for this command](https://technet.microsoft.com/en-us/library/hh849736.aspx). You can still use this project for some of the many automated benefits it can provide, that is if you are willing to massage things a little bit.
+- This scaffolding works best with simple script modules where only public functions are being exported. This is largely due to the nature of how modules behave the moment you have to use export-modulemember. When you use this command to export anything then you must also define your functions or none of them will be exported. [This is all defined in the technet article for this command](https://technet.microsoft.com/en-us/library/hh849736.aspx). You can still use this project for some of the many automated benefits it can provide though.
 
 - I use serveral PowerShell 5 features but this doesn't mean that the underlying modules being created need to require PowerShell 5 (the default manifest file that gets created sets the required version to 3).
 
-- Most documentation for the module gets automatically created as part of the build process. This documentation is created from the comment based help associated with every function.
-
-- The general idea of the base module is that you will develop and test it out without having to worry about keeping your manifest file up to date with your public functions. When you finally build the module, then the functions are explicitly injected into the manifest file and the source files are all (optionally) combined into one psm1 for distribution.
+- Most documentation for the module gets automatically created as part of the build process. This documentation is created from the comment based help associated with every function and from files in the build\docs directory.
 
 ## How it Works
 
@@ -17,7 +19,7 @@ Firstly, this module uses everything it creates in its own build process. Since 
 
 Aside from the handful of helper functions there is an included 'plaster' folder that includes a customized version of the module of the same name and a manifest folder named ModuleBuild. This ModuleBuild folder contains a scaffold directory structure used to create your projects. The questions asked as well as the actions taken when copying over the scaffold folder items are both contained in the root of the plaster directory in 'plastercontent.ps1' and 'plasterparameters.ps1' and are made into the plaster manifest file at build time.
 
-The scaffolding itself is mostly a big invoke-build script.
+The scaffolding itself is mostly a big invoke-build script and does not need the ModuleBuild module to perform build tasks.
 
 ## Folder Structure
 A default ModuleBuild project scaffold will look like the following for a project named 'ModuleName' with build version 0.0.1 sucessfully built.

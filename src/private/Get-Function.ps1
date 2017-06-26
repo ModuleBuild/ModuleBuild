@@ -6,6 +6,8 @@ function Get-Function {
         Enumerates all functions within lines of code.
     .PARAMETER Code
         Multiline or piped lines of code to process.
+    .PARAMETER Name
+        Name of a function to return. Default is all functions.
     .EXAMPLE
         TBD
     .NOTES
@@ -22,7 +24,9 @@ function Get-Function {
     param(
         [parameter(Position = 0, Mandatory = $true, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
         [AllowEmptyString()]
-        [string[]]$Code
+        [string[]]$Code,
+        [parameter(Position=1, HelpMessage='Name of function to process.')]
+        [string]$Name = '*'
     )
     begin {
         $ThisFunc = $MyInvocation.MyCommand.Name
@@ -33,10 +37,9 @@ function Get-Function {
         $Tokens = $null
 
         $predicate = {
-            $args[0] -is [System.Management.Automation.Language.FunctionDefinitionAST]
+            ($args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst]) -and
+            ($args[0].Name -like $name)
         }
-
-        $FunctionsFound = @()
     }
     process {
         $Codeblock += $Code
@@ -47,7 +50,6 @@ function Get-Function {
         $AST = [System.Management.Automation.Language.Parser]::ParseInput($ScriptText, [ref]$Tokens, [ref]$ParseError)
 
         if($ParseError) {
-            $ParseError | Write-Error
             throw "$($ThisFunc): Will not work properly with errors in the script, please modify based on the above errors and retry."
         }
 
@@ -59,6 +61,7 @@ function Get-Function {
                 Name = $Block.Name
                 Definition = $Block.Extent.Text
                 IsEmbedded = $false
+                AST = $Block
             }
 
             if (@(Get-ParentASTTypes $Block) -contains 'FunctionDefinitionAst') {

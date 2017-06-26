@@ -13,7 +13,7 @@
        PS > $test = Get-Content $testfile -raw
        PS > $test | New-CommentBasedHelp | clip
 
-       Takes C:\temp\test.ps1 as input, creates basic comment based help and puts the result in the clipboard 
+       Takes C:\temp\test.ps1 as input, creates basic comment based help and puts the result in the clipboard
        to be pasted elsewhere for review.
     .EXAMPLE
         PS > $CBH = Get-Content 'C:\EWSModule\Get-EWSContact.ps1' -Raw | New-CommentBasedHelp -Verbose -Advanced
@@ -40,7 +40,7 @@
     begin {
         $FunctionName = $MyInvocation.MyCommand.Name
         Write-Verbose "$($FunctionName): Begin."
-        
+
         function Get-FunctionParameter {
             <#
             .SYNOPSIS
@@ -83,7 +83,7 @@
             begin {
                 $FunctionName = $MyInvocation.MyCommand.Name
                 Write-Verbose "$($FunctionName): Begin."
-                
+
                 $Codeblock = @()
                 $ParseError = $null
                 $Tokens = $null
@@ -102,8 +102,8 @@
                 $ScriptText = ($Codeblock | Out-String).trim("`r`n")
                 Write-Verbose "$($FunctionName): Attempting to parse AST."
 
-                $AST = [System.Management.Automation.Language.Parser]::ParseInput($ScriptText, [ref]$Tokens, [ref]$ParseError) 
-        
+                $AST = [System.Management.Automation.Language.Parser]::ParseInput($ScriptText, [ref]$Tokens, [ref]$ParseError)
+
                 if($ParseError) {
                     $ParseError | Write-Error
                     throw "$($FunctionName): Will not work properly with errors in the script, please modify based on the above errors and retry."
@@ -114,8 +114,8 @@
                     if (-not [string]::IsNullOrEmpty($Name)) {
                         $functions = $functions | where {$_.Name -eq $Name}
                     }
-                    
-                    
+
+
                     # get the begin and end positions of every for loop
                     foreach ($function in $functions) {
                         Write-Verbose "$($FunctionName): Processing function - $($function.Name.ToString())"
@@ -170,6 +170,17 @@
 %%PARAMHELP%%
 '@
 
+        $CBHTemplate = @'
+    <#
+    .SYNOPSIS
+        TBD
+    .DESCRIPTION
+        TBD
+    %%PARAMETER%%
+    .EXAMPLE
+        TBD
+    #>
+'@
         $Codeblock = @()
     }
     process {
@@ -184,7 +195,7 @@
         }
         $AllParams = Get-FunctionParameter @FuncParams -Code $Codeblock | Sort-Object -Property FunctionName
         $AllFunctions = @($AllParams.FunctionName | Select -unique)
-        
+
         foreach ($f in $AllFunctions) {
             $OutCBH = @{}
             $OutCBH.'FunctionName' = $f

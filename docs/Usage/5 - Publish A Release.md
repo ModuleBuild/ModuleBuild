@@ -7,7 +7,7 @@ Once you have attained your API key you will need to update your build configura
 
 Now when you are ready to upload to the psgallery simply run the following:
 
-`.\Build.ps1 -UploadPSGallery
+`.\Build.ps1 -UploadPSGallery`
 
 Assuming you have a valid NugetAPI key defined and your PowerShell manifest file has everything the gallary requires then this build step will automatically update the the upload the recent release directory module to the PowerShell Gallery for you.
 
@@ -16,3 +16,11 @@ Assuming you have a valid NugetAPI key defined and your PowerShell manifest file
 Hey, one more point, you can chain things together and do a build, install and test, and upload to the powershell gallery in one fell swoop:
 
 `.\Build.ps1 -BuildModule -InstallAndTestModule -UploadPSGallery -ReleaseNotes 'First Upload'`
+
+or
+
+`Invoke-Build -Task BuildInstallTestAndPublishModule`
+
+or in VS Code
+
+`Ctrl+Shift+B (then select "Build, Install, Test, and Publish Module")`

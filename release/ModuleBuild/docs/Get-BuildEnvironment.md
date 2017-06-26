@@ -22,8 +22,11 @@ Retrieves all the stored settings in a buildenvironment.json file.
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-TBD
+Get-buildenvironment
 ```
+
+If a buildenvironment.json file exists in .\build then the settings within it will be displayed on the screen
+Otherwise nothing happens.
 
 ## PARAMETERS
 

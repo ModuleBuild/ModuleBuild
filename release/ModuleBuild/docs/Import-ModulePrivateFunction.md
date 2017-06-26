@@ -12,7 +12,8 @@ Retrieves private module function definitions and recreates them in your moduleb
 ## SYNTAX
 
 ```
-Import-ModulePrivateFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-Force]
+Import-ModulePrivateFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotInsertCBH]
+ [[-ExcludePaths] <String[]>] [[-ExcludeFiles] <String[]>] [-Force] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -50,7 +51,7 @@ Accept wildcard characters: False
 
 ### -ModulePath
 An existing module path to target.
-Must be a psd1 file.
+Must be a psd1 or psm1 file.
 
 ```yaml
 Type: String
@@ -80,8 +81,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Force
-Do not prompt for every function import.
+### -DoNotInsertCBH
+Do not attempt to find and insert comment based help into the function.
+Default for private functions is to skip CBH insertion.
 
 ```yaml
 Type: SwitchParameter
@@ -90,7 +92,84 @@ Aliases:
 
 Required: False
 Position: 4
+Default value: True
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ExcludePaths
+Paths within the root of your module source which will be ignored in this import.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 5
+Default value: @('temp','build','.git','.vscode','docs','release','plaster')
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ExcludeFiles
+Files, in regex pattern format, that will be ignored in this import.
+
+```yaml
+Type: String[]
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 6
+Default value: @('.*\.buildenvironment.ps1','.*\.build.ps1','Build\.ps1','Install\.ps1','PreLoad\.ps1','PostLoad\.ps1','.*\.tests\.ps1','.*\.test\.ps1')
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Force
+Do not prompt to import each found public function.
+Default will prompt before importing anything.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 7
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -101,6 +180,7 @@ Accept wildcard characters: False
 
 ## NOTES
 This only applies to modules of the type 'Script'.
+Be very careful before importing everything as any wayward functions might get imported and bloat your resulting module needlessly.
 
 ## RELATED LINKS
 

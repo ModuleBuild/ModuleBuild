@@ -12,7 +12,8 @@ Retrieves public module function definitions and recreates them in your modulebu
 ## SYNTAX
 
 ```
-Import-ModulePublicFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-Force]
+Import-ModulePublicFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotInsertCBH]
+ [-Force]
 ```
 
 ## DESCRIPTION
@@ -48,7 +49,7 @@ Accept wildcard characters: False
 
 ### -ModulePath
 An existing module path to target.
-Must be a psm1 file.
+Must be a psm1 or psd1 file.
 
 ```yaml
 Type: String
@@ -78,6 +79,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -DoNotInsertCBH
+Do not attempt to find and insert comment based help into the function.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: 4
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Force
 Do not prompt for every function import.
 
@@ -87,7 +103,7 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 4
+Position: 5
 Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False

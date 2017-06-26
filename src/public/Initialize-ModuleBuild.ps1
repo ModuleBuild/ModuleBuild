@@ -21,6 +21,11 @@ function Initialize-ModuleBuild {
         [parameter(Position = 0, ValueFromPipeline = $TRUE)]
         [String]$Path
     )
+    begin {
+        if ($script:ThisModuleLoaded -eq $true) {
+            Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+        }
+    }
     process {
         $CustomPlasterModulePath = Join-Path $MyModulePath 'plaster\PlasterModule\Plaster.psd1'
         $PostInitMessage = @'

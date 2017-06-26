@@ -10,10 +10,11 @@ Your module documentation also comes in a few different forms and locations that
 2. **Module documentation (distributed)** - This is packaged within your module release docs folder. This is essentially just a trimmed down version of your project documentation that only includes your module function documentation and little else. This is used to create your downloadable documentation (a cab file) and is also used as a point in time documentation for specific versions of your module.
 3. **Module documentation (downloadable)** - This is distributed with the module in the en-US folder and includes the local cab/zip/xml files for local module help.
 
-> **NOTE:** If you get one thing from this section it is that you should **NOT** be updating your project documentation in the .\docs folder directly. Instead, use the build\docs folder to update your documentation and it will automatically populate to your project .\docs directory at build time.
+>**NOTE:** If you get one thing from this section it is that you should **NOT** be updating your project documentation in the .\docs folder directly. Instead, use the build\docs folder to update your documentation and it will automatically populate to your project .\docs directory at build time.
 
 ## Comment Based Help (aka. CBH)
 This build project assumes that the comment based help in your public functions are the single source of truth for your documentation.
+
 ModuleBuild uses PlatyPS to generate the relevant help files at every build. The build will fail if "{{ blah blah blah }}" is found within the PlatyPS markdown output. PlatyPS puts this marker text in place when you have missed parameters, synopsis, descriptions, or other essential CBH sections.
 
 It is possible to setup the build process in a manner that would allow us to manually make updates to the .md files and then continue processing. But I've purposefully decided against this so you are encouraged to go back to your original functions, fix/change the offending CBH, and rebuild.
@@ -41,11 +42,14 @@ I've included a special task called 'UpdateCBHToScratch' that will recurse throu
 `.\Build.ps1 -InsertCBH`
 
 If you have a large project with little CBH this can be a good way to kickstart the process so the build process will start working. Additionally, if you add a bunch of public functions without CBH you can use this process to fill things out temporarily until you have time to round back and add better details.
+
 >**NOTE:** This process requires you to copy the resulting files back into your project to be of any use.
 
 ## ReadTheDocs.net Integration
-If you have enabled readthedocs.net integration in the ModuleBuild configuration then a mkdocs.yml file will get updated automatically at the root of your project directory. It is up to you to setup the integration between your github.com account and readthedocs.net for this to be of any use in your project. When setting up your project at the ReadTheDocs website remember to set the advanced settings for the mkdocs processing.
+If you have enabled readthedocs.net integration in the ModuleBuild configuration then a mkdocs.yml file will get updated automatically at the root of your project directory. It is up to you to setup the integration between your github.com account and readthedocs.net for this to be of any use in your project. When setting up your project at the ReadTheDocs website remember to set the advanced settings for 'mkdocs' processing.
 
 The ReadTheDocs manifest file gets generated from the folder structure in .\build\docs\ReadTheDocs. Each subfolder becomes a category with each markdown document within becoming a specific page within it.
 
 Beware that the order of the pages in this manifest file can be rather random. You will want to update the file to suit your needs (and then possibly disable readthedocs integration within your ModuleBuild config file so it doesn't revert the next build you run).
+
+**mkdocs.yml needs to be manually removed if you want it to be regenerated**

@@ -1,8 +1,8 @@
 function Read-HostContinue {
     param (
-        [Parameter(Position=0)]
+        [Parameter(Position=0,HelpMessage='Title for your read prompt.')]
         [String]$PromptTitle = '',
-        [Parameter(Position=1)]
+        [Parameter(Position=1,HelpMessage='Question to display at the prompt.')]
         [string]$PromptQuestion = 'Continue?',
         [Parameter(Position=2)]
         [string]$YesDescription = 'Do this.',

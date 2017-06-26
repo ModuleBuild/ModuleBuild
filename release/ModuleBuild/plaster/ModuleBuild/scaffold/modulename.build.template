@@ -798,11 +798,17 @@ task GithubPush VersionCheck, {
     assert (-not $changes) "Please, commit changes."
 }
 
+# Synopsis: Build the module
+task . Configure, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, BuildSessionCleanup
+
 # Synopsis: Install and test load the module.
 task InstallAndTestModule InstallModule, TestInstalledModule
 
-# Synopsis: The default build
-task . Configure, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, BuildSessionCleanup
+# Synopsis: Build, Install, and Test the module
+task BuildInstallAndTestModule Configure, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, BuildSessionCleanup
+
+# Synopsis: Build, Install, Test, and Publish the module
+task BuildInstallTestAndPublishModule Configure, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, PublishPSGallery, BuildSessionCleanup
 
 # Synopsis: Instert Comment Based Help where it doesn't already exist (output to scratch directory)
 task InsertMissingCBH Configure, Clean, UpdateCBHtoScratch, BuildSessionCleanup

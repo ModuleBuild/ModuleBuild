@@ -4,6 +4,7 @@
 There are two special files in the src\other directory:
 
 **src\other\PreLoad.ps1** - dot sourced at the beginning of the module (and in the build it is the first file to populate the final combined psm1 file).
+
 **src\other\PostLoad.ps1** - dot sourced at the end of the module (and is the last file to populate the final combined psm1 file).
 
 This is meant to help a little with some difference scenarios and could easily be expanded upon (perhaps a different file for exported variables and aliases that are AST parsed and converted into the correct replacements in the final psd1 file?)

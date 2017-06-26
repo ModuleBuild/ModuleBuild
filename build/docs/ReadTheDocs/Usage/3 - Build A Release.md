@@ -8,7 +8,7 @@ or
 
 `.\Build.ps1 -BuildModule`
 
-This will go through the process of combining the source files, populating the exportable functions, creating online help files, analyzing the script, and more. If everything builds without errors you will see the results populated in the release directory in two areas:
+This is the heart of the ModuleBuild project. The build will go through the process of combining the source files into a monolithic psm1 file, populating the exportable functions of the release module manifest, creating online help files, analyze the script, scan for sensitive terms, and more. If everything builds without errors you will see the results populated in the release directory in two areas:
 1. In the release directory in a folder with the same name as the module (which is best practice for a module)
 2. In the release directory in a folder with the version number of the release.
 

@@ -10,10 +10,13 @@ function Import-ModulePublicFunction {
     Specifies the path to a buildenvironment.json file for an existing modulebuild project.
 
     .PARAMETER ModulePath
-    An existing module path to target. Must be a psm1 file.
+    An existing module path to target. Must be a psm1 or psd1 file.
 
     .PARAMETER Name
     Function name to import. If none are specified then all functions will be imported.
+
+    .PARAMETER DoNotInsertCBH
+    Do not attempt to find and insert comment based help into the function.
 
     .PARAMETER Force
     Do not prompt for every function import.
@@ -39,11 +42,16 @@ function Import-ModulePublicFunction {
         [parameter(Position = 2)]
         [String]$Name = '*',
         [parameter(Position = 3)]
+        [Switch]$DoNotInsertCBH,
+        [parameter(Position = 4)]
         [Switch]$Force
     )
     begin {
-        if ($ModulePath -notmatch '.*\.psm1') {
-            throw 'Please provide the full path to a *.psm1 file to process'
+        if ($script:ThisModuleLoaded -eq $true) {
+            Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+        }
+        if ($ModulePath -notmatch '.*\.[psm1|psd1]') {
+            throw 'Please provide the full path to a psm1 or psd1 file to process'
         }
         else {
             try {
@@ -91,12 +99,22 @@ function Import-ModulePublicFunction {
                         $Continue = Read-HostContinue -PromptTitle "Function Name = $($LoadedFunction.Name)" -PromptQuestion "Import this as a public function?"
                     }
                     if ($Continue) {
-                        try {
-                            Write-Verbose "Writing public script file to $NewScriptFile"
-                            $NewScript | Out-File -FilePath $NewScriptFile -Encoding:utf8
+                        if ($DoNotInsertCBH) {
+                            try {
+                                Write-Verbose "Writing public script file to $NewScriptFile"
+                                $NewScript | Out-File -FilePath $NewScriptFile -Encoding:utf8
+                            }
+                            catch {
+                                throw "Unable to save file $NewScriptFile"
+                            }
                         }
-                        catch {
-                            throw "Unable to save file $NewScriptFile"
+                        else {
+                            try {
+                                $NewScript | Insert-MissingCBH | Out-File -FilePath $NewScriptFile -Encoding:utf8
+                            }
+                            catch {
+                                throw $_
+                            }
                         }
                     }
                 }

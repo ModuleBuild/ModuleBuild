@@ -61,8 +61,10 @@ function Set-BuildEnvironment {
         $DynamicParameters
     }
 
-    process {
-        New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+    begin {
+        if ($script:ThisModuleLoaded -eq $true) {
+            Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+        }
         if ([String]::isnullorempty($Path)) {
             $BuildPaths = @()
             $BuildPaths += (Get-ChildItem .\*.buildenvironment.json).FullName
@@ -73,19 +75,24 @@ function Set-BuildEnvironment {
             $BuildPath = $Path
         }
 
+        Write-Verbose "Using build file: $BuildPath"
+    }
+    process {
+        New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+
         if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
             try {
-                $LoadedBuildEnv = Get-BuildEnvironment $Path
+                $LoadedBuildEnv = Get-BuildEnvironment -Path $BuildPath
                 Foreach ($ParamKey in ($PSBoundParameters.Keys | Where-Object {$_ -ne 'Path'})) {
                     $LoadedBuildEnv.$ParamKey = $PSBoundParameters[$ParamKey]
                     Write-Output "Updating $ParamKey to be $($PSBoundParameters[$ParamKey])"
                 }
 
-                $LoadedBuildEnv | ConvertTo-Json | Out-File -FilePath $Path -Encoding:utf8 -Force
-                Write-Output "Saved configuration file - $Path"
+                $LoadedBuildEnv | ConvertTo-Json | Out-File -FilePath $BuildPath -Encoding:utf8 -Force
+                Write-Output "Saved configuration file - $BuildPath"
             }
             catch {
-                throw "Unable to load the build file in $Path"
+                throw "Unable to load the build file in $BuildPath"
             }
         }
         else {
