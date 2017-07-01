@@ -24,9 +24,6 @@ function Import-ModulePrivateFunction {
     .PARAMETER ExcludeFiles
     Files, in regex pattern format, that will be ignored in this import.
 
-    .PARAMETER Force
-    Do not prompt to import each found public function. Default will prompt before importing anything.
-
     .LINK
     https://github.com/zloeber/ModuleBuild
 
@@ -52,9 +49,7 @@ function Import-ModulePrivateFunction {
         [parameter(Position = 4)]
         [string[]]$ExcludePaths = @('temp','build','.git','.vscode','docs','release','plaster'),
         [parameter(Position = 5)]
-        [string[]]$ExcludeFiles = @('.*\.buildenvironment.ps1','.*\.build.ps1','Build\.ps1','Install\.ps1','PreLoad\.ps1','PostLoad\.ps1','.*\.tests\.ps1','.*\.test\.ps1'),
-        [parameter(Position = 6)]
-        [Switch]$Force
+        [string[]]$ExcludeFiles = @('.*\.buildenvironment.ps1','.*\.build.ps1','Build\.ps1','Install\.ps1','PreLoad\.ps1','PostLoad\.ps1','.*\.tests\.ps1','.*\.test\.ps1')
     )
     begin {
         if ($script:ThisModuleLoaded -eq $true) {

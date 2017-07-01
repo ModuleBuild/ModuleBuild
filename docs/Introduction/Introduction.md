@@ -5,7 +5,7 @@ The general idea of the base module is that you will develop and test without ha
 
 The starting module is that every private and public function will be saved as separate files in specific directorys (src\public and src\private). Then the module will be build into one monolithic distributable psm1 file with an updated manifect file to reflect your exported functions.
 
-There are a few premises which should be known about this project.
+There are a few premises which should be known about this project before using it to start your module development.
 
 - This scaffolding works best with simple script modules where only public functions are being exported. This is largely due to the nature of how modules behave the moment you have to use export-modulemember. When you use this command to export anything then you must also define your functions or none of them will be exported. [This is all defined in the technet article for this command](https://technet.microsoft.com/en-us/library/hh849736.aspx). You can still use this project for some of the many automated benefits it can provide though.
 

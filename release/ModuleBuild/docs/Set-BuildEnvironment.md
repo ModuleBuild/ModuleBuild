@@ -14,14 +14,15 @@ Sets a stored setting in a buildenvironment.json file.
 ```
 Set-BuildEnvironment [[-Path] <String>] [-AdditionalModulePaths <Object[]>] [-BaseReleaseFolder <String>]
  [-BaseSourceFolder <String>] [-BuildToolFolder <String>] [-Encoding <String>] [-FirstRun <Boolean>]
- [-ModuleAuthor <String>] [-ModuleCopyright <String>] [-ModuleDescription <String>]
- [-ModuleLicenseURI <String>] [-ModuleTags <Object[]>] [-ModuleToBuild <String>] [-ModuleVersion <String>]
- [-ModuleWebsite <String>] [-NugetAPIKey <String>] [-OptionAnalyzeCode <Boolean>]
+ [-Force <Boolean>] [-ForceInstallModule <Boolean>] [-ModuleAuthor <String>] [-ModuleCopyright <String>]
+ [-ModuleDescription <String>] [-ModuleLicenseURI <String>] [-ModuleTags <Object[]>] [-ModuleToBuild <String>]
+ [-ModuleVersion <String>] [-ModuleWebsite <String>] [-NugetAPIKey <String>] [-OptionAnalyzeCode <Boolean>]
  [-OptionCombineFiles <Boolean>] [-OptionGenerateReadTheDocs <Boolean>] [-OptionRunPlatyPSVerbose <Boolean>]
  [-OptionSanitizeSensitiveTerms <Boolean>] [-OptionSensitiveTerms <Object[]>]
  [-OptionSensitiveTermsInitialized <Boolean>] [-OptionTranscriptEnabled <Boolean>]
- [-OptionTranscriptLogFile <String>] [-OtherModuleSource <String>] [-PrivateFunctionSource <String>]
- [-PublicFunctionSource <String>] [-ScratchFolder <String>]
+ [-OptionTranscriptLogFile <String>] [-OptionUpdateVersionAfterPublishing <Boolean>]
+ [-OtherModuleSource <String>] [-PrivateFunctionSource <String>] [-PublicFunctionSource <String>]
+ [-ScratchFolder <String>]
 ```
 
 ## DESCRIPTION
@@ -128,6 +129,36 @@ Accept wildcard characters: False
 
 ### -FirstRun
 Update the setting for FirstRun
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -Force
+Update the setting for Force
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -ForceInstallModule
+Update the setting for ForceInstallModule
 
 ```yaml
 Type: Boolean
@@ -401,6 +432,21 @@ Update the setting for OptionTranscriptLogFile
 
 ```yaml
 Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -OptionUpdateVersionAfterPublishing
+Update the setting for OptionUpdateVersionAfterPublishing
+
+```yaml
+Type: Boolean
 Parameter Sets: (All)
 Aliases: 
 

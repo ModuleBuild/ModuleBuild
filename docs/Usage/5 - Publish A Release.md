@@ -24,3 +24,5 @@ or
 or in VS Code
 
 `Ctrl+Shift+B (then select "Build, Install, Test, and Publish Module")`
+
+After this has completed the build version number will automatically be incremented by 1 and updated in your build configuration and the main module manifest file.

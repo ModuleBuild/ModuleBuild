@@ -135,7 +135,9 @@ task VersionCheck LoadModuleManifest, {
     Write-Description White 'Manifest version and the release version in the build configuration file are the same.' -Level 2
     $GalleryVersion = find-module ($Script:BuildEnv.ModuleToBuild) -ErrorAction:SilentlyContinue
     if ($null -ne $GalleryVersion) {
-        assert ( ($GalleryVersion.Version -lt [version]($Script:BuildEnv.ModuleVersion)) -and (-not $Force) ) "The current module version is less than or equal to the one published in powershell gallary. You should bump up your module version to be at least greater than $($GalleryVersion.Version.ToString()) before building this module."
+        if ($GalleryVersion.Version -gt [version]($Script:BuildEnv.ModuleVersion)) {
+            throw "The current module version is less than or equal to the one published in powershell gallary. You should bump up your module version to be at least greater than $($GalleryVersion.Version.ToString()) before building this module."
+        }
     }
     else {
         Write-Description White 'This module has not been published to the gallery so any version is ok to build at this point.' -Level 2
@@ -164,9 +166,10 @@ task NewVersion LoadBuildTools, LoadModuleManifest, {
             }
         } while ( [string]::IsNullOrEmpty($NewVersion) -and ($NewVersion -notmatch '\d+\.\d+\.\d+') )
     }
-    if (($AllReleases -contains $NewVersion) -and (-not $Force)) {
-        Write-Build Red 'The module version already has been released (the folder exists within the releases folder. In order to set your build project to this version you will need to pass the -Force switch to this build script with the -NewVersion parameter' -Level 2
-        throw 'Unable to update build project version!'
+    if ($AllReleases -contains $NewVersion) {
+        if ((-not $Force) -and (-not $Script:BuildEnv.Force)) {
+            throw 'The module version already has been released (the folder exists within the releases folder. In order to set your build project to this version you will need to pass the -Force switch to this build script with the -NewVersion parameter'
+        }
     }
 
     $Script:BuildEnv.ModuleVersion = $NewVersion.ToString()
@@ -562,7 +565,7 @@ task PushCurrentRelease {
             $ProcessCurrentRelease = $false
         }
     }
-    if ($ProcessCurrentRelease -or $Force) {
+    if ($ProcessCurrentRelease -or $Force -or $Script:BuildEnv.Force) {
         Write-Description White "Pushing a version release to $($ThisBuildCurrentReleasePath)" -level 2
         $null = Remove-Item $CurrentReleasePath -Force -Recurse -ErrorAction 0
         $null = New-Item $CurrentReleasePath -ItemType:Directory -Force
@@ -698,9 +701,43 @@ task PublishPSGallery LoadBuildTools, InstallModule, {
         Write-Description White "Uploading project to PSGallery: $($Script:BuildEnv.ModuleToBuild)"
         Upload-ProjectToPSGallery -Name $Script:BuildEnv.ModuleToBuild -NuGetApiKey $Script:BuildEnv.NuGetApiKey
     }
+
     else {
         Write-Warning "Unable to publish the module as a current release is not available in $CurrentModule"
     }
+}
+
+# Synopsis: Update the current build patch version
+task AutoIncreaseVersionBuildLevel -after PublishPSGallery -if {$Script:BuildEnv.OptionUpdateVersionAfterPublishing} {
+    Write-Description White 'Attempting to update the module build version' -accent
+
+    $ModuleManifestFullPath = Join-Path $BuildRoot "$($Script:BuildEnv.ModuleToBuild).psd1"
+    $ReleasePath = Join-Path $BuildRoot $Script:BuildEnv.BaseReleaseFolder
+    $AllReleases = @((Get-ChildItem $ReleasePath -Directory | Where-Object {$_.Name -match '^([0-9].[0-9].[0-9])$'} | Select-Object).Name | ForEach-Object {[version]$_})
+
+    $NewestRelease = $AllReleases | Sort-Object -Descending | Select-Object -First 1
+
+    $ProposedNewRelease = [version]("$($NewestRelease.Major).$($NewestRelease.Minor).$($NewestRelease.Build + 1)")
+
+    if (($AllReleases -contains $ProposedNewRelease) -and (-not $Force) -and (-not $Script:BuildEnv.Force)) {
+        Write-Build Red "The module version already has been released (the folder exists within the releases folder. In order to set your build project to $($ProposedNewRelease.ToString()) you will need to pass the -Force switch to this build script with the -NewVersion parameter" -Level 2
+        throw 'Unable to update build project version!'
+    }
+
+    $Script:BuildEnv.ModuleVersion = $ProposedNewRelease.ToString()
+
+    Write-Description White 'Saving persistent build file with new module version' -level 2
+    Save-BuildData
+
+    Write-Description White 'Updating module manifest with new module version' -level 2
+    try {
+        Update-ModuleManifest -Path $ModuleManifestFullPath -ModuleVersion $ProposedNewRelease
+    }
+    catch {
+        throw $_
+    }
+
+    Write-Description Green "Module build version has been updated to $($ProposedNewRelease.ToString())" -level 2
 }
 
 # Synopsis: Install the current built module to the local machine
@@ -713,7 +750,12 @@ task InstallModule VersionCheck, {
     $ModuleInstallPath = "$($MyModulePath)$($Script:BuildEnv.ModuleToBuild)"
     if (Test-Path $ModuleInstallPath) {
         Write-Description White "Removing installed module $($Script:BuildEnv.ModuleToBuild)" -Level 2
-        Remove-Item -Path $ModuleInstallPath -Confirm -Recurse
+        if ($Force -or $Script:BuildEnv.Force) {
+            Remove-Item -Path $ModuleInstallPath -Force -Recurse
+        }
+        else {
+            Remove-Item -Path $ModuleInstallPath -Confirm -Recurse
+        }
         assert (-not (Test-Path $ModuleInstallPath)) 'Module already installed and you opted not to remove it. Cancelling install operation!'
     }
 

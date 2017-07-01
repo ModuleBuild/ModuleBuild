@@ -13,7 +13,7 @@ Retrieves private module function definitions and recreates them in your moduleb
 
 ```
 Import-ModulePrivateFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotInsertCBH]
- [[-ExcludePaths] <String[]>] [[-ExcludeFiles] <String[]>] [-Force] [-WhatIf] [-Confirm]
+ [[-ExcludePaths] <String[]>] [[-ExcludeFiles] <String[]>] [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -123,22 +123,6 @@ Aliases:
 Required: False
 Position: 6
 Default value: @('.*\.buildenvironment.ps1','.*\.build.ps1','Build\.ps1','Install\.ps1','PreLoad\.ps1','PostLoad\.ps1','.*\.tests\.ps1','.*\.test\.ps1')
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Force
-Do not prompt to import each found public function.
-Default will prompt before importing anything.
-
-```yaml
-Type: SwitchParameter
-Parameter Sets: (All)
-Aliases: 
-
-Required: False
-Position: 7
-Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

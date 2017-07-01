@@ -18,9 +18,6 @@ function Import-ModulePublicFunction {
     .PARAMETER DoNotInsertCBH
     Do not attempt to find and insert comment based help into the function.
 
-    .PARAMETER Force
-    Do not prompt for every function import.
-
     .LINK
     https://github.com/zloeber/ModuleBuild
 
@@ -33,7 +30,7 @@ function Import-ModulePublicFunction {
     This only applies to modules of the type 'Script' and commands of the type 'Function'.
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding( SupportsShouldProcess = $True, ConfirmImpact = 'High' )]
     param(
         [parameter(Position = 0, ValueFromPipeline = $TRUE)]
         [String]$Path,
@@ -42,9 +39,7 @@ function Import-ModulePublicFunction {
         [parameter(Position = 2)]
         [String]$Name = '*',
         [parameter(Position = 3)]
-        [Switch]$DoNotInsertCBH,
-        [parameter(Position = 4)]
-        [Switch]$Force
+        [Switch]$DoNotInsertCBH
     )
     begin {
         if ($script:ThisModuleLoaded -eq $true) {
@@ -92,17 +87,12 @@ function Import-ModulePublicFunction {
                     $NewScript = "function $($LoadedFunction.Name) {"
                     $NewScript += $LoadedFunction.Definition
                     $NewScript += '}'
-                    if ($Force) {
-                        $Continue = $true
-                    }
-                    else {
-                        $Continue = Read-HostContinue -PromptTitle "Function Name = $($LoadedFunction.Name)" -PromptQuestion "Import this as a public function?"
-                    }
-                    if ($Continue) {
+
+                    if ($pscmdlet.ShouldProcess("$($LoadedFunction.Name)", "Import public function $($LoadedFunction.Name) to the project $($LoadedBuildEnv.ModuleToBuild)?")) {
                         if ($DoNotInsertCBH) {
                             try {
                                 Write-Verbose "Writing public script file to $NewScriptFile"
-                                $NewScript | Out-File -FilePath $NewScriptFile -Encoding:utf8
+                                $NewScript | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
                             }
                             catch {
                                 throw "Unable to save file $NewScriptFile"
@@ -110,7 +100,7 @@ function Import-ModulePublicFunction {
                         }
                         else {
                             try {
-                                $NewScript | Insert-MissingCBH | Out-File -FilePath $NewScriptFile -Encoding:utf8
+                                $NewScript | Insert-MissingCBH | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
                             }
                             catch {
                                 throw $_

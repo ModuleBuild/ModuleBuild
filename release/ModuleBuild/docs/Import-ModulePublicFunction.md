@@ -13,7 +13,7 @@ Retrieves public module function definitions and recreates them in your modulebu
 
 ```
 Import-ModulePublicFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotInsertCBH]
- [-Force]
+ [-WhatIf] [-Confirm]
 ```
 
 ## DESCRIPTION
@@ -94,17 +94,33 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Force
-Do not prompt for every function import.
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
 
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: 
+Aliases: wi
 
 Required: False
-Position: 5
-Default value: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

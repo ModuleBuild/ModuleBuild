@@ -108,6 +108,24 @@ $Parameters = @(
         )
     },
     @{
+        ParameterName = "OptionUpdateVersionAfterPublishing"
+        ParameterType = "choice"
+        ParameterPrompt = "Automatically increase the module patch version after publishing to the gallary?"
+        Default = "0"
+        Choices = @(
+            @{
+                Label = "&Yes"
+                Help = "Increase the patch version after a successful publish to the gallery"
+                Value = "True"
+            },
+            @{
+                Label = "&No"
+                Help = "Do not increase the patch version after a successful gallery publish"
+                Value = "False"
+            }
+        )
+    },
+    @{
         ParameterName = "OptionSanitizeSensitiveTerms"
         ParameterType = "choice"
         ParameterPrompt = "Scan for sensitive terms (like your user id or company domain) in the module build process (Recommended for Gallery uploading)?"

@@ -14,6 +14,8 @@ param (
 if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
     $Script:BuildEnv = New-Object -TypeName PSObject -Property @{
         FirstRun = $True
+        Force = $False
+        ForceInstallModule = $true
         Encoding = 'utf8'
         ModuleToBuild = 'ModuleBuild'
         ModuleVersion = '0.0.1'
@@ -36,8 +38,12 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         # If you want to prescan and fail a build upon finding any proprietary strings
         # enable this option and define some strings.
         OptionSanitizeSensitiveTerms = $True
-        OptionSensitiveTerms = @($env:username, $env:userdomain, $env:userdnsdomain)
+        OptionSensitiveTerms = @($env:username, $env:userdomain, $env:userdnsdomain) | Where {$null -ne $_}
         OptionSensitiveTermsInitialized = $false
+
+        # If you want to update your current module build version automatically
+        # after a successful psgallery publish set this to $true
+        OptionUpdateVersionAfterPublishing = $true
 
         # Additional paths in the source module which should be copied over to the final build release
         AdditionalModulePaths = '.\plaster' -split ','
@@ -80,7 +86,7 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
             }
             else {
                 Write-Verbose "Adding profile setting '$key' from $PersistentBuildFile"
-                Add-Member -InputObject $Script:BuildEnv -TypeName 'NoteProperty' -Name $Key -Value $LoadedBuildEnv.$Key
+                Add-Member -InputObject $Script:BuildEnv -MemberType 'NoteProperty' -Name $Key -Value $LoadedBuildEnv.$Key
             }
         }
 

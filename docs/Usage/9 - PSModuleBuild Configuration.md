@@ -5,6 +5,8 @@ Each project has a ModuleBuild configuration file that will get dot sourced into
 
 **build\ModuleName.buildenvironment.json** - This gets automatically updated after a first run of the build and will forever after be the single source of truth moving forward for your build settings (unless you run the prior buildenvironment.ps1 script with the -ForcePersist option or update the 'FirstRun' option to be $true). This file is setup to be ignored in the git config file that the project includes so it should be considered a generally safe place to keep things like your Nuget API key or other local settings. There is little preventing you from adding additional settings here manually. When added they will automatically be available within the set-buildenvironment and get-buildenvironment commands included with this module.
 
+You can add items directly to this file if you like and they will be loaded and are able the be read and set with the modulebuild module. Additionally, if there are new settings in the buildenvironment.ps1 BuildEnv definitions then those settings will automatically be saved to this file when detected (so when the next build runs). This is further described in the next section.
+
 ## Configuration Process
 Whenever you kick off a process involving any of your build steps the ModuleName.buildenvironment.ps1 file is dot sourced into the session. When this file is invoked a few things happen:
 1. The default settings that are populated from initializing the project scaffolding are assigned to the global build environment variable that is aptly called 'BuildEnv'.

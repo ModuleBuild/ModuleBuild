@@ -4,8 +4,8 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>cac9de1a-569e-44c7-b411-b4078b5013e7</id>
-    <version>0.0.5</version>
+    <id>07a27ad4-a2ca-41d5-ac13-5c3ea64874bd</id>
+    <version>0.0.8</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
     <author>Zachary Loeber</author>
@@ -95,6 +95,20 @@
       <choice
         label="&amp;No"
         help="Do not combine source files"
+        value="False" />
+    </parameter>
+    <parameter
+      name="OptionUpdateVersionAfterPublishing"
+      type="choice"
+      prompt="Automatically increase the module patch version after publishing to the gallary?"
+      default="0">
+      <choice
+        label="&amp;Yes"
+        help="Increase the patch version after a successful publish to the gallery"
+        value="True" />
+      <choice
+        label="&amp;No"
+        help="Do not increase the patch version after a successful gallery publish"
         value="False" />
     </parameter>
     <parameter
@@ -228,5 +242,8 @@
     <templateFile
       source="scaffold\build\docs\Additional\*"
       destination="build\docs\Additional" />
+    <templateFile
+      source="scaffold\build\docs\Additional\*"
+      destination="docs" />
   </content>
 </plasterManifest>

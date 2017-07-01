@@ -1,0 +1,991 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<helpItems xmlns="http://msh" schema="maml">
+
+<command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+<command:details><command:name>Get-BuildEnvironment</command:name>
+<command:verb>Get</command:verb>
+<command:noun>BuildEnvironment</command:noun>
+<maml:description><maml:para>Retrieves all the stored settings in a buildenvironment.json file.
+</maml:para>
+</maml:description>
+</command:details>
+<maml:description><maml:para>Retrieves all the stored settings in a buildenvironment.json file.
+</maml:para>
+</maml:description>
+<command:syntax><command:syntaxItem><maml:name>Get-BuildEnvironment</maml:name>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none"><maml:name>Path</maml:name>
+<maml:Description><maml:para>Specifies the path to a buildenvironment.json file.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+</command:syntaxItem>
+</command:syntax>
+<command:parameters><command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none"><maml:name>Path</maml:name>
+<maml:Description><maml:para>Specifies the path to a buildenvironment.json file.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+</command:parameters>
+<command:inputTypes></command:inputTypes>
+<command:returnValues></command:returnValues>
+<maml:alertSet><maml:alert><maml:para>
+</maml:para>
+</maml:alert>
+</maml:alertSet>
+<command:examples><command:example><maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+<dev:code>Get-buildenvironment</dev:code>
+<dev:remarks><maml:para>If a buildenvironment.json file exists in .\build then the settings within it will be displayed on the screen Otherwise nothing happens.
+</maml:para>
+</dev:remarks>
+</command:example>
+</command:examples>
+<command:relatedLinks><maml:navigationLink><maml:linkText>https://github.com/zloeber/ModuleBuild</maml:linkText>
+<maml:uri>https://github.com/zloeber/ModuleBuild</maml:uri>
+</maml:navigationLink>
+</command:relatedLinks>
+</command:command>
+<command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+<command:details><command:name>Import-ModulePrivateFunction</command:name>
+<command:verb>Import</command:verb>
+<command:noun>ModulePrivateFunction</command:noun>
+<maml:description><maml:para>Retrieves private module function definitions and recreates them in your modulebuild based project.
+</maml:para>
+</maml:description>
+</command:details>
+<maml:description><maml:para>Retrieves private module function definitions and recreates them in your modulebuild based project. This can be used to either upgrade modulebuild for a project or convert an existing module to start using modulebuild. This function will load and then unload the module to work its magic. 'Private' functions are determined by excluding exported functions and using AST to filter out all function definitions in files within the module folder that are not embedded in other functions. This function will not overwrite any existing private function file of the same name.
+</maml:para>
+</maml:description>
+<command:syntax><command:syntaxItem><maml:name>Import-ModulePrivateFunction</maml:name>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none"><maml:name>Path</maml:name>
+<maml:Description><maml:para>Specifies the path to a buildenvironment.json file for an existing modulebuild project.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="2" aliases="none"><maml:name>ModulePath</maml:name>
+<maml:Description><maml:para>An existing module path to target. Must be a psd1 or psm1 file.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none"><maml:name>Name</maml:name>
+<maml:Description><maml:para>Function name to import. If none are specified then all functions will be imported.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>*</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none"><maml:name>DoNotInsertCBH</maml:name>
+<maml:Description><maml:para>Do not attempt to find and insert comment based help into the function. Default for private functions is to skip CBH insertion.
+</maml:para>
+</maml:Description>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>True</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none"><maml:name>ExcludePaths</maml:name>
+<maml:Description><maml:para>Paths within the root of your module source which will be ignored in this import.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+<dev:type><maml:name>String[]</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>@('temp','build','.git','.vscode','docs','release','plaster')</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none"><maml:name>ExcludeFiles</maml:name>
+<maml:Description><maml:para>Files, in regex pattern format, that will be ignored in this import.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+<dev:type><maml:name>String[]</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>@('.*\.buildenvironment.ps1','.*\.build.ps1','Build\.ps1','Install\.ps1','PreLoad\.ps1','PostLoad\.ps1','.*\.tests\.ps1','.*\.test\.ps1')</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none"><maml:name>Force</maml:name>
+<maml:Description><maml:para>Do not prompt to import each found public function. Default will prompt before importing anything.
+</maml:para>
+</maml:Description>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi"><maml:name>WhatIf</maml:name>
+<maml:Description><maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.
+</maml:para>
+</maml:Description>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf"><maml:name>Confirm</maml:name>
+<maml:Description><maml:para>Prompts you for confirmation before running the cmdlet.
+</maml:para>
+</maml:Description>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+</command:syntaxItem>
+</command:syntax>
+<command:parameters><command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none"><maml:name>Path</maml:name>
+<maml:Description><maml:para>Specifies the path to a buildenvironment.json file for an existing modulebuild project.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="2" aliases="none"><maml:name>ModulePath</maml:name>
+<maml:Description><maml:para>An existing module path to target. Must be a psd1 or psm1 file.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none"><maml:name>Name</maml:name>
+<maml:Description><maml:para>Function name to import. If none are specified then all functions will be imported.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>*</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none"><maml:name>DoNotInsertCBH</maml:name>
+<maml:Description><maml:para>Do not attempt to find and insert comment based help into the function. Default for private functions is to skip CBH insertion.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>True</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none"><maml:name>ExcludePaths</maml:name>
+<maml:Description><maml:para>Paths within the root of your module source which will be ignored in this import.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+<dev:type><maml:name>String[]</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>@('temp','build','.git','.vscode','docs','release','plaster')</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none"><maml:name>ExcludeFiles</maml:name>
+<maml:Description><maml:para>Files, in regex pattern format, that will be ignored in this import.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String[]</command:parameterValue>
+<dev:type><maml:name>String[]</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>@('.*\.buildenvironment.ps1','.*\.build.ps1','Build\.ps1','Install\.ps1','PreLoad\.ps1','PostLoad\.ps1','.*\.tests\.ps1','.*\.test\.ps1')</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none"><maml:name>Force</maml:name>
+<maml:Description><maml:para>Do not prompt to import each found public function. Default will prompt before importing anything.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="wi"><maml:name>WhatIf</maml:name>
+<maml:Description><maml:para>Shows what would happen if the cmdlet runs. The cmdlet is not run.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="cf"><maml:name>Confirm</maml:name>
+<maml:Description><maml:para>Prompts you for confirmation before running the cmdlet.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+</command:parameters>
+<command:inputTypes></command:inputTypes>
+<command:returnValues></command:returnValues>
+<maml:alertSet><maml:alert><maml:para>This only applies to modules of the type 'Script'. Be very careful before importing everything as any wayward functions might get imported and bloat your resulting module needlessly.
+</maml:para>
+</maml:alert>
+</maml:alertSet>
+<command:examples><command:example><maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+<dev:code>Import-ModulePrivateFunction -ModulePath 'C:\Temp\PSCloudFlare\PSCloudFlare.psd1'</dev:code>
+<dev:remarks><maml:para>Finds all the functions that are in the module source but not exported and prompts for each of them to recreate them as individual ps1 files within your ModuleBuild src\private directory.
+</maml:para>
+</dev:remarks>
+</command:example>
+</command:examples>
+<command:relatedLinks><maml:navigationLink><maml:linkText>https://github.com/zloeber/ModuleBuild</maml:linkText>
+<maml:uri>https://github.com/zloeber/ModuleBuild</maml:uri>
+</maml:navigationLink>
+</command:relatedLinks>
+</command:command>
+<command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+<command:details><command:name>Import-ModulePublicFunction</command:name>
+<command:verb>Import</command:verb>
+<command:noun>ModulePublicFunction</command:noun>
+<maml:description><maml:para>Retrieves public module function definitions and recreates them in your modulebuild based project.
+</maml:para>
+</maml:description>
+</command:details>
+<maml:description><maml:para>Retrieves module function definitions and recreates them in your modulebuild based project. This can be used to either upgrade modulebuild for a project or convert an existing module to start using modulebuild. This function will load and then unload the module to work its magic.
+</maml:para>
+</maml:description>
+<command:syntax><command:syntaxItem><maml:name>Import-ModulePublicFunction</maml:name>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none"><maml:name>Path</maml:name>
+<maml:Description><maml:para>Specifies the path to a buildenvironment.json file for an existing modulebuild project.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="2" aliases="none"><maml:name>ModulePath</maml:name>
+<maml:Description><maml:para>An existing module path to target. Must be a psm1 or psd1 file.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none"><maml:name>Name</maml:name>
+<maml:Description><maml:para>Function name to import. If none are specified then all functions will be imported.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>*</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none"><maml:name>DoNotInsertCBH</maml:name>
+<maml:Description><maml:para>Do not attempt to find and insert comment based help into the function.
+</maml:para>
+</maml:Description>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none"><maml:name>Force</maml:name>
+<maml:Description><maml:para>Do not prompt for every function import.
+</maml:para>
+</maml:Description>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+</command:syntaxItem>
+</command:syntax>
+<command:parameters><command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none"><maml:name>Path</maml:name>
+<maml:Description><maml:para>Specifies the path to a buildenvironment.json file for an existing modulebuild project.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="2" aliases="none"><maml:name>ModulePath</maml:name>
+<maml:Description><maml:para>An existing module path to target. Must be a psm1 or psd1 file.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none"><maml:name>Name</maml:name>
+<maml:Description><maml:para>Function name to import. If none are specified then all functions will be imported.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>*</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none"><maml:name>DoNotInsertCBH</maml:name>
+<maml:Description><maml:para>Do not attempt to find and insert comment based help into the function.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none"><maml:name>Force</maml:name>
+<maml:Description><maml:para>Do not prompt for every function import.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+<dev:type><maml:name>SwitchParameter</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>False</dev:defaultValue>
+</command:parameter>
+</command:parameters>
+<command:inputTypes></command:inputTypes>
+<command:returnValues></command:returnValues>
+<maml:alertSet><maml:alert><maml:para>This only applies to modules of the type 'Script' and commands of the type 'Function'.
+</maml:para>
+</maml:alert>
+</maml:alertSet>
+<command:examples><command:example><maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+<dev:code>Import-ModulePrivateFunction -ModulePath 'C:\Temp\PSCloudFlare\release\PSCloudFlare\PSCloudFlare.psd1' -force</dev:code>
+<dev:remarks><maml:para>Finds any non-exported and unembedded functions and automatically creates them in the current modulebuild project private source directory if they don't already exist.
+</maml:para>
+</dev:remarks>
+</command:example>
+</command:examples>
+<command:relatedLinks><maml:navigationLink><maml:linkText>https://github.com/zloeber/ModuleBuild</maml:linkText>
+<maml:uri>https://github.com/zloeber/ModuleBuild</maml:uri>
+</maml:navigationLink>
+</command:relatedLinks>
+</command:command>
+<command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+<command:details><command:name>Initialize-ModuleBuild</command:name>
+<command:verb>Initialize</command:verb>
+<command:noun>ModuleBuild</command:noun>
+<maml:description><maml:para>Set up the framework for a ModuleBuild project.
+</maml:para>
+</maml:description>
+</command:details>
+<maml:description><maml:para>Set up the framework for a ModuleBuild project.
+</maml:para>
+</maml:description>
+<command:syntax><command:syntaxItem><maml:name>Initialize-ModuleBuild</maml:name>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none"><maml:name>Path</maml:name>
+<maml:Description><maml:para>Specifies the path to create the project.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+</command:syntaxItem>
+</command:syntax>
+<command:parameters><command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none"><maml:name>Path</maml:name>
+<maml:Description><maml:para>Specifies the path to create the project.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+</command:parameters>
+<command:inputTypes></command:inputTypes>
+<command:returnValues></command:returnValues>
+<maml:alertSet><maml:alert><maml:para>
+</maml:para>
+</maml:alert>
+</maml:alertSet>
+<command:examples><command:example><maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+<dev:code>TBD</dev:code>
+<dev:remarks><maml:para>
+</maml:para>
+</dev:remarks>
+</command:example>
+</command:examples>
+<command:relatedLinks><maml:navigationLink><maml:linkText>https://github.com/zloeber/ModuleBuild</maml:linkText>
+<maml:uri>https://github.com/zloeber/ModuleBuild</maml:uri>
+</maml:navigationLink>
+</command:relatedLinks>
+</command:command>
+<command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+<command:details><command:name>Set-BuildEnvironment</command:name>
+<command:verb>Set</command:verb>
+<command:noun>BuildEnvironment</command:noun>
+<maml:description><maml:para>Sets a stored setting in a buildenvironment.json file.
+</maml:para>
+</maml:description>
+</command:details>
+<maml:description><maml:para>Sets the stored setting in a buildenvironment.json file.
+</maml:para>
+</maml:description>
+<command:syntax><command:syntaxItem><maml:name>Set-BuildEnvironment</maml:name>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none"><maml:name>Path</maml:name>
+<maml:Description><maml:para>Specifies the path to a buildenvironment.json file.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>AdditionalModulePaths</maml:name>
+<maml:Description><maml:para>Update the setting for AdditionalModulePaths
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+<dev:type><maml:name>Object[]</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>BaseReleaseFolder</maml:name>
+<maml:Description><maml:para>Update the setting for BaseReleaseFolder
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>BaseSourceFolder</maml:name>
+<maml:Description><maml:para>Update the setting for BaseSourceFolder
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>BuildToolFolder</maml:name>
+<maml:Description><maml:para>Update the setting for BuildToolFolder
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>Encoding</maml:name>
+<maml:Description><maml:para>Update the setting for Encoding
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>FirstRun</maml:name>
+<maml:Description><maml:para>Update the setting for FirstRun
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleAuthor</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleAuthor
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleCopyright</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleCopyright
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleDescription</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleDescription
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleLicenseURI</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleLicenseURI
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleTags</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleTags
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+<dev:type><maml:name>Object[]</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleToBuild</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleToBuild
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleVersion</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleVersion
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleWebsite</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleWebsite
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>NugetAPIKey</maml:name>
+<maml:Description><maml:para>Update the setting for NugetAPIKey
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionAnalyzeCode</maml:name>
+<maml:Description><maml:para>Update the setting for OptionAnalyzeCode
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionCombineFiles</maml:name>
+<maml:Description><maml:para>Update the setting for OptionCombineFiles
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionGenerateReadTheDocs</maml:name>
+<maml:Description><maml:para>Update the setting for OptionGenerateReadTheDocs
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionRunPlatyPSVerbose</maml:name>
+<maml:Description><maml:para>Update the setting for OptionRunPlatyPSVerbose
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionSanitizeSensitiveTerms</maml:name>
+<maml:Description><maml:para>Update the setting for OptionSanitizeSensitiveTerms
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionSensitiveTerms</maml:name>
+<maml:Description><maml:para>Update the setting for OptionSensitiveTerms
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+<dev:type><maml:name>Object[]</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionSensitiveTermsInitialized</maml:name>
+<maml:Description><maml:para>Update the setting for OptionSensitiveTermsInitialized
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionTranscriptEnabled</maml:name>
+<maml:Description><maml:para>Update the setting for OptionTranscriptEnabled
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionTranscriptLogFile</maml:name>
+<maml:Description><maml:para>Update the setting for OptionTranscriptLogFile
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionUpdateVersionAfterPublishing</maml:name>
+<maml:Description><maml:para>Update the setting for OptionUpdateVersionAfterPublishing
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OtherModuleSource</maml:name>
+<maml:Description><maml:para>Update the setting for OtherModuleSource
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>PrivateFunctionSource</maml:name>
+<maml:Description><maml:para>Update the setting for PrivateFunctionSource
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>PublicFunctionSource</maml:name>
+<maml:Description><maml:para>Update the setting for PublicFunctionSource
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ScratchFolder</maml:name>
+<maml:Description><maml:para>Update the setting for ScratchFolder
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+</command:syntaxItem>
+</command:syntax>
+<command:parameters><command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="1" aliases="none"><maml:name>Path</maml:name>
+<maml:Description><maml:para>Specifies the path to a buildenvironment.json file.
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>AdditionalModulePaths</maml:name>
+<maml:Description><maml:para>Update the setting for AdditionalModulePaths
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+<dev:type><maml:name>Object[]</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>BaseReleaseFolder</maml:name>
+<maml:Description><maml:para>Update the setting for BaseReleaseFolder
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>BaseSourceFolder</maml:name>
+<maml:Description><maml:para>Update the setting for BaseSourceFolder
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>BuildToolFolder</maml:name>
+<maml:Description><maml:para>Update the setting for BuildToolFolder
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>Encoding</maml:name>
+<maml:Description><maml:para>Update the setting for Encoding
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>FirstRun</maml:name>
+<maml:Description><maml:para>Update the setting for FirstRun
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleAuthor</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleAuthor
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleCopyright</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleCopyright
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleDescription</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleDescription
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleLicenseURI</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleLicenseURI
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleTags</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleTags
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+<dev:type><maml:name>Object[]</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleToBuild</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleToBuild
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleVersion</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleVersion
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ModuleWebsite</maml:name>
+<maml:Description><maml:para>Update the setting for ModuleWebsite
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>NugetAPIKey</maml:name>
+<maml:Description><maml:para>Update the setting for NugetAPIKey
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionAnalyzeCode</maml:name>
+<maml:Description><maml:para>Update the setting for OptionAnalyzeCode
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionCombineFiles</maml:name>
+<maml:Description><maml:para>Update the setting for OptionCombineFiles
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionGenerateReadTheDocs</maml:name>
+<maml:Description><maml:para>Update the setting for OptionGenerateReadTheDocs
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionRunPlatyPSVerbose</maml:name>
+<maml:Description><maml:para>Update the setting for OptionRunPlatyPSVerbose
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionSanitizeSensitiveTerms</maml:name>
+<maml:Description><maml:para>Update the setting for OptionSanitizeSensitiveTerms
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionSensitiveTerms</maml:name>
+<maml:Description><maml:para>Update the setting for OptionSensitiveTerms
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Object[]</command:parameterValue>
+<dev:type><maml:name>Object[]</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionSensitiveTermsInitialized</maml:name>
+<maml:Description><maml:para>Update the setting for OptionSensitiveTermsInitialized
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionTranscriptEnabled</maml:name>
+<maml:Description><maml:para>Update the setting for OptionTranscriptEnabled
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionTranscriptLogFile</maml:name>
+<maml:Description><maml:para>Update the setting for OptionTranscriptLogFile
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OptionUpdateVersionAfterPublishing</maml:name>
+<maml:Description><maml:para>Update the setting for OptionUpdateVersionAfterPublishing
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">Boolean</command:parameterValue>
+<dev:type><maml:name>Boolean</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>OtherModuleSource</maml:name>
+<maml:Description><maml:para>Update the setting for OtherModuleSource
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>PrivateFunctionSource</maml:name>
+<maml:Description><maml:para>Update the setting for PrivateFunctionSource
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>PublicFunctionSource</maml:name>
+<maml:Description><maml:para>Update the setting for PublicFunctionSource
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+<command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="none"><maml:name>ScratchFolder</maml:name>
+<maml:Description><maml:para>Update the setting for ScratchFolder
+</maml:para>
+</maml:Description>
+<command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+<dev:type><maml:name>String</maml:name>
+<maml:uri /></dev:type>
+<dev:defaultValue>None</dev:defaultValue>
+</command:parameter>
+</command:parameters>
+<command:inputTypes></command:inputTypes>
+<command:returnValues></command:returnValues>
+<maml:alertSet><maml:alert><maml:para>
+</maml:para>
+</maml:alert>
+</maml:alertSet>
+<command:examples><command:example><maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+<dev:code>Set-BuildEnvironment -OptionSensitiveTerms @('myapikey','myname','password')</dev:code>
+<dev:remarks><maml:para>
+</maml:para>
+</dev:remarks>
+</command:example>
+</command:examples>
+<command:relatedLinks><maml:navigationLink><maml:linkText>https://github.com/zloeber/ModuleBuild</maml:linkText>
+<maml:uri>https://github.com/zloeber/ModuleBuild</maml:uri>
+</maml:navigationLink>
+</command:relatedLinks>
+</command:command>
+</helpItems>
