@@ -38,12 +38,6 @@ $Parameters = @(
         Default = ' '
     },
     @{
-        ParameterName = "NugetAPIKey"
-        ParameterType = "text"
-        ParameterPrompt = "Enter a PowerShell Gallery (aka Nuget) API key. Without this you will not be able to upload your module to the Gallery"
-        Default = ' '
-    },
-    @{
         ParameterName = "ProjectLicense"
         ParameterType = "choice"
         ParameterPrompt = "What license would you like for this module to have?"

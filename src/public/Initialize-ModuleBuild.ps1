@@ -13,7 +13,7 @@ function Initialize-ModuleBuild {
     https://github.com/zloeber/ModuleBuild
 
     .EXAMPLE
-    TBD
+    Initialize-ModuleBuild -Path C:\Work\NewModule
     #>
 
     [CmdletBinding()]
@@ -40,6 +40,7 @@ A few items to consider doing next:
 7. If you enabled sensitive terminology scanning then review and update your terms defined in your buildenvironment.json file (using get-buildenvironment & set-buildenvironment).
 8. Change your project logo at src\other\powershell-project.png
 9. Build your project with .\Build.ps1
+10. Enter a PowerShell Gallery (aka Nuget) API key. Without this you will not be able to upload your module to the Gallery using Set-BuildEnvironment -NugetAPIKey
 
 Run Update-Module ModuleBuild every so often to get more recent releases of this project.
 
@@ -56,7 +57,6 @@ Enjoy!
         if (get-module Plaster) {
             Write-Output 'Removing already loaded version of Plaster as we need to use our custom version instead..'
             Remove-Module Plaster -Force
-            $PlasterWasLoaded = $true
         }
 
         try {
@@ -68,14 +68,23 @@ Enjoy!
 
         $PlasterResults = invoke-plaster @PlasterParams -NoLogo -PassThru
 
-        if ($PlasterWasLoaded) {
-            Write-Output 'Attempting to reimport the Plaster module that we unloaded earlier..'
-            Import-Module Plaster #-ErrorAction:SilentlyContinue
+        # Get the newly created buildenvironment file and run it the first time to create the fist export file.
+        $BuildDefinition = Get-ChildItem (Join-Path $PlasterResults.DestinationPath 'build') -Filter '*.buildenvironment.ps1'
+        $strCommand = "powershell -noprofile -WindowStyle hidden -file $($BuildDefinition.FullName)"
+
+        try {
+
+            Invoke-Expression $strCommand
+        }
+        catch {
+            throw $_
         }
 
         Write-Output ''
         Write-Output "Your new PowerShell project scaffolding has been created in $($PlasterResults.DestinationPath)"
         Write-Output ''
         Write-Output $PostInitMessage
+
+        Remove-Module Plaster -Force
     }
 }

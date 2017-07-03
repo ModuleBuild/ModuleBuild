@@ -113,11 +113,6 @@ $Content = @(
     },
     @{
         ContentType = 'templateFile'
-        Source = 'scaffold\build\modulename.template.json'
-        Destination = 'build\${PLASTER_PARAM_ModuleName}.buildenvironment.json'
-    },
-    @{
-        ContentType = 'templateFile'
         Source = 'scaffold\readme.md'
         Destination = 'Readme.md'
     },

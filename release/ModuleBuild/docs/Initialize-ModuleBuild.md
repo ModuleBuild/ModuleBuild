@@ -22,7 +22,7 @@ Set up the framework for a ModuleBuild project.
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-TBD
+Initialize-ModuleBuild -Path C:\Work\NewModule
 ```
 
 ## PARAMETERS

@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>07a27ad4-a2ca-41d5-ac13-5c3ea64874bd</id>
+    <id>5b27989b-39cb-49a9-bd19-d0e53b529161</id>
     <version>0.0.8</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -41,11 +41,6 @@
       name="AdditionalModulePaths"
       type="text"
       prompt="Comma separate list of paths that will be included with the final module release (ie. .\libs,.\data)"
-      default=" " />
-    <parameter
-      name="NugetAPIKey"
-      type="text"
-      prompt="Enter a PowerShell Gallery (aka Nuget) API key. Without this you will not be able to upload your module to the Gallery"
       default=" " />
     <parameter
       name="ProjectLicense"
@@ -215,9 +210,6 @@
     <templateFile
       source="scaffold\build\modulename.buildenvironment.template"
       destination="build\${PLASTER_PARAM_ModuleName}.buildenvironment.ps1" />
-    <templateFile
-      source="scaffold\build\modulename.template.json"
-      destination="build\${PLASTER_PARAM_ModuleName}.buildenvironment.json" />
     <templateFile
       source="scaffold\readme.md"
       destination="Readme.md" />

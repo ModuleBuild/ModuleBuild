@@ -1,0 +1,17 @@
+TOPIC
+    about_<%=$PLASTER_PARAM_ModuleName%>
+
+SHORT DESCRIPTION
+    <%=$PLASTER_PARAM_ModuleDescription%>
+
+LONG DESCRIPTION
+    <%=$PLASTER_PARAM_ModuleDescription%>
+
+EXAMPLES
+    TBD
+
+KEYWORDS
+    <%=$PLASTER_PARAM_ModuleTags%>
+
+SEE ALSO
+    <%=$PLASTER_PARAM_ModuleWebsite%>
