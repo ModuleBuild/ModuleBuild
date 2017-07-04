@@ -72,7 +72,7 @@ else {
         # If you will be publishing to the PowerShell Gallery you will need a Nuget API key (can get from the website)
         # You should not actually enter this key here but should manually enter it in the <%=$PLASTER_PARAM_ModuleName%>.buildenvironment.json file
 
-        NugetAPIKey  = $null
+        NugetAPIKey  = ''
     }
 
     ########################################

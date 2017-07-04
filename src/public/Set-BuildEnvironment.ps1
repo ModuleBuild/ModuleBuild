@@ -26,10 +26,7 @@ function Set-BuildEnvironment {
         # Create dictionary
         $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
         if ([String]::isnullorempty($Path)) {
-            $BuildPaths = @()
-            $BuildPaths += (Get-ChildItem .\*.buildenvironment.json).FullName
-            $BuildPaths += (Get-ChildItem .\build\*.buildenvironment.json).FullName
-            $BuildPath = $BuildPaths | Select-Object -First 1
+            $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
         }
         else {
             $BuildPath = $Path
@@ -66,10 +63,7 @@ function Set-BuildEnvironment {
             Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
         }
         if ([String]::isnullorempty($Path)) {
-            $BuildPaths = @()
-            $BuildPaths += (Get-ChildItem .\*.buildenvironment.json).FullName
-            $BuildPaths += (Get-ChildItem .\build\*.buildenvironment.json).FullName
-            $BuildPath = $BuildPaths | Select-Object -First 1
+            $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
         }
         else {
             $BuildPath = $Path
@@ -87,7 +81,7 @@ function Set-BuildEnvironment {
                     $LoadedBuildEnv.$ParamKey = $PSBoundParameters[$ParamKey]
                     Write-Output "Updating $ParamKey to be $($PSBoundParameters[$ParamKey])"
                 }
-
+                $LoadedBuildEnv.PSObject.Properties.remove('Path')
                 $LoadedBuildEnv | ConvertTo-Json | Out-File -FilePath $BuildPath -Encoding:utf8 -Force
                 Write-Output "Saved configuration file - $BuildPath"
             }

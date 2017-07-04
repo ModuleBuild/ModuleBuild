@@ -31,3 +31,20 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 - Combined the UpdateRelease and NewVersion tasks and made both promptable
 - Fixed git version tag issue with the build script for the plaster manifest file.
 - Removed options to prompt for different folder names (like public/private/other/temp) and updated all template files and plaster manifest file accordinly.
+
+## Version 0.1.1
+- Removed prompts for the nuget api key when running initialize-modulebuild.
+- Initialize-ModuleBuild now automatically runs the build environment powershell script for the first time to create the modulebuild json settings file.
+- More documentation.
+- Fixed some minor scaffolding creation issues.
+- Added a 'ForceInstallModule' setting to eliminate build prompt when running the install and test module build tasks when the module is already installed.
+- Fixed VS Code tasks.
+- Added additional VS Code tasks when pressing ctrl+shift+B.
+- Added two new public functions for importing public/private functions from existing modules to a modulebuild project.
+- Added setting 'OptionUpdateVersionAfterPublishing' to ensure that this gets done after publishing to the gallery.
+- Fixed initial sensitive term settings generation to work on non-domain joined machines.
+
+## Version 0.1.2
+- Updated vs code task names
+- Fixed an issue with a null build environment variable causing dynamic parameters in set-buildenvironment to fail
+- Several small scaffolding clean ups.

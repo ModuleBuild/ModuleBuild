@@ -25,7 +25,7 @@ Retrieves all the stored settings in a buildenvironment.json file.
 Get-buildenvironment
 ```
 
-If a buildenvironment.json file exists in .\build then the settings within it will be displayed on the screen
+If a buildenvironment.json file exists in .\build then the settings within it will be displayed on the screen.
 Otherwise nothing happens.
 
 ## PARAMETERS

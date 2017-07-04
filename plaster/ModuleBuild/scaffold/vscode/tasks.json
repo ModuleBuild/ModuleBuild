@@ -38,7 +38,7 @@
             ]
         },
         {
-            "taskName": "Build, Install, and Test Module",
+            "taskName": "Build, Install, and Load Module",
             "suppressTaskName": true,
             "isBuildCommand": true,
             "args": [
@@ -46,7 +46,7 @@
             ]
         },
         {
-            "taskName": "Build, Install, Test, and Publish Module",
+            "taskName": "Build, Install, Load, and Publish Module",
             "suppressTaskName": true,
             "isBuildCommand": true,
             "args": [
@@ -54,7 +54,7 @@
             ]
         },
         {
-            "taskName": "Install and Test Module",
+            "taskName": "Install and Load Module",
             "suppressTaskName": true,
             "isBuildCommand": true,
             "args": [

@@ -1,6 +1,5 @@
 
 . .\Get-BuildEnvironment.ps1
-
 . .\New-DynamicParameter.ps1
 
 function Set-BuildEnvironment {
@@ -18,7 +17,7 @@ function Set-BuildEnvironment {
     https://github.com/zloeber/ModuleBuild
 
     .EXAMPLE
-    TBD
+    Set-BuildEnvironment -OptionSensitiveTerms @('myapikey','myname','password')
     #>
 
     [CmdletBinding()]
@@ -29,10 +28,16 @@ function Set-BuildEnvironment {
     DynamicParam {
         # Create dictionary
         $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+        if ([String]::isnullorempty($Path)) {
+            $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+        }
+        else {
+            $BuildPath = $Path
+        }
 
-        if ((Test-Path $Path) -and ($Path -like "*.buildenvironment.json")) {
+        if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
             try {
-                $LoadedBuildEnv = Get-Content $Path | ConvertFrom-Json
+                $LoadedBuildEnv = Get-Content $BuildPath | ConvertFrom-Json
                 $NewParams = (Get-Member -Type 'NoteProperty' -InputObject $LoadedBuildEnv).Name
                 $NewParams | ForEach-Object {
 
@@ -40,6 +45,7 @@ function Set-BuildEnvironment {
                         Name = $_
                         Type = $LoadedBuildEnv.$_.gettype().Name.toString()
                         ValueFromPipeline = $TRUE
+                        HelpMessage = "Update the setting for $($_)"
                     }
 
                     # Add new dynamic parameter to dictionary
@@ -47,7 +53,7 @@ function Set-BuildEnvironment {
                 }
             }
             catch {
-                #throw "Unable to load the build file in $Path"
+                #throw "Unable to load the build file in $BuildPath"
             }
         }
 
@@ -55,21 +61,39 @@ function Set-BuildEnvironment {
         $DynamicParameters
     }
 
+    begin {
+        if ($script:ThisModuleLoaded -eq $true) {
+            Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+        }
+        if ([String]::isnullorempty($Path)) {
+            $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+        }
+        else {
+            $BuildPath = $Path
+        }
+
+        Write-Verbose "Using build file: $BuildPath"
+    }
     process {
         New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
-        try {
-            $LoadedBuildEnv = Get-BuildEnvironment $Path
-            Foreach ($ParamKey in ($PSBoundParameters.Keys | Where-Object {$_ -ne 'Path'})) {
-                $LoadedBuildEnv.$ParamKey = $PSBoundParameters[$ParamKey]
-                Write-Output "Updating $ParamKey to be $($PSBoundParameters[$ParamKey])"
+        if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
+            try {
+                $LoadedBuildEnv = Get-BuildEnvironment -Path $BuildPath
+                Foreach ($ParamKey in ($PSBoundParameters.Keys | Where-Object {$_ -ne 'Path'})) {
+                    $LoadedBuildEnv.$ParamKey = $PSBoundParameters[$ParamKey]
+                    Write-Output "Updating $ParamKey to be $($PSBoundParameters[$ParamKey])"
+                }
+                $LoadedBuildEnv.PSObject.Properties.remove('Path')
+                $LoadedBuildEnv | ConvertTo-Json | Out-File -FilePath $BuildPath -Encoding:utf8 -Force
+                Write-Output "Saved configuration file - $BuildPath"
             }
-
-            $LoadedBuildEnv | ConvertTo-Json | Out-File -FilePath $Path -Encoding:utf8 -Force
-            Write-Output "Saved configuration file - $Path"
+            catch {
+                throw "Unable to load the build file in $BuildPath"
+            }
         }
-        catch {
-            throw "Unable to load the build file in $Path"
+        else {
+            Write-Error "Unable to find or process a buildenvironment.json file!"
         }
     }
 }

@@ -1,3 +1,6 @@
+. .\Get-BuildEnvironment.ps1
+. .\New-DynamicParameter.ps1
+
 function Get-BuildEnvironment {
     <#
     .SYNOPSIS
