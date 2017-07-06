@@ -649,12 +649,12 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
             if ($RTDocs.Count -gt 1) {
                 $NewSection = @()
                 Foreach ($RTDDoc in $RTDocs) {
-                    $NewSection += @{$RTDDoc.Basename = "$($RTDFolder.Name)\$($RTDDoc.Name)"}
+                    $NewSection += @{$RTDDoc.Basename = "$($RTDFolder.Name)/$($RTDDoc.Name)"}
                 }
                 $Pages[$RTDFolder.Name] = $NewSection
             }
             else {
-                $Pages[$RTDFolder.Name] = "$($RTDFolder.Name)\$($RTDocs.Name)"
+                $Pages[$RTDFolder.Name] = "$($RTDFolder.Name)/$($RTDocs.Name)"
             }
         }
 
@@ -663,13 +663,12 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
         }
 
         $RTD = @{
+            site_author = $Script:BuildEnv.ModuleAuthor
             site_name = "$($Script:BuildEnv.ModuleToBuild) Docs"
             repo_url = $Script:BuildEnv.ModuleWebsite
-            site_author = $Script:BuildEnv.ModuleAuthor
-            edit_uri = "edit/master/docs/"
             theme = "readthedocs"
             copyright = "$($Script:BuildEnv.ModuleToBuild) is licensed under the <a href='$($Script:BuildEnv.ModuleWebsite)/master/LICENSE.md'> license"
-            Pages = $Pages
+            pages = $Pages
         }
 
         $RTD | ConvertTo-Yaml | Out-File -Encoding $Script:BuildEnv.Encoding -FilePath $YMLFile -Force
