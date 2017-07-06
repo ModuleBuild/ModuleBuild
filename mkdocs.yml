@@ -1,9 +1,9 @@
-﻿edit_uri: edit\master\docs
-site_author: Zachary Loeber
+﻿site_author: Zachary Loeber
+repo_url: https://github.com/zloeber/ModuleBuild
 copyright: ModuleBuild is licensed under the <a href='https://github.com/zloeber/ModuleBuild/master/LICENSE.md'> license
 theme: readthedocs
 site_name: ModuleBuild Docs
-Pages:
+pages:
   - Index: index.md
   - Introduction: Introduction\Introduction.md
   - Usage:
@@ -25,7 +25,5 @@ Pages:
     - Import-ModulePrivateFunction: Functions\Import-ModulePrivateFunction.md
   - ToDo: ToDo.md
   - Contributing: Contributing.md
-  - ChangeLog: ChangeLog.md
+  - ChangeLog: ChangeLog.mdS
   - Acknowledgements: Acknowledgements.md
-repo_url: https://github.com/zloeber/ModuleBuild
-
