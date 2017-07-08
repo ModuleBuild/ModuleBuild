@@ -4,7 +4,7 @@ copyright: ModuleBuild is licensed under the <a href='https://github.com/zloeber
 theme: readthedocs
 site_name: ModuleBuild Docs
 pages:
-  - Index: index.md
+  - Home: index.md
   - Introduction: Introduction/Introduction.md
   - Usage:
     - Initialization: 'Usage/1 - Initialization.md'
