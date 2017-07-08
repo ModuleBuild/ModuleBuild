@@ -11,6 +11,7 @@ The answer is simple, it takes all the hard work out of authoring and maintainin
 
 ### Features
 This build framework for PowerShell modules comes with several appealing baked in features which include;
+
 - Fully portable project directory structure and build process. So portable that you can copy it to another PowerShell 5.0 capable system and it should run the same.
 - Automatically combine your public and private functions into one clean psm1 file at build time.
 - Automatically update your psd1 file with public functions at build time.

@@ -50,5 +50,5 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 - Several small scaffolding clean ups.
 
 ## Version 0.1.3
-- Fixed .gitignore file in plaster scaffolding so that the temp build folder is properly ignored
-- Removed superfluous acknowledgements.md file and folder
+- Fixes to mkdocs.yml formatting
+- Fixed temp build directory exclusion in .gitignore file

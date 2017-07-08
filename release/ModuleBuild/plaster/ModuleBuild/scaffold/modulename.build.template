@@ -493,7 +493,7 @@ task CreateMarkdownHelp GetPublicFunctions, {
         Write-Build White ''
         Write-Build Yellow "Path of files with issues: $($StageReleasePath)\docs\"
         Write-Build White ''
-        $MissingDocumentation
+        $MissingDocumentation | Select-Object FileName, Matches | Format-Table -auto
         Write-Build Yellow ''
         pause
 
@@ -639,37 +639,37 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
     $YMLFile = Join-Path $BuildRoot 'mkdocs.yml'
 
     if (-not (Test-Path $YMLFile)) {
-        $Pages = [ordered]@{}
+        $Pages = @()
 
         $RTDFolders = Get-ChildItem -Path $ProjectDocsPath -Directory | Sort-Object -Property Name
         $RTDPages = Get-ChildItem -Path $ProjectDocsPath -File -Filter '*.md' | Sort-Object -Property Name
+
+        ForEach ($RTDPage in $RTDPages) {
+            $Pages += @{$RTDPage.BaseName = $RTDPage.Name}
+        }
 
         ForEach ($RTDFolder in $RTDFolders) {
             $RTDocs = @(Get-ChildItem -Path $RTDFolder.FullName -Filter '*.md' | Sort-Object Name)
             if ($RTDocs.Count -gt 1) {
                 $NewSection = @()
                 Foreach ($RTDDoc in $RTDocs) {
-                    $NewSection += @{$RTDDoc.Basename = "$($RTDFolder.Name)\$($RTDDoc.Name)"}
+                    $NewSection += @{$RTDDoc.Basename = "$($RTDFolder.Name)/$($RTDDoc.Name)"}
                 }
-                $Pages[$RTDFolder.Name] = $NewSection
+                $Pages += @{$RTDFolder.Name = $NewSection}
             }
             else {
-                $Pages[$RTDFolder.Name] = "$($RTDFolder.Name)\$($RTDocs.Name)"
+                $Pages += @{$RTDFolder.Name = "$($RTDFolder.Name)/$($RTDocs.Name)"}
             }
-        }
-
-        ForEach ($RTDPage in $RTDPages) {
-            $Pages[$RTDPage.BaseName] = $RTDPage.Name
         }
 
         $RTD = @{
+            site_author = $Script:BuildEnv.ModuleAuthor
             site_name = "$($Script:BuildEnv.ModuleToBuild) Docs"
             repo_url = $Script:BuildEnv.ModuleWebsite
-            site_author = $Script:BuildEnv.ModuleAuthor
-            edit_uri = "edit/master/docs/"
+            use_directory_urls = $false
             theme = "readthedocs"
             copyright = "$($Script:BuildEnv.ModuleToBuild) is licensed under the <a href='$($Script:BuildEnv.ModuleWebsite)/master/LICENSE.md'> license"
-            Pages = $Pages
+            pages = $Pages
         }
 
         $RTD | ConvertTo-Yaml | Out-File -Encoding $Script:BuildEnv.Encoding -FilePath $YMLFile -Force
@@ -716,22 +716,18 @@ task AutoIncreaseVersionBuildLevel -after PublishPSGallery -if {$Script:BuildEnv
     $AllReleases = @((Get-ChildItem $ReleasePath -Directory | Where-Object {$_.Name -match '^([0-9].[0-9].[0-9])$'} | Select-Object).Name | ForEach-Object {[version]$_})
 
     $NewestRelease = $AllReleases | Sort-Object -Descending | Select-Object -First 1
-
     $ProposedNewRelease = [version]("$($NewestRelease.Major).$($NewestRelease.Minor).$($NewestRelease.Build + 1)")
-
-    if (($AllReleases -contains $ProposedNewRelease) -and (-not $Force) -and (-not $Script:BuildEnv.Force)) {
-        Write-Build Red "The module version already has been released (the folder exists within the releases folder. In order to set your build project to $($ProposedNewRelease.ToString()) you will need to pass the -Force switch to this build script with the -NewVersion parameter" -Level 2
-        throw 'Unable to update build project version!'
-    }
 
     $Script:BuildEnv.ModuleVersion = $ProposedNewRelease.ToString()
 
     Write-Description White 'Saving persistent build file with new module version' -level 2
     Save-BuildData
 
+    $NewReleaseNotes = "$($ProposedNewRelease.ToString()) release"
+
     Write-Description White 'Updating module manifest with new module version' -level 2
     try {
-        Update-ModuleManifest -Path $ModuleManifestFullPath -ModuleVersion $ProposedNewRelease
+        Update-ModuleManifest -Path $ModuleManifestFullPath -ModuleVersion $ProposedNewRelease -ReleaseNotes $NewReleaseNotes
     }
     catch {
         throw $_
@@ -750,7 +746,7 @@ task InstallModule VersionCheck, {
     $ModuleInstallPath = "$($MyModulePath)$($Script:BuildEnv.ModuleToBuild)"
     if (Test-Path $ModuleInstallPath) {
         Write-Description White "Removing installed module $($Script:BuildEnv.ModuleToBuild)" -Level 2
-        if ($Force -or $Script:BuildEnv.Force) {
+        if ($Force -or $Script:BuildEnv.ForceInstallModule) {
             Remove-Item -Path $ModuleInstallPath -Force -Recurse
         }
         else {

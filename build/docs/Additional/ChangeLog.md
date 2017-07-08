@@ -48,3 +48,7 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 - Updated vs code task names
 - Fixed an issue with a null build environment variable causing dynamic parameters in set-buildenvironment to fail
 - Several small scaffolding clean ups.
+
+## Version 0.1.3
+- Fixes to mkdocs.yml formatting
+- Fixed temp build directory exclusion in .gitignore file

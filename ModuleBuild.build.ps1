@@ -639,10 +639,14 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
     $YMLFile = Join-Path $BuildRoot 'mkdocs.yml'
 
     if (-not (Test-Path $YMLFile)) {
-        $Pages = [ordered]@{}
+        $Pages = @()
 
         $RTDFolders = Get-ChildItem -Path $ProjectDocsPath -Directory | Sort-Object -Property Name
         $RTDPages = Get-ChildItem -Path $ProjectDocsPath -File -Filter '*.md' | Sort-Object -Property Name
+
+        ForEach ($RTDPage in $RTDPages) {
+            $Pages += @{$RTDPage.BaseName = $RTDPage.Name}
+        }
 
         ForEach ($RTDFolder in $RTDFolders) {
             $RTDocs = @(Get-ChildItem -Path $RTDFolder.FullName -Filter '*.md' | Sort-Object Name)
@@ -651,21 +655,18 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
                 Foreach ($RTDDoc in $RTDocs) {
                     $NewSection += @{$RTDDoc.Basename = "$($RTDFolder.Name)/$($RTDDoc.Name)"}
                 }
-                $Pages[$RTDFolder.Name] = $NewSection
+                $Pages += @{$RTDFolder.Name = $NewSection}
             }
             else {
-                $Pages[$RTDFolder.Name] = "$($RTDFolder.Name)/$($RTDocs.Name)"
+                $Pages += @{$RTDFolder.Name = "$($RTDFolder.Name)/$($RTDocs.Name)"}
             }
-        }
-
-        ForEach ($RTDPage in $RTDPages) {
-            $Pages[$RTDPage.BaseName] = $RTDPage.Name
         }
 
         $RTD = @{
             site_author = $Script:BuildEnv.ModuleAuthor
             site_name = "$($Script:BuildEnv.ModuleToBuild) Docs"
             repo_url = $Script:BuildEnv.ModuleWebsite
+            use_directory_urls = $false
             theme = "readthedocs"
             copyright = "$($Script:BuildEnv.ModuleToBuild) is licensed under the <a href='$($Script:BuildEnv.ModuleWebsite)/master/LICENSE.md'> license"
             pages = $Pages
