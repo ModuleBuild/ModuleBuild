@@ -668,7 +668,7 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
             repo_url = $Script:BuildEnv.ModuleWebsite
             use_directory_urls = $false
             theme = "readthedocs"
-            copyright = "$($Script:BuildEnv.ModuleToBuild) is licensed under the <a href='$($Script:BuildEnv.ModuleWebsite)/master/LICENSE.md'> license"
+            copyright = "$($Script:BuildEnv.ModuleToBuild) is licensed under this <a href='$($Script:BuildEnv.ModuleWebsite)/blob/master/License.md'> license"
             pages = $Pages
         }
 

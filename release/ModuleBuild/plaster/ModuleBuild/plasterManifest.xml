@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>0e503dcd-3b6b-4f35-a9f5-d0ffe23986c2</id>
+    <id>2d67047f-95d9-483f-ac5e-0e1c7b22be98</id>
     <version>0.0.8</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>

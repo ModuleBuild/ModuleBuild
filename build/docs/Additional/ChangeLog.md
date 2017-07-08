@@ -52,3 +52,6 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 ## Version 0.1.3
 - Fixes to mkdocs.yml formatting
 - Fixed temp build directory exclusion in .gitignore file
+
+## Version 0.1.4
+- Fixed invalid mkdocs.yml license link reference
