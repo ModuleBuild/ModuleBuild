@@ -55,3 +55,4 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 
 ## Version 0.1.4
 - Fixed invalid mkdocs.yml license link reference
+- Fixed invalid reference to acknowledgements folder in plaster manifest (thanks Roberto Desideri!)

@@ -19,7 +19,7 @@ Firstly, this module uses everything it creates in its own build process. Since 
 
 Aside from the handful of helper functions there is an included 'plaster' folder that includes a customized version of the module of the same name and a manifest folder named ModuleBuild. This ModuleBuild folder contains a scaffold directory structure used to create your projects. The questions asked as well as the actions taken when copying over the scaffold folder items are both contained in the root of the plaster directory in 'plastercontent.ps1' and 'plasterparameters.ps1' and are made into the plaster manifest file at build time.
 
-The scaffolding itself is mostly a big invoke-build script and does not need the ModuleBuild module to perform build tasks.
+The scaffolding itself is mostly a big invoke-build script and does not need the ModuleBuild loaded to perform build tasks.
 
 ## Folder Structure
 A default ModuleBuild project scaffold will look like the following for a project named 'ModuleName' with build version 0.0.1 sucessfully built.

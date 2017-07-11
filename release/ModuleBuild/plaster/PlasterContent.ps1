@@ -143,11 +143,6 @@ $Content = @(
     },
     @{
         ContentType = 'templateFile'
-        Source = 'scaffold\build\docs\ReadTheDocs\Acknowledgements\*'
-        Destination = 'build\docs\ReadTheDocs\Acknowledgements'
-    },
-    @{
-        ContentType = 'templateFile'
         Source = 'scaffold\build\docs\Additional\*'
         Destination = 'build\docs\Additional'
     },

@@ -34,7 +34,7 @@
             "suppressTaskName": true,
             "isBuildCommand": true,
             "args": [
-              "${workspaceRoot}\\Build.ps1"
+                "${workspaceRoot}\\Build.ps1"
             ]
         },
         {
@@ -42,23 +42,25 @@
             "suppressTaskName": true,
             "isBuildCommand": true,
             "args": [
-              "Invoke-Build -Task BuildInstallAndTestModule"
-            ]
+                "Invoke-Build -Task BuildInstallAndTestModule"
+            ],
+            "problemMatcher": []
         },
         {
             "taskName": "Build, Install, Load, and Publish Module",
             "suppressTaskName": true,
             "isBuildCommand": true,
             "args": [
-              "Invoke-Build -Task BuildInstallTestAndPublishModule"
-            ]
+                "Invoke-Build -Task BuildInstallTestAndPublishModule"
+            ],
+            "problemMatcher": []
         },
         {
             "taskName": "Install and Load Module",
             "suppressTaskName": true,
             "isBuildCommand": true,
             "args": [
-              "Invoke-Build -Task InstallAndTestModule"
+                "Invoke-Build -Task InstallAndTestModule"
             ]
         },
         {
@@ -66,7 +68,7 @@
             "suppressTaskName": true,
             "isBuildCommand": true,
             "args": [
-              "Invoke-Build -Task PublishPSGallery"
+                "Invoke-Build -Task PublishPSGallery"
             ]
         },
         {
@@ -95,7 +97,9 @@
             "problemMatcher": [
                 {
                     "owner": "powershell",
-                    "fileLocation": ["absolute"],
+                    "fileLocation": [
+                        "absolute"
+                    ],
                     "severity": "error",
                     "pattern": [
                         {
@@ -111,5 +115,5 @@
                 }
             ]
         }
-	]
+    ]
 }

@@ -635,10 +635,11 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
 
     $DocsReleasePath = Join-Path $Script:BuildEnv.BaseReleaseFolder $Script:BuildEnv.ModuleToBuild
     $ProjectDocsPath = Join-Path $BuildRoot 'docs'
-
+    $ProjectFunctionDocsPath = Join-Path $ProjectDocsPath 'Functions'
     $YMLFile = Join-Path $BuildRoot 'mkdocs.yml'
 
     if (-not (Test-Path $YMLFile)) {
+        # If the yml file doesn't exist then go ahead and create it from scratch
         $Pages = @()
 
         $RTDFolders = Get-ChildItem -Path $ProjectDocsPath -Directory | Sort-Object -Property Name
@@ -671,11 +672,11 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
             copyright = "$($Script:BuildEnv.ModuleToBuild) is licensed under this <a href='$($Script:BuildEnv.ModuleWebsite)/blob/master/License.md'> license"
             pages = $Pages
         }
-
         $RTD | ConvertTo-Yaml | Out-File -Encoding $Script:BuildEnv.Encoding -FilePath $YMLFile -Force
+
     }
     else {
-        Write-Warning "Skipping ReadTheDocs manifest file creation as it already exists. Please remove the following file if you want it to be regenerated: $YMLFile"
+        Write-Warning 'The mkdocs.yml file already exists. If you want this regenerated you will need to delete it first.'
     }
 }
 

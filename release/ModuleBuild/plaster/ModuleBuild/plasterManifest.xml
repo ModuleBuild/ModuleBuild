@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>2d67047f-95d9-483f-ac5e-0e1c7b22be98</id>
+    <id>8b0bccef-afeb-42c7-967f-e68b33cd27e6</id>
     <version>0.0.8</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -228,9 +228,6 @@
     <templateFile
       source="scaffold\build\docs\en-US\*"
       destination="build\docs\en-US" />
-    <templateFile
-      source="scaffold\build\docs\ReadTheDocs\Acknowledgements\*"
-      destination="build\docs\ReadTheDocs\Acknowledgements" />
     <templateFile
       source="scaffold\build\docs\Additional\*"
       destination="build\docs\Additional" />
