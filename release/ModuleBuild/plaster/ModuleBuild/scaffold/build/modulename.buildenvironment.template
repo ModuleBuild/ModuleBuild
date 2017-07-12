@@ -46,18 +46,8 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         OptionUpdateVersionAfterPublishing = $<%=$PLASTER_PARAM_OptionUpdateVersionAfterPublishing%>
 
         # Additional paths in the source module which should be copied over to the final build release
-<%
-if ($PLASTER_PARAM_AdditionalModulePaths -ne ' ') {
-        @"
-        AdditionalModulePaths = '<%=$PLASTER_PARAM_AdditionalModulePaths%>' -split ','
-"@
-}
-else {
-    @"
         AdditionalModulePaths = @()
-"@
-}
-%>
+
         # Generate a yml file in the root folder of this project for readthedocs.org integration
         OptionGenerateReadTheDocs = $<%=$PLASTER_PARAM_OptionGenerateReadTheDocs%>
         # Most of the following options you probably don't need to change

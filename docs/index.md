@@ -40,14 +40,12 @@ Install-Module -Name ModuleBuild -Scope CurrentUser
 I started this little framework as a build script for [one of my projects](https://github.com/zloeber/FormatPowershellCode) so you can see it in action there if you like (note that this is a very early version of the build script though). I've since taken that code, made it a bit more generic, and added an initialization routine for new projects. As an exercise I adapted [another older project](https://github.com/zloeber/NLogModule) to use this build script as well. So this framework does work for me but you might need to do some tweaking to get it working for your own project but keep in mind that any module that exports more than functions will take additional work. (See the notes below to better understand why.)
 
 ## Contributing
-[https://github.com/zloeber/ModuleBuild/docs/Contributing.md](https://github.com/zloeber/ModuleBuild/docs/Contributing.md)
-
-## Release Notes
-[https://github.com/zloeber/ModuleBuild/docs/ReleaseNotes.md](https://github.com/zloeber/ModuleBuild/docs/ReleaseNotes.md)
+[Notes on contributing to this project](Contributing.md)
 
 ## Change Log
-[https://github.com/zloeber/ModuleBuild/docs/ChangeLog.md](https://github.com/zloeber/ModuleBuild/docs/ChangeLog.md)
+[Change notes for each release](ChangeLog.md)
 
 ## Acknowledgements
-[https://github.com/zloeber/ModuleBuild/docs/Acknowledgements.md](https://github.com/zloeber/ModuleBuild/docs/Acknowledgements.md)
+[Other projects or sources of inspiration](Acknowledgements.md)
+
 

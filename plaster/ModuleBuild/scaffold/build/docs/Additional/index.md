@@ -25,13 +25,11 @@ Install-Module -Name <%=$PLASTER_PARAM_ModuleName%> -Scope CurrentUser
 ```
 
 ## Contributing
-[<%=$PLASTER_PARAM_ModuleWebsite%>/docs/Contributing.md](<%=$PLASTER_PARAM_ModuleWebsite%>/docs/Contributing.md)
+[Notes on contributing to this project](Contributing.md)
 
-## Release Notes
-[<%=$PLASTER_PARAM_ModuleWebsite%>/docs/ReleaseNotes.md](<%=$PLASTER_PARAM_ModuleWebsite%>/docs/ReleaseNotes.md)
-
-## Change Log
-[<%=$PLASTER_PARAM_ModuleWebsite%>/docs/ChangeLog.md](<%=$PLASTER_PARAM_ModuleWebsite%>/docs/ChangeLog.md)
+## Change Logs
+[Change notes for each release](ChangeLogs.md)
 
 ## Acknowledgements
-[<%=$PLASTER_PARAM_ModuleWebsite%>/docs/Acknowledgements.md](<%=$PLASTER_PARAM_ModuleWebsite%>/docs/Acknowledgements.md)
+[Other projects or sources of inspiration](Acknowledgements.md)
+

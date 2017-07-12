@@ -56,3 +56,8 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 ## Version 0.1.4
 - Fixed invalid mkdocs.yml license link reference
 - Fixed invalid reference to acknowledgements folder in plaster manifest (thanks Roberto Desideri!)
+
+## Version 0.1.5
+- Fixed awful .gitignore settings included in the default scaffolding
+- Fixed documentation links to be self-referencing
+- Removed AdditionalModulePaths from initial plaster manifest (can just set this with set-buildenvironment after creation)

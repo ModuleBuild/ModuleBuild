@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>ac5262f9-8901-4890-9818-07dc8e7decd6</id>
+    <id>aae927d8-6c34-4059-a10d-fd74d975b72e</id>
     <version>0.0.8</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -37,11 +37,6 @@
       name="ModuleTags"
       type="text"
       prompt="Comma separate list of tags that describe this module. This is required for the PowerShell Gallery" />
-    <parameter
-      name="AdditionalModulePaths"
-      type="text"
-      prompt="Comma separate list of paths that will be included with the final module release (ie. .\libs,.\data)"
-      default=" " />
     <parameter
       name="ProjectLicense"
       type="choice"

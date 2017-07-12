@@ -32,12 +32,6 @@ $Parameters = @(
         ParameterPrompt = "Comma separate list of tags that describe this module. This is required for the PowerShell Gallery"
     },
     @{
-        ParameterName = "AdditionalModulePaths"
-        ParameterType = "text"
-        ParameterPrompt = "Comma separate list of paths that will be included with the final module release (ie. .\libs,.\data)"
-        Default = ' '
-    },
-    @{
         ParameterName = "ProjectLicense"
         ParameterType = "choice"
         ParameterPrompt = "What license would you like for this module to have?"
