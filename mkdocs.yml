@@ -19,9 +19,10 @@ pages:
   - 6 - Your Next Release: Usage/6 - Your Next Release.md
   - 7 - Project Documentation: Usage/7 - Project Documentation.md
   - 8 - Special Files: Usage/8 - Special Files.md
-  - 9 - PSModuleBuild Configuration: Usage/9 - PSModuleBuild Configuration.md
+  - 9 - PSModuleBuild Configuration: Usage/9 - ModuleBuild Configuration.md
   - 10 - Converting To ModuleBuild: Usage/10 - Converting To ModuleBuild.md
 - Functions:
+  - Add-PublicFunction: Functions/Add-PublicFunction.md
   - Get-BuildEnvironment: Functions/Get-BuildEnvironment.md
   - Import-ModulePrivateFunction: Functions/Import-ModulePrivateFunction.md
   - Import-ModulePublicFunction: Functions/Import-ModulePublicFunction.md

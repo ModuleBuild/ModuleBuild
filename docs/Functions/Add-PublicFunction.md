@@ -7,12 +7,12 @@ schema: 2.0.0
 # Add-PublicFunction
 
 ## SYNOPSIS
-Adds a public function to your modulebuild based project.
+Adds a public function to your modulebuild based project based on defined templates.
 
 ## SYNTAX
 
 ```
-Add-PublicFunction [[-Name] <String>] [-Force]
+Add-PublicFunction [[-Name] <String>] [-Force] [-TemplateName <String>]
 ```
 
 ## DESCRIPTION
@@ -54,6 +54,21 @@ Aliases:
 Required: False
 Position: Named
 Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TemplateName
+Use this template file for the new function
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

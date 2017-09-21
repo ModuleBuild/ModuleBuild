@@ -12,7 +12,7 @@ A scaffolding framework which can be used to kickstart a generic PowerShell modu
 
 ## ModuleBuild Cmdlets
 ### [Add-PublicFunction](Add-PublicFunction.md)
-Adds a public function to your modulebuild based project.
+Adds a public function to your modulebuild based project based on defined templates.
 
 ### [Get-BuildEnvironment](Get-BuildEnvironment.md)
 Retrieves all the stored settings in a buildenvironment.json file.

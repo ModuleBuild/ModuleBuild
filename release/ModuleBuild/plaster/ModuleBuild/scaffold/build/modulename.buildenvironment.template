@@ -58,6 +58,7 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         BaseReleaseFolder = 'release'        # Releases directory.
         BuildToolFolder = 'build'        # Build tool path (these scripts are dot sourced)
         ScratchFolder = 'temp'        # Scratch path - this is where all our scratch work occurs. It will be cleared out at every run.
+        FunctionTemplates = "src\templates"  # Location of function template files (*.tem)
 
         # If you will be publishing to the PowerShell Gallery you will need a Nuget API key (can get from the website)
         # You should not actually enter this key here but should manually enter it in the <%=$PLASTER_PARAM_ModuleName%>.buildenvironment.json file

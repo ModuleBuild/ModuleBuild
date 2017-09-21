@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>885a2cea-4109-4442-b8a3-c0514e2113a2</id>
+    <id>a30d2819-c662-45c6-a142-d608cd0874e8</id>
     <version>0.0.8</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -165,6 +165,9 @@
     <file
       source="scaffold\src\public\*"
       destination="src\public" />
+    <file
+      source="scaffold\src\templates\*"
+      destination="src\templates" />
     <file
       source="scaffold\tests\*"
       destination="src\tests" />

@@ -14,10 +14,11 @@ Sets a stored setting in a buildenvironment.json file.
 ```
 Set-BuildEnvironment [[-Path] <String>] [-AdditionalModulePaths <Object[]>] [-BaseReleaseFolder <String>]
  [-BaseSourceFolder <String>] [-BuildToolFolder <String>] [-Encoding <String>] [-FirstRun <Boolean>]
- [-Force <Boolean>] [-ForceInstallModule <Boolean>] [-ModuleAuthor <String>] [-ModuleCopyright <String>]
- [-ModuleDescription <String>] [-ModuleLicenseURI <String>] [-ModuleTags <Object[]>] [-ModuleToBuild <String>]
- [-ModuleVersion <String>] [-ModuleWebsite <String>] [-NugetAPIKey <String>] [-OptionAnalyzeCode <Boolean>]
- [-OptionCombineFiles <Boolean>] [-OptionGenerateReadTheDocs <Boolean>] [-OptionRunPlatyPSVerbose <Boolean>]
+ [-Force <Boolean>] [-ForceInstallModule <Boolean>] [-FunctionTemplates <String>] [-ModuleAuthor <String>]
+ [-ModuleCopyright <String>] [-ModuleDescription <String>] [-ModuleLicenseURI <String>]
+ [-ModuleTags <Object[]>] [-ModuleToBuild <String>] [-ModuleVersion <String>] [-ModuleWebsite <String>]
+ [-NugetAPIKey <String>] [-OptionAnalyzeCode <Boolean>] [-OptionCombineFiles <Boolean>]
+ [-OptionGenerateReadTheDocs <Boolean>] [-OptionRunPlatyPSVerbose <Boolean>]
  [-OptionSanitizeSensitiveTerms <Boolean>] [-OptionSensitiveTerms <Object[]>]
  [-OptionSensitiveTermsInitialized <Boolean>] [-OptionTranscriptEnabled <Boolean>]
  [-OptionTranscriptLogFile <String>] [-OptionUpdateVersionAfterPublishing <Boolean>]
@@ -162,6 +163,21 @@ Update the setting for ForceInstallModule
 
 ```yaml
 Type: Boolean
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -FunctionTemplates
+Update the setting for FunctionTemplates
+
+```yaml
+Type: String
 Parameter Sets: (All)
 Aliases: 
 

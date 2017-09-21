@@ -49,6 +49,11 @@ $Content = @(
     },
     @{
         ContentType = 'file'
+        Source = 'scaffold\src\templates\*'
+        Destination = 'src\templates'
+    },
+    @{
+        ContentType = 'file'
         Source = 'scaffold\tests\*'
         Destination = 'src\tests'
     },

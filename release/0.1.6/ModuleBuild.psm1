@@ -9,40 +9,6 @@
  empty. Even leaving this comment is good enough.
 #>
 
-$PrivateFunctionTemplate = @'
-function %%FunctionName%% {
-    <#
-    .SYNOPSIS
-    TBD
-    .DESCRIPTION
-    TBD
-    .LINK
-    https://github.com/zloeber/ModuleBuild
-    .EXAMPLE
-    TBD
-    .NOTES
-    Author: %%ModuleAuthor%%
-    Website: %%ModuleWebsite%%
-    #>
-
-    [CmdletBinding()]
-    param(
-    )
-    begin {
-        if ($script:ThisModuleLoaded -eq $true) {
-            Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
-        }
-        $FunctionName = $MyInvocation.MyCommand.Name
-        Write-Verbose "$($FunctionName): Begin."
-    }
-    process {
-    }
-    end {
-        Write-Verbose "$($FunctionName): End."
-    }
-}
-'@
-
 ## PRIVATE MODULE FUNCTIONS AND DATA ##
 
 function Convert-ArrayToRegex {
@@ -1481,26 +1447,68 @@ function Add-PublicFunction {
     [CmdletBinding()]
     param(
         [parameter(Position = 0, ValueFromPipeline = $TRUE)]
-        [String]$Name,
+        [string]$Name,
         [switch]$Force
     )
+    dynamicparam {
+        # Create dictionary
+        $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+        $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
 
+        if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
+            try {
+                $LoadedBuildEnv = Get-Content $BuildPath | ConvertFrom-Json
+                $TemplateNames = @((Get-ChildItem -Path $LoadedBuildEnv.FunctionTemplates -Filter '*.tem').BaseName)
+
+                $NewParamSettings = @{
+                    Name = 'TemplateName'
+                    Type = 'string'
+                    ValidateSet = $TemplateNames
+                    HelpMessage = "Use this template file for the new function"
+                }
+
+                # Add new dynamic parameter to dictionary
+                New-DynamicParameter @NewParamSettings -Dictionary $DynamicParameters
+            }
+            catch {
+                throw "Unable to load the build file in $BuildPath"
+            }
+        }
+
+        # Return dictionary with dynamic parameters
+        $DynamicParameters
+    }
     begin {
         if ($script:ThisModuleLoaded -eq $true) {
             Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
         }
+        $FunctionName = $MyInvocation.MyCommand.Name
+        Write-Verbose "$($FunctionName): Begin."
+    }
+    process {
+        # Pull in the dynamic parameters first
+        New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+
+        # Attempt to get the build environment data and create our template lookup table
         try {
             $BuildEnvInfo = Get-BuildEnvironment
             $BuildEnvPath = Split-Path (Split-Path ((Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' -ErrorAction:SilentlyContinue | select -First 1).FullName))
             $PublicFunctionSrc = Join-Path $BuildEnvPath $BuildEnvInfo.PublicFunctionSource
+            $TemplatePath = Join-Path $BuildEnvPath $BuildEnvInfo.FunctionTemplates
+            $TemplateLookup = @{}
+            Get-ChildItem -Path $TemplatePath -Filter '*.tem' | Foreach {
+                $TemplateLookup.($_.BaseName) = $_.FullName
+            }
+            $BuildEnvVars = (Get-Member -Type 'NoteProperty' -InputObject $LoadedBuildEnv).Name
         }
         catch {
             throw "Unable to find or load a buildenvironment json file!"
         }
 
         Write-Verbose "Using public function directory: $PublicFunctionSrc"
-    }
-    process {
+        Write-Verbose "Using function template path: $TemplatePath"
+
+        $TemplateData = Get-Content -Path $TemplateLookup[$TemplateName]
         $FunctionFullPath = (Join-Path $PublicFunctionSrc $Name) + ".ps1"
         if (Test-PublicFunctionName $Name -ShowIssues) {
             Write-Verbose "Adding function to be created: $FunctionFullPath"
@@ -1513,14 +1521,22 @@ function Add-PublicFunction {
                 Write-Warning "Function file already exists, skipping: $NewFunction"
             }
             else {
-                $FunctionPath = Split-Path $Name
-                $FunctionFileName = Split-Path $Name -Leaf
+                $FunctionFileName = Split-Path $NewFunction -Leaf
                 $FunctionName = ($FunctionFileName -split '\.')[0]
-                Write-Verbose "Function Path: $FunctionPath"
                 Write-Verbose "Function FileName: $FunctionFileName"
                 Write-Verbose "Function Name: $FunctionName"
-                Write-Output "Creating new public function from template: $FunctionName"
-                $Script:PrivateFunctionTemplate -replace '%%FunctionName%%', $FunctionName -Replace '%%ModuleAuthor%%',$BuildEnvInfo.ModuleAuthor -replace '%%ModuleWebsite%%',$BuildEnvInfo.ModuleWebsite | Out-File -FilePath $NewFunction -Force
+                Write-Output "Creating new public function called $FunctionName.ps1 from template: $TemplateName"
+
+                # Start by replacing the functionname
+                $NewFunctionOutput = $TemplateData -replace '%%FunctionName%%', $FunctionName
+
+                # Next replace any other variables found in our build environment file that exist in the template.
+                $BuildEnvVars | Foreach {
+                    Write-Verbose "   Replacing %%$($_)%% with $($BuildEnvInfo.$_) if found in template..."
+                    $NewFunctionOutput = $NewFunctionOutput -replace "%%$($_)%%", ($BuildEnvInfo.$_ -join ',')
+                }
+
+                $NewFunctionOutput | Out-File -FilePath $NewFunction -Force
             }
         }
     }

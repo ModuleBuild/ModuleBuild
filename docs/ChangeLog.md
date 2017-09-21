@@ -61,3 +61,7 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 - Fixed awful .gitignore settings included in the default scaffolding
 - Fixed documentation links to be self-referencing
 - Removed AdditionalModulePaths from initial plaster manifest (can just set this with set-buildenvironment after creation)
+
+## Version 0.1.6
+- Added New-PublicFunction to module along with a template folder and basic function template to start with. Any src\templates\*.tem file is able to be used for this new feature and any build environment variable surrounded by double percentage symbols will be automatically replaced (ie. %%ModuleName%%).
+- Fixed ReadTheDocs yml creation issue with the licensing link.
