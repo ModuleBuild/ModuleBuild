@@ -1,6 +1,6 @@
 ﻿use_directory_urls: false
 site_author: Zachary Loeber
-copyright: ModuleBuild is licensed under the following <a href='https://github.com/zloeber/ModuleBuild/blob/master/License.md'> license"
+copyright: ModuleBuild is licensed under the <a href='https://github.com/zloeber/ModuleBuild/blob/master/License.md'>Creative Commons</a> license"
 theme: readthedocs
 site_name: ModuleBuild Docs
 pages:
