@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>a30d2819-c662-45c6-a142-d608cd0874e8</id>
+    <id>80e39645-34c8-4a9a-a366-2f0903920555</id>
     <version>0.0.8</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -105,7 +105,7 @@
       name="OptionSanitizeSensitiveTerms"
       type="choice"
       prompt="Scan for sensitive terms (like your user id or company domain) in the module build process (Recommended for Gallery uploading)?"
-      default="0">
+      default="1">
       <choice
         label="&amp;Yes"
         help="Sanitize sensitive terms"
@@ -127,6 +127,20 @@
       <choice
         label="&amp;No"
         help="No YML file will be generated."
+        value="False" />
+    </parameter>
+    <parameter
+      name="PluginModuleLogging"
+      type="choice"
+      prompt="Plugin - Include NLog logging capabilities in the module?"
+      default="1">
+      <choice
+        label="&amp;Yes"
+        help="The project will include nlog binaries and transparent logging capabilities."
+        value="True" />
+      <choice
+        label="&amp;No"
+        help="The project will NOT include nlog binaries and transparent logging capabilities."
         value="False" />
     </parameter>
   </parameters>
@@ -171,6 +185,14 @@
     <file
       source="scaffold\tests\*"
       destination="src\tests" />
+    <templateFile
+      source="scaffold\plugins\NLog\*"
+      destination="plugins\nlog"
+      condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
+    <file
+      source="scaffold\plugins\NLog\NLogModule\*"
+      destination="plugins\nlog\NLog\NLogModule"
+      condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
     <file
       source="scaffold\build\cleanup\*"
       destination="build\cleanup" />
@@ -224,8 +246,8 @@
       source="scaffold\build\docs\ReadTheDocs\*"
       destination="build\docs\ReadTheDocs" />
     <templateFile
-      source="scaffold\build\docs\en-US\*"
-      destination="build\docs\en-US" />
+      source="scaffold\build\docs\en-US\about_ModuleName.help.txt"
+      destination="build\docs\en-US\about_${PLASTER_PARAM_ModuleName}.help.txt" />
     <templateFile
       source="scaffold\build\docs\Additional\*"
       destination="build\docs\Additional" />

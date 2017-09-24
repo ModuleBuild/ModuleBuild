@@ -117,7 +117,7 @@ $Parameters = @(
         ParameterName = "OptionSanitizeSensitiveTerms"
         ParameterType = "choice"
         ParameterPrompt = "Scan for sensitive terms (like your user id or company domain) in the module build process (Recommended for Gallery uploading)?"
-        Default = "0"
+        Default = "1"
         Choices = @(
             @{
                 Label = "&Yes"
@@ -145,6 +145,24 @@ $Parameters = @(
             @{
                 Label = "&No"
                 Help = "No YML file will be generated."
+                Value = "False"
+            }
+        )
+    },
+    @{
+        ParameterName = "PluginModuleLogging"
+        ParameterType = "choice"
+        ParameterPrompt = "Plugin - Include NLog logging capabilities in the module?"
+        Default = "1"
+        Choices = @(
+            @{
+                Label = "&Yes"
+                Help = "The project will include nlog binaries and transparent logging capabilities."
+                Value = "True"
+            },
+            @{
+                Label = "&No"
+                Help = "The project will NOT include nlog binaries and transparent logging capabilities."
                 Value = "False"
             }
         )

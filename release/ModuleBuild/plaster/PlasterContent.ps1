@@ -58,6 +58,18 @@ $Content = @(
         Destination = 'src\tests'
     },
     @{
+        ContentType = 'templateFile'
+        Source = 'scaffold\plugins\NLog\*'
+        Destination = 'plugins\nlog'
+        Condition = '$PLASTER_PARAM_PluginModuleLogging -eq "True"'
+    },
+    @{
+        ContentType = 'file'
+        Source = 'scaffold\plugins\NLog\NLogModule\*'
+        Destination = 'plugins\nlog\NLog\NLogModule'
+        Condition = '$PLASTER_PARAM_PluginModuleLogging -eq "True"'
+    },
+    @{
         ContentType = 'file'
         Source = 'scaffold\build\cleanup\*'
         Destination = 'build\cleanup'
@@ -143,8 +155,8 @@ $Content = @(
     },
     @{
         ContentType = 'templateFile'
-        Source      = 'scaffold\build\docs\en-US\*'
-        Destination = 'build\docs\en-US'
+        Source      = 'scaffold\build\docs\en-US\about_ModuleName.help.txt'
+        Destination = 'build\docs\en-US\about_${PLASTER_PARAM_ModuleName}.help.txt'
     },
     @{
         ContentType = 'templateFile'

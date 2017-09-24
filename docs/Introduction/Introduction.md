@@ -38,6 +38,8 @@ ProjectRootFolder
 		- private
 			SomePrivateFunction1.ps1
         	SomePrivateFunction2.ps1
+	- plugins
+		- nlog
     - docs
         index.md
         - Functions

@@ -240,7 +240,9 @@ task PrepareStage {
     Copy-Item -Path "$($BuildRoot)\$($Script:BuildEnv.OtherModuleSource)" -Recurse -Destination "$($ScratchPath)\$($Script:BuildEnv.OtherModuleSource)"
     Copy-Item -Path (Join-Path $BuildDocsPath 'en-US') -Recurse -Destination $ScratchPath
     $Script:BuildEnv.AdditionalModulePaths | ForEach-Object {
-        Copy-Item -Path $_ -Recurse -Destination $ScratchPath -Force
+        if (Test-Path $_) {
+            Copy-Item -Path $_ -Recurse -Destination $ScratchPath -Force
+        }
     }
 }
 
@@ -362,10 +364,12 @@ task CreateModulePSM1 RemoveScriptSignatures, UpdateCBH, {
     }
 
     if (($Script:BuildEnv.AdditionalModulePaths).Count -gt 0) {
-        Write-Description White 'Copying over additional module paths now.' -Level 2
+        Write-Description White 'Copying over additional module paths now (if they exist).' -Level 2
         $Script:BuildEnv.AdditionalModulePaths | ForEach-Object {
-            Write-Description White "Copying $_" -Level 3
-            Copy-Item -Path $_ -Recurse -Destination $StageReleasePath -Force
+            if (Test-Path $_) {
+                Write-Description White "Copying $_" -Level 3
+                Copy-Item -Path $_ -Recurse -Destination $StageReleasePath -Force
+            }
         }
     }
 }

@@ -36,7 +36,7 @@ This build framework for PowerShell modules comes with several appealing baked i
 - Easy to manage build configuration with forward compatible design and easy to use commands
 - Includes ability to scan for sensitive terms (like your company domain name or other items that you may not want published)
 - Functions for importing public and private functions from other projects into a ModuleBuild project
-
+- Add new public functions to your project based on easy to create templates.
 ## Documentation
 
 Visit the [ReadTheDocs.org documentation](http://modulebuild.readthedocs.io/en/latest/) that this module created a manifest for automatically.

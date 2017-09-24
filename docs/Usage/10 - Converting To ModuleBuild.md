@@ -19,12 +19,12 @@ Like the public function import, this will not overwrite any files that exist in
 So in order to convert an existing project to a modulebuild project you will follow these steps:
 
 1. Initialize a new ModuleBuild project folder
-2. **Build** the project (**and it will fail the first time**). This ensures that your modulebuild project settings have been exported at least once.
+2. ~~**Build** the project (**and it will fail the first time**). This ensures that your modulebuild project settings have been exported at least once.~~
 3. From your new modulebuild project folder run the Import-ModulePrivateFunction command against your existing module.
 4. From your new modulebuild project folder run the Import-ModulePublicFunction command against your existing module.
 5. Add any required preload or postload code in src\other\preload.ps1 or src\other\postload.ps1
 
-## Important Notes
+## Very Important Notes
 - This will generally work well for easy projects. Modules with many dependencies or higher complexity levels will likely be more work to get converted.
 - It is very important that, when specifying your module source, that you choose the right file. There are BIG differences in behavior between importing a psm1 file and a psd1 file and whichever one you pass in will be the one that gets imported.
 - I'd only run these commands against a newly initialized project but you could theoretically use this to split up some monolithic module for development purposes. Conversely, you could also use these to merge the public/private functions of multiple disperate modules as well.

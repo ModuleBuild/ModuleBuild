@@ -17,7 +17,7 @@ Once this has been kicked off and all answers have been entered, the initializat
 ## Quick Start
 With your new module folder all created there are several steps still left to take in order to make your new project more world class. There are several sections of the following documentation that go over fleshing out the module with public functions, building a release, testing things, out and starting another release. Here are some quick next step tips if you aren't feeling like reading all of that.
 
-1. Add public functions, one per file, to .\src\public
+1. Add public functions, one per file, to .\src\public (You can use the ModuleBuild function 'Add-PublicFunction' for this task)
 2. Update your default readme.md file at the root project directory
 3. Update the about_ModuleName.help.txt file within .\build\docs\en-US
 4. Doing ReadTheDocs integration? Cool, update .\build\docs\ReadTheDocs by creating folders representing sections and putting markdown files within them for the pages within those sections.

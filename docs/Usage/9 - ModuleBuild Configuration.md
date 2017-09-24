@@ -33,3 +33,16 @@ Use this against an existing module directory to load the module into memory and
 
 ## Import-ModulePrivateFunction
 Use this against an existing module directory to load the module into memory to determine the exported functions. Then the whole module folder will then be crawled for any non-embedded function definitions that do not exist in the exported function list. Finally, you will be prompted to import each of the found candidate private functions into the modulebuild defined private folder for your project. No files will be overwritten.
+
+## Add-PublicFunction
+This function will parse your build environment config file for the location of your function templates directory (default = src\templates) and allow you to use one of them to create a new public function for your module. Some basic validation of the function name will be done including:
+- Verb-Noun format
+- Noun is singular, not plural
+- Function doesn't already exist
+- Function consists of only a-z, A-Z, and '-'
+
+Any string int he template function that matches the following format will be replaced by the build environment variable in your build configuration file:
+
+`%%<build variable>%%`
+
+As an example, `%%ModuleName%%` would be replaced by your Module project name.
