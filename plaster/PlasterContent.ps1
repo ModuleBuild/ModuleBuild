@@ -150,11 +150,6 @@ $Content = @(
     },
     @{
         ContentType = 'templateFile'
-        Source = 'scaffold\build\docs\ReadTheDocs\*'
-        Destination = 'build\docs\ReadTheDocs'
-    },
-    @{
-        ContentType = 'templateFile'
         Source      = 'scaffold\build\docs\en-US\about_ModuleName.help.txt'
         Destination = 'build\docs\en-US\about_${PLASTER_PARAM_ModuleName}.help.txt'
     },
