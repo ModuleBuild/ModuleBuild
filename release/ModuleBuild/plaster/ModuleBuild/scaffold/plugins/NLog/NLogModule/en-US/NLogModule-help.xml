@@ -2,9 +2,81 @@
 <helpItems schema="maml" xmlns="http://msh">
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Get-LogMessageLayout</command:name>
+      <command:name>Get-NLogDllLoadState</command:name>
       <command:verb>Get</command:verb>
-      <command:noun>LogMessageLayout</command:noun>
+      <command:noun>NLogDllLoadState</command:noun>
+      <maml:description>
+        <maml:para>Validate if the NLog Dll is loaded or not.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Validate if the NLog Dll is loaded or not.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-NLogDllLoadState</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-NLogDllLoadState</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-NLogInstance</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>NLogInstance</command:noun>
+      <maml:description>
+        <maml:para>Gets the current nlog instance for the module</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Gets the current nlog instance for the module</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-NLogInstance</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>$myCurrentNlog = Get-NLogInstance</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-NLogMessageLayout</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>NLogMessageLayout</command:noun>
       <maml:description>
         <maml:para>Sets the log message layout</maml:para>
       </maml:description>
@@ -14,7 +86,7 @@
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Get-LogMessageLayout</maml:name>
+        <maml:name>Get-NLogMessageLayout</maml:name>
         <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>layoutId</maml:name>
           <maml:Description>
@@ -53,7 +125,7 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>$myFilelogtarget.Layout  = Get-LogMessageLayout -layoutId 1</dev:code>
+        <dev:code>$myFilelogtarget.Layout  = Get-NLogMessageLayout -layoutId 1</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -63,9 +135,9 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Get-NewLogConfig</command:name>
-      <command:verb>Get</command:verb>
-      <command:noun>NewLogConfig</command:noun>
+      <command:name>New-NLogConfig</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>NLogConfig</command:noun>
       <maml:description>
         <maml:para>Creates a new configuration in memory</maml:para>
       </maml:description>
@@ -75,7 +147,7 @@
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Get-NewLogConfig</maml:name>
+        <maml:name>New-NLogConfig</maml:name>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters />
@@ -89,7 +161,7 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>$myLogconfig = Get-NewLogConfig()</dev:code>
+        <dev:code>$myLogconfig = New-NLogConfig</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -99,9 +171,368 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Get-NewLogger</command:name>
-      <command:verb>Get</command:verb>
-      <command:noun>NewLogger</command:noun>
+      <command:name>New-NLogConsoleTarget</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>NLogConsoleTarget</command:noun>
+      <maml:description>
+        <maml:para>Creates a new console logging target</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Creates a new console logging target</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-NLogConsoleTarget</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Encoding</maml:name>
+          <maml:Description>
+            <maml:para>File encoding type</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+          <dev:type>
+            <maml:name>Encoding</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Text.Encoding]::GetEncoding("iso-8859-2")</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>Layout</maml:name>
+          <maml:Description>
+            <maml:para>Message layout for logs to the console</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(Get-NLogMessageLayout -layoutId 3)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ErrorStream</maml:name>
+          <maml:Description>
+            <maml:para>Enable error stream logging</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Encoding</maml:name>
+        <maml:Description>
+          <maml:para>File encoding type</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+        <dev:type>
+          <maml:name>Encoding</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Text.Encoding]::GetEncoding("iso-8859-2")</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ErrorStream</maml:name>
+        <maml:Description>
+          <maml:para>Enable error stream logging</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>Layout</maml:name>
+        <maml:Description>
+          <maml:para>Message layout for logs to the console</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(Get-NLogMessageLayout -layoutId 3)</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>TBD</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-NLogFileTarget</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>NLogFileTarget</command:noun>
+      <maml:description>
+        <maml:para>Creates a new file logging target</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Creates a new file logging target</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-NLogFileTarget</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>ArchiveAboveSize</maml:name>
+          <maml:Description>
+            <maml:para>Archives file above this many bytes.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>10240000</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>archiveEvery</maml:name>
+          <maml:Description>
+            <maml:para>Period of time to archive log files</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Month</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+          <maml:name>ArchiveNumbering</maml:name>
+          <maml:Description>
+            <maml:para>How archive files are names</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Rolling</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+          <maml:name>FileName</maml:name>
+          <maml:Description>
+            <maml:para>Name of log file</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+          <maml:name>Encoding</maml:name>
+          <maml:Description>
+            <maml:para>File encoding type</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+          <dev:type>
+            <maml:name>Encoding</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Text.Encoding]::GetEncoding("iso-8859-2")</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+          <maml:name>Layout</maml:name>
+          <maml:Description>
+            <maml:para>Message layout for logs to the file</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(Get-NLogMessageLayout -layoutId 1)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
+          <maml:name>maxArchiveFiles</maml:name>
+          <maml:Description>
+            <maml:para>Maximum number of archive files to retain.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>1</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CreateDirs</maml:name>
+          <maml:Description>
+            <maml:para>Create directories when archiving</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>KeepFileOpen</maml:name>
+          <maml:Description>
+            <maml:para>Maintain a lock on the log file</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>ArchiveAboveSize</maml:name>
+        <maml:Description>
+          <maml:para>Archives file above this many bytes.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>10240000</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>archiveEvery</maml:name>
+        <maml:Description>
+          <maml:para>Period of time to archive log files</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Month</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <maml:name>ArchiveNumbering</maml:name>
+        <maml:Description>
+          <maml:para>How archive files are names</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Rolling</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CreateDirs</maml:name>
+        <maml:Description>
+          <maml:para>Create directories when archiving</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+        <maml:name>FileName</maml:name>
+        <maml:Description>
+          <maml:para>Name of log file</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+        <maml:name>Encoding</maml:name>
+        <maml:Description>
+          <maml:para>File encoding type</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+        <dev:type>
+          <maml:name>Encoding</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Text.Encoding]::GetEncoding("iso-8859-2")</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>KeepFileOpen</maml:name>
+        <maml:Description>
+          <maml:para>Maintain a lock on the log file</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+        <maml:name>Layout</maml:name>
+        <maml:Description>
+          <maml:para>Message layout for logs to the file</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(Get-NLogMessageLayout -layoutId 1)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
+        <maml:name>maxArchiveFiles</maml:name>
+        <maml:Description>
+          <maml:para>Maximum number of archive files to retain.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>1</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>TBD</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-NLogLogger</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>NLogLogger</command:noun>
       <maml:description>
         <maml:para>Creates a new LogManager instance</maml:para>
       </maml:description>
@@ -111,7 +542,7 @@
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Get-NewLogger</maml:name>
+        <maml:name>New-NLogLogger</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>LoggerName</maml:name>
           <maml:Description>
@@ -150,7 +581,7 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>$myLogger = Get-NewLogger()</dev:code>
+        <dev:code>$myLogger = New-NLogLogger</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -160,9 +591,9 @@
   </command:command>
   <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
     <command:details>
-      <command:name>Get-NewLogTarget</command:name>
-      <command:verb>Get</command:verb>
-      <command:noun>NewLogTarget</command:noun>
+      <command:name>New-NLogTarget</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>NLogTarget</command:noun>
       <maml:description>
         <maml:para>Creates a new logging target</maml:para>
       </maml:description>
@@ -172,7 +603,7 @@
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
-        <maml:name>Get-NewLogTarget</maml:name>
+        <maml:name>New-NLogTarget</maml:name>
         <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
           <maml:name>TargetType</maml:name>
           <maml:Description>
@@ -211,43 +642,7 @@
     <command:examples>
       <command:example>
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>$myFilelogtarget = Get-NewLogTarget -targetType "file"</dev:code>
-        <dev:remarks>
-          <maml:para></maml:para>
-        </dev:remarks>
-      </command:example>
-    </command:examples>
-    <command:relatedLinks />
-  </command:command>
-  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
-    <command:details>
-      <command:name>Get-NLogDllLoadState</command:name>
-      <command:verb>Get</command:verb>
-      <command:noun>NLogDllLoadState</command:noun>
-      <maml:description>
-        <maml:para>Validate if the NLog Dll is loaded or not.</maml:para>
-      </maml:description>
-    </command:details>
-    <maml:description>
-      <maml:para>Validate if the NLog Dll is loaded or not.</maml:para>
-    </maml:description>
-    <command:syntax>
-      <command:syntaxItem>
-        <maml:name>Get-NLogDllLoadState</maml:name>
-      </command:syntaxItem>
-    </command:syntax>
-    <command:parameters />
-    <command:inputTypes />
-    <command:returnValues />
-    <maml:alertSet>
-      <maml:alert>
-        <maml:para></maml:para>
-      </maml:alert>
-    </maml:alertSet>
-    <command:examples>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
-        <dev:code>Get-NLogDllLoadState</dev:code>
+        <dev:code>$myFilelogtarget = New-NLogTarget -targetType "file"</dev:code>
         <dev:remarks>
           <maml:para></maml:para>
         </dev:remarks>
@@ -261,16 +656,16 @@
       <command:verb>Register</command:verb>
       <command:noun>NLog</command:noun>
       <maml:description>
-        <maml:para>Register the NLog dlls and create a file logging target.</maml:para>
+        <maml:para>Start NLog logging with a basic configuration.</maml:para>
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Register the NLog dlls and create a file logging target.</maml:para>
+      <maml:para>Start NLog logging with a basic configuration.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
         <maml:name>Register-NLog</maml:name>
-        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>FileName</maml:name>
           <maml:Description>
             <maml:para>File to start logging to</maml:para>
@@ -282,7 +677,7 @@
           </dev:type>
           <dev:defaultValue>None</dev:defaultValue>
         </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
           <maml:name>LoggerName</maml:name>
           <maml:Description>
             <maml:para>An Nlog name (useful for multiple logging targets)</maml:para>
@@ -294,10 +689,61 @@
           </dev:type>
           <dev:defaultValue>TestLogger</dev:defaultValue>
         </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>LogLevel</maml:name>
+          <maml:Description>
+            <maml:para>Level of logging. Default is Info.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">LogLevel</command:parameterValue>
+          <dev:type>
+            <maml:name>LogLevel</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[NLog.LogLevel]::Debug</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Register-NLog</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>LoggerName</maml:name>
+          <maml:Description>
+            <maml:para>An Nlog name (useful for multiple logging targets)</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>TestLogger</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>LogLevel</maml:name>
+          <maml:Description>
+            <maml:para>Level of logging. Default is Info.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">LogLevel</command:parameterValue>
+          <dev:type>
+            <maml:name>LogLevel</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[NLog.LogLevel]::Debug</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Target</maml:name>
+          <maml:Description>
+            <maml:para>An NLog target (created with New-NLogFileTarget or New-NLogConsoleTarget)</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <dev:type>
+            <maml:name>Object</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
       </command:syntaxItem>
     </command:syntax>
     <command:parameters>
-      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>FileName</maml:name>
         <maml:Description>
           <maml:para>File to start logging to</maml:para>
@@ -309,7 +755,7 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
         <maml:name>LoggerName</maml:name>
         <maml:Description>
           <maml:para>An Nlog name (useful for multiple logging targets)</maml:para>
@@ -320,6 +766,30 @@
           <maml:uri />
         </dev:type>
         <dev:defaultValue>TestLogger</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>LogLevel</maml:name>
+        <maml:Description>
+          <maml:para>Level of logging. Default is Info.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">LogLevel</command:parameterValue>
+        <dev:type>
+          <maml:name>LogLevel</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[NLog.LogLevel]::Debug</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Target</maml:name>
+        <maml:Description>
+          <maml:para>An NLog target (created with New-NLogFileTarget or New-NLogConsoleTarget)</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <dev:type>
+          <maml:name>Object</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
     </command:parameters>
     <command:inputTypes />

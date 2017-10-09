@@ -179,11 +179,40 @@ function Remove-NLogDLL
 
 ## PUBLIC MODULE FUNCTIONS AND DATA ##
 
-function Get-LogMessageLayout {
+function Get-NLogDllLoadState {
     <#
     .EXTERNALHELP NLogModule-help.xml
     .LINK
-        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.1/docs/Functions/Get-LogMessageLayout.md
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/Get-NLogDllLoadState.md
+    #>
+    if (-not (get-module | Where-Object {($_.Name -eq 'nlog') -or ($_.Name -eq 'Nlog45')})) {
+        return $false
+    }
+    else {
+        return $true
+    }
+}
+
+
+
+function Get-NLogInstance {
+    <#
+    .EXTERNALHELP NLogModule-help.xml
+    .LINK
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/Get-NLogInstance.md
+    #>
+    param ()
+
+    $Script:Logger
+}
+
+
+
+function Get-NLogMessageLayout {
+    <#
+    .EXTERNALHELP NLogModule-help.xml
+    .LINK
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/Get-NLogMessageLayout.md
     #>
     [CmdletBinding()]
     param (
@@ -193,7 +222,14 @@ function Get-LogMessageLayout {
     
     switch ($layoutId) {
         1 {
-            $layout    = '${longdate} | ${machinename} | ${processid} | ${processname} | ${level} | ${logger} | ${message}'
+            $layout = '${longdate} | ${machinename} | ${processid} | ${processname} | ${level} | ${logger} | ${message}'
+        }
+        2 {
+            $layout = '${shortdate} | ${processname} | ${level} | ${logger} | ${message}'
+        }
+
+        3 {
+            $layout = '${longdate}|${level:uppercase=true}|${logger}|${message}'
         }
         default {
             $layout    = '${longdate} | ${machinename} | ${processid} | ${processname} | ${level} | ${logger} | ${message}'
@@ -204,46 +240,118 @@ function Get-LogMessageLayout {
 
 
 
-function Get-NewLogConfig {
+function New-NLogConfig {
     <#
     .EXTERNALHELP NLogModule-help.xml
     .LINK
-        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.1/docs/Functions/Get-NewLogConfig.md
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/New-NLogConfig.md
     #>
     New-Object NLog.Config.LoggingConfiguration 
 }
 
 
 
-function Get-NewLogger {
+function New-NLogConsoleTarget {
     <#
     .EXTERNALHELP NLogModule-help.xml
     .LINK
-        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.1/docs/Functions/Get-NewLogger.md
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/New-NLogConsoleTarget.md
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [System.Text.Encoding]$Encoding = [System.Text.Encoding]::GetEncoding("iso-8859-2"),
+        [Parameter()]
+        [switch]$ErrorStream,
+        [Parameter()]
+        [string]$Layout = (Get-NLogMessageLayout -layoutId 3)
+    )
+    
+    $LogTarget = New-NLogTarget -targetType 'console'
+    $LogTarget.ErrorStream = $ErrorStream
+    $LogTarget.Encoding = $Encoding
+    $LogTarget.Layout = $Layout
+
+    $LogTarget
+}
+
+
+
+function New-NLogFileTarget {
+    <#
+    .EXTERNALHELP NLogModule-help.xml
+    .LINK
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/New-NLogFileTarget.md
+    #>
+    [CmdletBinding()]
+    param (
+        [Parameter()]
+        [int]$ArchiveAboveSize = 10240000,
+        [Parameter()]
+        [string]$archiveEvery = 'Month',
+        [Parameter()]
+        [string]$ArchiveNumbering = 'Rolling',
+        [Parameter()]
+        [switch]$CreateDirs,
+        [Parameter(Mandatory=$true)]
+        [string]$FileName,
+        [Parameter()]
+        [System.Text.Encoding]$Encoding = [System.Text.Encoding]::GetEncoding("iso-8859-2"),
+        [Parameter()]
+        [switch]$KeepFileOpen,
+        [Parameter()]
+        [string]$Layout = (Get-NLogMessageLayout -layoutId 1),
+        [Parameter()]
+        [int]$maxArchiveFiles = 1
+    ) 
+    
+    $LogTarget = New-NLogTarget -targetType 'file'
+    $LogTarget.ArchiveAboveSize = $ArchiveAboveSize
+    $LogTarget.archiveEvery = $archiveEvery
+    $LogTarget.ArchiveNumbering = $ArchiveNumbering    
+    $LogTarget.CreateDirs = $CreateDirs    
+    $LogTarget.FileName = $FileName
+    $LogTarget.Encoding = $Encoding
+    $LogTarget.KeepFileOpen = $KeepFileOpen
+    $LogTarget.Layout = $Layout
+    $LogTarget.maxArchiveFiles = $maxArchiveFiles
+
+    $LogTarget
+}
+
+
+
+function New-NLogLogger {
+    <#
+    .EXTERNALHELP NLogModule-help.xml
+    .LINK
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/New-NLogLogger.md
     #>
     param (
         [parameter(mandatory=$true)] 
         [System.String]$LoggerName
     ) 
     
-    [NLog.LogManager]::GetLogger($loggerName) 
+    [NLog.LogManager]::GetLogger($loggerName)
 }
 
 
 
-function Get-NewLogTarget {
+function New-NLogTarget {
     <#
     .EXTERNALHELP NLogModule-help.xml
     .LINK
-        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.1/docs/Functions/Get-NewLogTarget.md
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/New-NLogTarget.md
     #>
     param (
         [parameter(mandatory=$true)]
-        [System.String]$TargetType ) 
+        [ValidateSet('console','file','mail')]
+        [System.String]$TargetType
+    ) 
     
     switch ($TargetType) {
         "console" {
-            New-Object NLog.Targets.ColoredConsoleTarget    
+            New-Object NLog.Targets.ColoredConsoleTarget
         }
         "file" {
             New-Object NLog.Targets.FileTarget
@@ -257,58 +365,55 @@ function Get-NewLogTarget {
 
 
 
-function Get-NLogDllLoadState {
-    <#
-    .EXTERNALHELP NLogModule-help.xml
-    .LINK
-        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.1/docs/Functions/Get-NLogDllLoadState.md
-    #>
-    if (-not (get-module | where {($_.Name -eq 'nlog') -or ($_.Name -eq 'Nlog45')})) {
-        return $false
-    }
-    else {
-        return $true
-    }
-}
-
-
-
 function Register-NLog {
     <#
     .EXTERNALHELP NLogModule-help.xml
     .LINK
-        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.1/docs/Functions/Register-NLog.md
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/Register-NLog.md
     #>
-    [CmdletBinding()]
+    [CmdletBinding(DefaultParameterSetName='Default')]
     param (
-        [Parameter(Mandatory = $True)]
+        [Parameter(Mandatory = $True, ParameterSetName='Default')]
         [string]$FileName,
-        [Parameter()]
-        [string]$LoggerName = 'TestLogger'
-        
+        [Parameter(ParameterSetName='Default')]
+        [Parameter(ParameterSetName='TargetSupplied')]
+        [string]$LoggerName = 'TestLogger',
+        [Parameter(ParameterSetName='Default')]
+        [Parameter(ParameterSetName='TargetSupplied')]
+        [NLog.LogLevel]$LogLevel = [NLog.LogLevel]::Debug,
+        [Parameter(Mandatory = $True, ParameterSetName='TargetSupplied')]
+        [object]$Target
     )
-    if ($Script:Logger -eq $null) {
-        $debugLog                      = Get-NewLogTarget -targetType "file"
-        $debugLog.ArchiveAboveSize     = 10240000
-        $debugLog.archiveEvery         = "Month"
-        $debugLog.ArchiveNumbering     = "Rolling"    
-        $debugLog.CreateDirs           = $true    
-        $debugLog.FileName             = $FileName
-        $debugLog.Encoding             = [System.Text.Encoding]::GetEncoding("iso-8859-2")
-        $debugLog.KeepFileOpen         = $false
-        $debugLog.Layout               = Get-LogMessageLayout -layoutId 1    
-        $debugLog.maxArchiveFiles      = 1
-        
-        $Script:NLogConfig.AddTarget("file", $debugLog)
-        
-        $rule1 = New-Object NLog.Config.LoggingRule("*", [NLog.LogLevel]::Debug, $debugLog)
+
+    if ($null -eq $Script:Logger) {
+        switch ($PsCmdlet.ParameterSetName) {
+            'default'  {
+                $Target = New-NlogFileTarget -FileName $FileName
+                $Script:NLogConfig.AddTarget("file", $Target)
+            }
+            'TargetSupplied'  {
+                switch ($Target.GetType().Name) {
+                    'FileTarget' {
+                        $Script:NLogConfig.AddTarget("file", $Target)
+                    }
+                    'ColoredConsoleTarget' {
+                        $Script:NLogConfig.AddTarget("console", $Target)
+                    }
+                    'MailTarget' {
+                        $Script:NLogConfig.AddTarget("mail", $Target)
+                    }
+                }
+            }
+        }
+
+        $rule1 = New-Object NLog.Config.LoggingRule("*", $LogLevel, $Target)
         $Script:NLogConfig.LoggingRules.Add($rule1)
 
         # Assign configured Log config to LogManager
         [NLog.LogManager]::Configuration = $Script:NLogConfig
 
         # Create a new Logger
-        $Script:Logger = Get-NewLogger -loggerName $LoggerName
+        $Script:Logger = New-NLogLogger -loggerName $LoggerName
     }
     else {
         Write-Warning 'NlogModule: You must first run UnRegister-NLog!'
@@ -318,15 +423,15 @@ function Register-NLog {
 
 
 function UnRegister-NLog {
-        <#
+    <#
     .EXTERNALHELP NLogModule-help.xml
     .LINK
-        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.1/docs/Functions/UnRegister-NLog.md
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/UnRegister-NLog.md
     #>
     [CmdletBinding()]
     param ()
     if ($Script:Logger -ne $null) {
-        $Script:NLogConfig = Get-NewLogConfig
+        $Script:NLogConfig = New-NLogConfig
         $Script:Logger = $null
     }
     else {
@@ -337,366 +442,362 @@ function UnRegister-NLog {
 
 
 function Write-Debug {
-<#
+    <#
     .EXTERNALHELP NLogModule-help.xml
     .LINK
-        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.1/docs/Functions/Write-Debug.md
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/Write-Debug.md
     #>
 
 
-    [CmdletBinding(HelpUri='http://go.microsoft.com/fwlink/?LinkID=113424', RemotingCapability='None')]
-     param(
-         [Parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true)]
-         [Alias('Msg')]
-         [AllowEmptyString()]
-         [string]
-         ${Message})
+    [CmdletBinding(HelpUri = 'http://go.microsoft.com/fwlink/?LinkID=113424', RemotingCapability = 'None')]
+    param(
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
+        [Alias('Msg')]
+        [AllowEmptyString()]
+        [string]
+        ${Message})
      
-     begin
-     {
+    begin {
         Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
-         try {
-             $outBuffer = $null
-             if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer))
-             {
-                 $PSBoundParameters['OutBuffer'] = 1
-             }
-             $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Utility\Write-Debug', [System.Management.Automation.CommandTypes]::Cmdlet)
-             $scriptCmd = {& $wrappedCmd @PSBoundParameters }
-             $steppablePipeline = $scriptCmd.GetSteppablePipeline($myInvocation.CommandOrigin)
-             $steppablePipeline.Begin($PSCmdlet)
-         } catch {
-             throw
-         }
-     }
-     
-     process
-     {
-         try {
-             $steppablePipeline.Process($_)
-         } catch {
-             throw
-         }
-     }
-     
-     end
-     {
-        if ($script:Logger -ne $null) {
-            $script:Logger.Trace($Message)
+        try {
+            $outBuffer = $null
+            if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer)) {
+                $PSBoundParameters['OutBuffer'] = 1
+            }
+            $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Utility\Write-Debug', [System.Management.Automation.CommandTypes]::Cmdlet)
+            $scriptCmd = {& $wrappedCmd @PSBoundParameters }
+            $steppablePipeline = $scriptCmd.GetSteppablePipeline($myInvocation.CommandOrigin)
+            $steppablePipeline.Begin($PSCmdlet)
         }
-         try {
-             $steppablePipeline.End()
-         } catch {
-             throw
-         }
-     }
+        catch {
+            throw
+        }
+    }
+     
+    process {
+        try {
+            $steppablePipeline.Process($_)
+        }
+        catch {
+            throw
+        }
+    }
+     
+    end {
+        if ($script:Logger -ne $null) {
+            $OutputMessage = @(([string]$Message).Split([Environment]::NewLine) | Where-Object {-not [string]::IsNullOrEmpty($_)}) -join ''
+            $script:Logger.Trace($OutputMessage)
+        }
+        try {
+            $steppablePipeline.End()
+        }
+        catch {
+            throw
+        }
+    }
 }
 
 
 
 function Write-Error {
-<#
+    <#
     .EXTERNALHELP NLogModule-help.xml
     .LINK
-        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.1/docs/Functions/Write-Error.md
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/Write-Error.md
     #>
 
 
-    [CmdletBinding(DefaultParameterSetName='NoException', RemotingCapability='None')]
-     param(
-         [Parameter(ParameterSetName='WithException', Mandatory=$true)]
-         [System.Exception]
-         ${Exception},
+    [CmdletBinding(DefaultParameterSetName = 'NoException', RemotingCapability = 'None')]
+    param(
+        [Parameter(ParameterSetName = 'WithException', Mandatory = $true)]
+        [System.Exception]
+        ${Exception},
      
-         [Parameter(ParameterSetName='NoException', Mandatory=$true, Position=0, ValueFromPipeline=$true)]
-         [Parameter(ParameterSetName='WithException')]
-         [Alias('Msg')]
-         [AllowEmptyString()]
-         [AllowNull()]
-         [string]
-         ${Message},
+        [Parameter(ParameterSetName = 'NoException', Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
+        [Parameter(ParameterSetName = 'WithException')]
+        [Alias('Msg')]
+        [AllowEmptyString()]
+        [AllowNull()]
+        [string]
+        ${Message},
      
-         [Parameter(ParameterSetName='ErrorRecord', Mandatory=$true)]
-         [System.Management.Automation.ErrorRecord]
-         ${ErrorRecord},
+        [Parameter(ParameterSetName = 'ErrorRecord', Mandatory = $true)]
+        [System.Management.Automation.ErrorRecord]
+        ${ErrorRecord},
      
-         [Parameter(ParameterSetName='WithException')]
-         [Parameter(ParameterSetName='NoException')]
-         [System.Management.Automation.ErrorCategory]
-         ${Category},
+        [Parameter(ParameterSetName = 'WithException')]
+        [Parameter(ParameterSetName = 'NoException')]
+        [System.Management.Automation.ErrorCategory]
+        ${Category},
      
-         [Parameter(ParameterSetName='NoException')]
-         [Parameter(ParameterSetName='WithException')]
-         [string]
-         ${ErrorId},
+        [Parameter(ParameterSetName = 'NoException')]
+        [Parameter(ParameterSetName = 'WithException')]
+        [string]
+        ${ErrorId},
      
-         [Parameter(ParameterSetName='NoException')]
-         [Parameter(ParameterSetName='WithException')]
-         [System.Object]
-         ${TargetObject},
+        [Parameter(ParameterSetName = 'NoException')]
+        [Parameter(ParameterSetName = 'WithException')]
+        [System.Object]
+        ${TargetObject},
      
-         [string]
-         ${RecommendedAction},
+        [string]
+        ${RecommendedAction},
      
-         [Alias('Activity')]
-         [string]
-         ${CategoryActivity},
+        [Alias('Activity')]
+        [string]
+        ${CategoryActivity},
      
-         [Alias('Reason')]
-         [string]
-         ${CategoryReason},
+        [Alias('Reason')]
+        [string]
+        ${CategoryReason},
      
-         [Alias('TargetName')]
-         [string]
-         ${CategoryTargetName},
+        [Alias('TargetName')]
+        [string]
+        ${CategoryTargetName},
      
-         [Alias('TargetType')]
-         [string]
-         ${CategoryTargetType})
+        [Alias('TargetType')]
+        [string]
+        ${CategoryTargetType})
      
-     begin
-     {
-         try {
-             $outBuffer = $null
-             if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer))
-             {
-                 $PSBoundParameters['OutBuffer'] = 1
-             }
-             $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Utility\Write-Error', [System.Management.Automation.CommandTypes]::Cmdlet)
-             $scriptCmd = {& $wrappedCmd @PSBoundParameters }
-             $steppablePipeline = $scriptCmd.GetSteppablePipeline($myInvocation.CommandOrigin)
-             $steppablePipeline.Begin($PSCmdlet)
-         } catch {
-             throw
-         }
-     }
+    begin {
+        try {
+            $outBuffer = $null
+            if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer)) {
+                $PSBoundParameters['OutBuffer'] = 1
+            }
+            $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Utility\Write-Error', [System.Management.Automation.CommandTypes]::Cmdlet)
+            $scriptCmd = {& $wrappedCmd @PSBoundParameters }
+            $steppablePipeline = $scriptCmd.GetSteppablePipeline($myInvocation.CommandOrigin)
+            $steppablePipeline.Begin($PSCmdlet)
+        }
+        catch {
+            throw
+        }
+    }
      
-     process
-     {
-         try {
-             $steppablePipeline.Process($_)
-         } catch {
-             throw
-         }
-     }
+    process {
+        try {
+            $steppablePipeline.Process($_)
+        }
+        catch {
+            throw
+        }
+    }
      
-     end
-     {
+    end {
         if ($script:Logger -ne $null) {
-            $script:Logger.Error($Message)
+            $OutputMessage = @(([string]$Message).Split([Environment]::NewLine) | Where-Object {-not [string]::IsNullOrEmpty($_)}) -join ''
+            $script:Logger.Error($OutputMessage)
         }
         try {
             $steppablePipeline.End()
-        } catch {
+        }
+        catch {
             throw
         }
-     }
+    }
 }
 
 
 
 function Write-Host {
-<#
+    <#
     .EXTERNALHELP NLogModule-help.xml
     .LINK
-        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.1/docs/Functions/Write-Host.md
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/Write-Host.md
     #>
 
 
-    [CmdletBinding(HelpUri='http://go.microsoft.com/fwlink/?LinkID=113426', RemotingCapability='None')]
-     param(
-         [Parameter(Position=0, ValueFromPipeline=$true, ValueFromRemainingArguments=$true)]
-         [System.Object]
-         ${Object},
+    [CmdletBinding(HelpUri = 'http://go.microsoft.com/fwlink/?LinkID=113426', RemotingCapability = 'None')]
+    param(
+        [Parameter(Position = 0, ValueFromPipeline = $true, ValueFromRemainingArguments = $true)]
+        [System.Object]
+        ${Object},
      
-         [switch]
-         ${NoNewline},
+        [switch]
+        ${NoNewline},
      
-         [System.Object]
-         ${Separator},
+        [System.Object]
+        ${Separator},
      
-         [System.ConsoleColor]
-         ${ForegroundColor},
+        [System.ConsoleColor]
+        ${ForegroundColor},
      
-         [System.ConsoleColor]
-         ${BackgroundColor})
+        [System.ConsoleColor]
+        ${BackgroundColor})
      
-     begin
-     {
-         try {
-             $outBuffer = $null
-             if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer))
-             {
-                 $PSBoundParameters['OutBuffer'] = 1
-             }
-             $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Utility\Write-Host', [System.Management.Automation.CommandTypes]::Cmdlet)
-             $scriptCmd = {& $wrappedCmd @PSBoundParameters }
-             $steppablePipeline = $scriptCmd.GetSteppablePipeline($myInvocation.CommandOrigin)
-             $steppablePipeline.Begin($PSCmdlet)
-         } catch {
-             throw
-         }
-     }
-     
-     process
-     {
-         try {
-             $steppablePipeline.Process($_)
-         } catch {
-             throw
-         }
-     }
-     
-     end
-     {
-        if ($script:Logger -ne $null) {
-            $Message = [string]$Object
-            $script:Logger.Info("$Message")
+    begin {
+        try {
+            $outBuffer = $null
+            if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer)) {
+                $PSBoundParameters['OutBuffer'] = 1
+            }
+            $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Utility\Write-Host', [System.Management.Automation.CommandTypes]::Cmdlet)
+            $scriptCmd = {& $wrappedCmd @PSBoundParameters }
+            $steppablePipeline = $scriptCmd.GetSteppablePipeline($myInvocation.CommandOrigin)
+            $steppablePipeline.Begin($PSCmdlet)
         }
-         try {
-             $steppablePipeline.End()
-         } catch {
-             throw
-         }
-     }
+        catch {
+            throw
+        }
+    }
+     
+    process {
+        try {
+            $steppablePipeline.Process($_)
+        }
+        catch {
+            throw
+        }
+    }
+     
+    end {
+        if ($null -ne $script:Logger) {
+            $OutputMessage = @(([string]$Object).Split([Environment]::NewLine) | Where-Object {-not [string]::IsNullOrEmpty($_)}) -join ''
+            $script:Logger.Info($OutputMessage)
+        }
+        try {
+            $steppablePipeline.End()
+        }
+        catch {
+            throw
+        }
+    }
 }
 
 
 
 function Write-Output {
-<#
+    <#
     .EXTERNALHELP NLogModule-help.xml
     .LINK
-        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.1/docs/Functions/Write-Output.md
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/Write-Output.md
     #>
-    [CmdletBinding(HelpUri='http://go.microsoft.com/fwlink/?LinkID=113427', RemotingCapability='None')]
-     param(
-         [Parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true, ValueFromRemainingArguments=$true)]
-         [AllowEmptyCollection()]
-         [AllowNull()]
-         [psobject[]]${InputObject},
-         [switch]${NoEnumerate})
+    [CmdletBinding(HelpUri = 'http://go.microsoft.com/fwlink/?LinkID=113427', RemotingCapability = 'None')]
+    param(
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true, ValueFromRemainingArguments = $true)]
+        [AllowEmptyCollection()]
+        [AllowNull()]
+        [psobject[]]${InputObject},
+        [switch]${NoEnumerate})
      
-     begin
-     {
-         try {
+    begin {
+        try {
             Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
-             $outBuffer = $null
-             if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer))
-             {
-                 $PSBoundParameters['OutBuffer'] = 1
-             }
-             $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Utility\Write-Output', [System.Management.Automation.CommandTypes]::Cmdlet)
-             $scriptCmd = {& $wrappedCmd @PSBoundParameters }
-             $steppablePipeline = $scriptCmd.GetSteppablePipeline($myInvocation.CommandOrigin)
-             $steppablePipeline.Begin($PSCmdlet)
-         } catch {
-             throw
-         }
-     }
-     
-     process
-     {
-         try {
-             $steppablePipeline.Process($_)
-         } catch {
-             throw
-         }
-     }
-     
-     end
-     {
-        if ($script:Logger -ne $null) {
-            $OutputMessage = [string]$InputObject
-            $script:Logger.Info("$OutputMessage")
+            $outBuffer = $null
+            if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer)) {
+                $PSBoundParameters['OutBuffer'] = 1
+            }
+            $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Utility\Write-Output', [System.Management.Automation.CommandTypes]::Cmdlet)
+            $scriptCmd = {& $wrappedCmd @PSBoundParameters }
+            $steppablePipeline = $scriptCmd.GetSteppablePipeline($myInvocation.CommandOrigin)
+            $steppablePipeline.Begin($PSCmdlet)
         }
-         try {
-             $steppablePipeline.End()
-         } catch {
-             throw
-         }
+        catch {
+            throw
+        }
+    }
+     
+    process {
+        try {
+            $steppablePipeline.Process($_)
+        }
+        catch {
+            throw
+        }
+    }
+     
+    end {
+        if ($null -ne $script:Logger) {
+            $OutputMessage = @(([string]$InputObject).Split([Environment]::NewLine) | Where-Object {-not [string]::IsNullOrEmpty($_)}) -join ''
+            $script:Logger.Info($OutputMessage)
+        }
+        try {
+            $steppablePipeline.End()
+        }
+        catch {
+            throw
+        }
 
-     }
+    }
 }
 
 
-
 function Write-Verbose {
-<#
+    <#
     .EXTERNALHELP NLogModule-help.xml
     .LINK
-        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.1/docs/Functions/Write-Verbose.md
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/Write-Verbose.md
     #>
 
 
-    [CmdletBinding(HelpUri='http://go.microsoft.com/fwlink/?LinkID=113429', RemotingCapability='None')]
-     param(
-         [Parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true)]
-         [Alias('Msg')]
-         [AllowEmptyString()]
-         [string]
-         ${Message})
+    [CmdletBinding(HelpUri = 'http://go.microsoft.com/fwlink/?LinkID=113429', RemotingCapability = 'None')]
+    param(
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
+        [Alias('Msg')]
+        [AllowEmptyString()]
+        [string]
+        ${Message})
      
-    begin
-    {
+    begin {
         Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
-         try {
-             $outBuffer = $null
-             if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer))
-             {
-                 $PSBoundParameters['OutBuffer'] = 1
-             }
-             $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Utility\Write-Verbose', [System.Management.Automation.CommandTypes]::Cmdlet)
-             $scriptCmd = {& $wrappedCmd @PSBoundParameters }
-             $steppablePipeline = $scriptCmd.GetSteppablePipeline($myInvocation.CommandOrigin)
-             $steppablePipeline.Begin($PSCmdlet)
-         } catch {
-             throw
-         }
-     }
-     
-     process
-     {
-         try {
-             $steppablePipeline.Process($_)
-         } catch {
-             throw
-         }
-     }
-     
-     end
-     {
-        if ($script:Logger -ne $null) {
-            $script:Logger.Info("$Message")
+        try {
+            $outBuffer = $null
+            if ($PSBoundParameters.TryGetValue('OutBuffer', [ref]$outBuffer)) {
+                $PSBoundParameters['OutBuffer'] = 1
+            }
+            $wrappedCmd = $ExecutionContext.InvokeCommand.GetCommand('Microsoft.PowerShell.Utility\Write-Verbose', [System.Management.Automation.CommandTypes]::Cmdlet)
+            $scriptCmd = {& $wrappedCmd @PSBoundParameters }
+            $steppablePipeline = $scriptCmd.GetSteppablePipeline($myInvocation.CommandOrigin)
+            $steppablePipeline.Begin($PSCmdlet)
         }
-         try {
-             $steppablePipeline.End()
-         } catch {
-             throw
-         }
-     }
+        catch {
+            throw
+        }
+    }
+     
+    process {
+        try {
+            $steppablePipeline.Process($_)
+        }
+        catch {
+            throw
+        }
+    }
+     
+    end {
+        if ($script:Logger -ne $null) {
+            $OutputMessage = @(([string]$Message).Split([Environment]::NewLine) | Where-Object {-not [string]::IsNullOrEmpty($_)}) -join ''
+            $script:Logger.Info($OutputMessage)
+        }
+        try {
+            $steppablePipeline.End()
+        }
+        catch {
+            throw
+        }
+    }
 }
 
 
 
 function Write-Warning {
-<#
+    <#
     .EXTERNALHELP NLogModule-help.xml
     .LINK
-        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.1/docs/Functions/Write-Warning.md
+        https://github.com/zloeber/nlogmodule/tree/master/release/0.0.2/docs/Functions/Write-Warning.md
     #>
 
 
-    [CmdletBinding(HelpUri='http://go.microsoft.com/fwlink/?LinkID=113430', RemotingCapability='None')]
+    [CmdletBinding(HelpUri = 'http://go.microsoft.com/fwlink/?LinkID=113430', RemotingCapability = 'None')]
     param(
-        [Parameter(Mandatory=$true, Position=0, ValueFromPipeline=$true)]
+        [Parameter(Mandatory = $true, Position = 0, ValueFromPipeline = $true)]
         [Alias('Msg')]
         [AllowEmptyString()]
         [string]${Message}
     )
      
-    begin
-    {
+    begin {
         Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
         try {
             $outBuffer = $null
@@ -713,8 +814,7 @@ function Write-Warning {
         }
     }
      
-    process
-    {
+    process {
         try {
             $steppablePipeline.Process($_)
         }
@@ -725,7 +825,8 @@ function Write-Warning {
      
     end {
         if ($script:Logger -ne $null) {
-            $script:Logger.Warn("$Message")
+            $OutputMessage = @(([string]$Message).Split([Environment]::NewLine) | Where-Object {-not [string]::IsNullOrEmpty($_)}) -join ''
+            $script:Logger.Warn("$OutputMessage")
         }
         try {
             $steppablePipeline.End()
@@ -777,9 +878,9 @@ $ThisModuleLoaded = $true
 try {
     $DotNetInstalled = (Get-ChildItem 'HKLM:\SOFTWARE\Microsoft\NET Framework Setup\NDP' -recurse | 
         Get-ItemProperty -name Version -ea 0 | 
-        Where { $_.PSChildName -match '^(?!S)\p{L}'} | 
-        Select @{n='version';e={[decimal](($_.Version).Substring(0,3))}} -Unique |
-        Sort-Object -Descending | select -First 1).Version
+        Where-Object { $_.PSChildName -match '^(?!S)\p{L}'} | 
+        Select-Object @{n='version';e={[decimal](($_.Version).Substring(0,3))}} -Unique |
+        Sort-Object -Descending | Select-Object -First 1).Version
 }
 catch {
     $DotNetInstalled = 3.5
@@ -803,7 +904,7 @@ catch {
 }
 
 $Logger = $null
-$NLogConfig = Get-NewLogConfig
+$NLogConfig = New-NLogConfig
 
 #region Module Cleanup
 $ExecutionContext.SessionState.Module.OnRemove = {Remove-NLogDLL} 
@@ -811,7 +912,7 @@ $null = Register-EngineEvent -SourceIdentifier ( [System.Management.Automation.P
 #endregion Module Cleanup
 
 # Exported members
-Export-ModuleMember -Variable NLogConfig -Function  'Get-LogMessageLayout', 'Get-NewLogConfig', 'Get-NewLogger', 'Get-NewLogTarget', 'Get-NLogDllLoadState', 'Register-NLog', 'UnRegister-NLog', 'Write-Debug', 'Write-Error', 'Write-Host', 'Write-Output', 'Write-Verbose', 'Write-Warning'
+Export-ModuleMember -Variable NLogConfig -Function 'Get-NLogMessageLayout', 'New-NLogConfig', 'New-NLogLogger', 'Get-NLogTarget', 'Get-NLogDllLoadState', 'Get-NLogInstance', 'Register-NLog', 'UnRegister-NLog', 'Write-Debug', 'Write-Error', 'Write-Host', 'Write-Output', 'Write-Verbose', 'Write-Warning'
 
 
 

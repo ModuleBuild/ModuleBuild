@@ -22,7 +22,7 @@ Adds a public function to your modulebuild based project.
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-Add-PublicFunction -Name 'New-AwesomeFunction'
+Add-PublicFunction -Name 'New-AwesomeFunction' -Template:PlainPublicFunction
 ```
 
 ## PARAMETERS

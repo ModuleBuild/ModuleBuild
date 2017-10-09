@@ -1,0 +1,21 @@
+TOPIC
+    about_NLogModule
+
+SHORT DESCRIPTION
+    Use NLog to capture and log all calls to write-output, verbose, warning, error, and host
+
+LONG DESCRIPTION
+    Use NLog to capture and log all calls to write-output, verbose, warning, error, and host
+
+EXAMPLES
+    Register-NLog -FileName 'c:\temp\debug.log' -LoggerName 'MyApp'
+    Write-Verbose 'My verbose message'
+    Write-Warning 'This is a warning! Oh No!'
+    Write-Host -ForgroundColor:Green "Writing to the host!"
+    UnRegister-NLog
+
+KEYWORDS
+    NLog,PowerShell Logging,Logging
+
+SEE ALSO
+    https://github.com/zloeber/NLogModule

@@ -8,7 +8,7 @@ This project owes some acknowlegement to other projects. Here are some other aut
 
 [Plaster](https://github.com/PowerShell/Plaster) - Used for the code scaffolding portion of this project.
 
-[Haroopad](http://pad.haroopress.com/) - Sweet Markdown Editor.
+[PSCodeHealth](https://github.com/MathieuBuisson/PSCodeHealth) - PowerShell code health reporting.
 
 [Hitchhikers Guide to the PowerShell Pipeline](https://xainey.github.io/2017/powershell-module-pipeline/)
 

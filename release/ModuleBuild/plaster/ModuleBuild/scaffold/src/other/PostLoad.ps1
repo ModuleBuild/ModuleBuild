@@ -57,5 +57,3 @@ $ThisModuleLoaded = $true
 
 # Non-function exported public module members might go here.
 #Export-ModuleMember -Variable SomeVariable -Function  *
-
-# This file cannot be completely empty. Even leaving this comment is good enough.

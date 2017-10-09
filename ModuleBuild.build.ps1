@@ -33,7 +33,7 @@ if (Test-Path $BuildFile) {
     . $BuildFile
 }
 else {
-    throw "Without a build environment file we are at a loss as to what to do!"
+    throw "Without a build environment file we are at a loss as to what to      qdo!"
 }
 
 if ($Script:BuildEnv.OptionTranscriptEnabled) {
@@ -141,6 +141,34 @@ task VersionCheck LoadModuleManifest, {
     }
     else {
         Write-Description White 'This module has not been published to the gallery so any version is ok to build at this point.' -Level 2
+    }
+}
+
+#Synopsis: Create a CodeHealthReport of your existing code
+task CodeHealthReport -if {$Script:BuildEnv.OptionCodeHealthReport} ValidateRequirements, LoadRequiredModules, {
+    $BuildReportsFolder = Join-Path $BuildRoot $Script:BuildEnv.BuildReportsFolder
+    Write-Description White "Creating a prebuild code health report of your public functions to $($Script:BuildEnv.BuildReportsFolder)" -accent
+
+    if (-not (Test-Path $BuildReportsFolder)) {
+        New-Item -Path $BuildReportsFolder -ItemType:Directory
+    }
+
+    Write-Description White 'Creating a code health report of your public functions' -level 2
+    $CodeHealthScanPathPublic = Join-Path $BuildRoot $Script:BuildEnv.PublicFunctionSource
+    $CodeHealthReportPublic = Join-Path $BuildReportsFolder 'CodeHealthReport-Public.html'
+    Invoke-PSCodeHealth -Path $CodeHealthScanPathPublic -HtmlReportPath $CodeHealthReportPublic
+
+    if (Test-Path $CodeHealthReportPublic) {
+        (Get-Content -Path $CodeHealthReportPublic -raw) -replace [regex]::escape((Resolve-Path $CodeHealthScanPathPublic)), $Script:BuildEnv.PublicFunctionSource | Out-File -FilePath $CodeHealthReportPublic -Encoding $Script:BuildEnv.Encoding -Force
+    }
+
+    Write-Description White 'Creating a code health report of your private functions' -level 2
+    $CodeHealthScanPathPrivate = Join-Path $BuildRoot $Script:BuildEnv.PrivateFunctionSource
+    $CodeHealthReportPrivate = Join-Path $BuildReportsFolder 'CodeHealthReport-Private.html'
+    Invoke-PSCodeHealth -Path $CodeHealthScanPathPrivate -HtmlReportPath $CodeHealthReportPrivate
+
+    if (Test-Path $CodeHealthReportPrivate) {
+        (Get-Content -Path $CodeHealthReportPrivate -raw) -replace [regex]::escape((Resolve-Path $CodeHealthScanPathPrivate)), $Script:BuildEnv.PrivateFunctionSource | Out-File -FilePath $CodeHealthReportPrivate -Encoding $Script:BuildEnv.Encoding -Force
     }
 }
 
@@ -786,6 +814,18 @@ task PreBuildTasks {
     }
 }
 
+# Synopsis: Run pre-build scripts (such as other builds)
+task PostBuildTasks {
+    Write-Description White 'Running any Post-Build scripts' -accent
+    $BuildToolPath = Join-Path $BuildRoot $Script:BuildEnv.BuildToolFolder
+    $CleanupPath = Join-Path $BuildToolPath 'shutdown'
+    # Dot source any post build cleanup scripts.
+    Get-ChildItem -Path $CleanupPath -Recurse -Filter "*.ps1" -File | Foreach {
+        Write-Description White "Dot sourcing shutdown script file: $($_.Name)" -Level 3
+        . $_.FullName
+    }
+}
+
 # Synopsis: Remove session artifacts like loaded modules and variables
 task BuildSessionCleanup {
     Write-Description White 'Cleaning up the build session' -accent
@@ -801,13 +841,6 @@ task BuildSessionCleanup {
     Write-Description White "Removing $($Script:BuildEnv.ModuleToBuild) module  (if loaded)." -Level 3
     Remove-Module $Script:BuildEnv.ModuleToBuild -Erroraction Ignore
 
-    # Dot source any post build cleanup scripts.
-    Write-Description White "Runing post-build scripts" -Level 2
-    $CleanupPath = Join-Path $BuildToolPath 'shutdown'
-    Get-ChildItem -Path $CleanupPath -Recurse -Filter "*.ps1" -File | Foreach {
-        Write-Description White "Dot sourcing shutdown script file: $($_.Name)" -Level 3
-        . $_.FullName
-    }
     if ($Script:BuildEnv.OptionTranscriptEnabled) {
         Stop-Transcript -WarningAction:Ignore
     }
@@ -838,16 +871,16 @@ task GithubPush VersionCheck, {
 }
 
 # Synopsis: Build the module
-task . Configure, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, BuildSessionCleanup
+task . Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, PostBuildTasks, BuildSessionCleanup
 
 # Synopsis: Install and test load the module.
 task InstallAndTestModule InstallModule, TestInstalledModule
 
 # Synopsis: Build, Install, and Test the module
-task BuildInstallAndTestModule Configure, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, BuildSessionCleanup
+task BuildInstallAndTestModule Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, PostBuildTasks, BuildSessionCleanup
 
 # Synopsis: Build, Install, Test, and Publish the module
-task BuildInstallTestAndPublishModule Configure, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, PublishPSGallery, BuildSessionCleanup
+task BuildInstallTestAndPublishModule Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, PublishPSGallery, PostBuildTasks, BuildSessionCleanup
 
 # Synopsis: Instert Comment Based Help where it doesn't already exist (output to scratch directory)
 task InsertMissingCBH Configure, Clean, UpdateCBHtoScratch, BuildSessionCleanup

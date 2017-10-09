@@ -78,19 +78,19 @@ $Parameters = @(
         )
     },
     @{
-        ParameterName = "OptionCombineFiles"
+        ParameterName = "OptionCodeHealthReport"
         ParameterType = "choice"
-        ParameterPrompt = "Combine scripts into one psm1 in the module build process (Recommended for Gallery uploading)?"
+        ParameterPrompt = "Use PSCodeHealth to generate public and private function code health reports. (This can slow down the build process.)"
         Default = "0"
         Choices = @(
             @{
                 Label = "&Yes"
-                Help = "Combine source files"
+                Help = "Enable code health reporting"
                 Value = "True"
             },
             @{
                 Label = "&No"
-                Help = "Do not combine source files"
+                Help = "Disable code health reporting"
                 Value = "False"
             }
         )
@@ -135,7 +135,7 @@ $Parameters = @(
         ParameterName = "OptionGenerateReadTheDocs"
         ParameterType = "choice"
         ParameterPrompt = "Generate YML file in build process for ReadTheDocs.org integration?"
-        Default = "0"
+        Default = "1"
         Choices = @(
             @{
                 Label = "&Yes"

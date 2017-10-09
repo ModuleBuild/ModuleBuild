@@ -28,6 +28,7 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
 
         # Options - These affect how your eventual build will be run.
         OptionAnalyzeCode = $True
+        OptionCodeHealthReport = $True
         OptionCombineFiles = $True
         OptionTranscriptEnabled = $false
         OptionTranscriptLogFile = 'BuildTranscript.Log'
@@ -46,7 +47,7 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         OptionUpdateVersionAfterPublishing = $true
 
         # Additional paths in the source module which should be copied over to the final build release
-        AdditionalModulePaths = '.\plaster' -split ','
+        AdditionalModulePaths = @('plaster','plugins')
         # Generate a yml file in the root folder of this project for readthedocs.org integration
         OptionGenerateReadTheDocs = $True
         # Most of the following options you probably don't need to change
@@ -55,6 +56,7 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         PrivateFunctionSource = "src\private"        # Private function source
         OtherModuleSource = "src\other"        # Other module source
         BaseReleaseFolder = 'release'        # Releases directory.
+        BuildReportsFolder = 'buildreports'
         BuildToolFolder = 'build'        # Build tool path (these scripts are dot sourced)
         ScratchFolder = 'temp'        # Scratch path - this is where all our scratch work occurs. It will be cleared out at every run.
         FunctionTemplates = "src\templates"  # Location of function template files (*.tem)
@@ -127,6 +129,10 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
 
     if ($Script:BuildEnv.OptionGenerateReadTheDocs) {
         $RequiredModules += 'Powershell-YAML'
+    }
+
+    if ($Script:BuildEnv.OptionCodeHealthReport) {
+        $RequiredModules += 'PSCodeHealth'
     }
 
 }

@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>80e39645-34c8-4a9a-a366-2f0903920555</id>
+    <id>04757e11-ae20-4be2-baa5-e6f4be1a3538</id>
     <version>0.0.8</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -74,17 +74,17 @@
         value="False" />
     </parameter>
     <parameter
-      name="OptionCombineFiles"
+      name="OptionCodeHealthReport"
       type="choice"
-      prompt="Combine scripts into one psm1 in the module build process (Recommended for Gallery uploading)?"
+      prompt="Use PSCodeHealth to generate public and private function code health reports. (This can slow down the build process.)"
       default="0">
       <choice
         label="&amp;Yes"
-        help="Combine source files"
+        help="Enable code health reporting"
         value="True" />
       <choice
         label="&amp;No"
-        help="Do not combine source files"
+        help="Disable code health reporting"
         value="False" />
     </parameter>
     <parameter
@@ -119,7 +119,7 @@
       name="OptionGenerateReadTheDocs"
       type="choice"
       prompt="Generate YML file in build process for ReadTheDocs.org integration?"
-      default="0">
+      default="1">
       <choice
         label="&amp;Yes"
         help="The YML file will get regenerated at every build. This file gets saved in the root folder of your project."

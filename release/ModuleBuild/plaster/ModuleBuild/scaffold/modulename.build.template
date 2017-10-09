@@ -144,6 +144,34 @@ task VersionCheck LoadModuleManifest, {
     }
 }
 
+#Synopsis: Create a CodeHealthReport of your existing code
+task CodeHealthReport -if {$Script:BuildEnv.OptionCodeHealthReport} ValidateRequirements, LoadRequiredModules, {
+    $BuildReportsFolder = Join-Path $BuildRoot $Script:BuildEnv.BuildReportsFolder
+    Write-Description White "Creating a prebuild code health report of your public functions to $($Script:BuildEnv.BuildReportsFolder)" -accent
+
+    if (-not (Test-Path $BuildReportsFolder)) {
+        New-Item -Path $BuildReportsFolder -ItemType:Directory
+    }
+
+    Write-Description White 'Creating a code health report of your public functions' -level 2
+    $CodeHealthScanPathPublic = Join-Path $BuildRoot $Script:BuildEnv.PublicFunctionSource
+    $CodeHealthReportPublic = Join-Path $BuildReportsFolder 'CodeHealthReport-Public.html'
+    Invoke-PSCodeHealth -Path $CodeHealthScanPathPublic -HtmlReportPath $CodeHealthReportPublic
+
+    if (Test-Path $CodeHealthReportPublic) {
+        (Get-Content -Path $CodeHealthReportPublic -raw) -replace [regex]::escape((Resolve-Path $CodeHealthScanPathPublic)), $Script:BuildEnv.PublicFunctionSource | Out-File -FilePath $CodeHealthReportPublic -Encoding $Script:BuildEnv.Encoding -Force
+    }
+
+    Write-Description White 'Creating a code health report of your private functions' -level 2
+    $CodeHealthScanPathPrivate = Join-Path $BuildRoot $Script:BuildEnv.PrivateFunctionSource
+    $CodeHealthReportPrivate = Join-Path $BuildReportsFolder 'CodeHealthReport-Private.html'
+    Invoke-PSCodeHealth -Path $CodeHealthScanPathPrivate -HtmlReportPath $CodeHealthReportPrivate
+
+    if (Test-Path $CodeHealthReportPrivate) {
+        (Get-Content -Path $CodeHealthReportPrivate -raw) -replace [regex]::escape((Resolve-Path $CodeHealthScanPathPrivate)), $Script:BuildEnv.PrivateFunctionSource | Out-File -FilePath $CodeHealthReportPrivate -Encoding $Script:BuildEnv.Encoding -Force
+    }
+}
+
 #Synopsis: Validate script requirements are met, load required modules, load project manifest and module, and load additional build tools.
 task Configure ValidateRequirements, PreBuildTasks, LoadRequiredModules, LoadModuleManifest, LoadModule, VersionCheck, LoadBuildTools, {
     # If we made it this far then we are configured!
@@ -841,16 +869,16 @@ task GithubPush VersionCheck, {
 }
 
 # Synopsis: Build the module
-task . Configure, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, BuildSessionCleanup
+task . Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, BuildSessionCleanup
 
 # Synopsis: Install and test load the module.
 task InstallAndTestModule InstallModule, TestInstalledModule
 
 # Synopsis: Build, Install, and Test the module
-task BuildInstallAndTestModule Configure, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, BuildSessionCleanup
+task BuildInstallAndTestModule Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, BuildSessionCleanup
 
 # Synopsis: Build, Install, Test, and Publish the module
-task BuildInstallTestAndPublishModule Configure, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, PublishPSGallery, BuildSessionCleanup
+task BuildInstallTestAndPublishModule Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, PublishPSGallery, BuildSessionCleanup
 
 # Synopsis: Instert Comment Based Help where it doesn't already exist (output to scratch directory)
 task InsertMissingCBH Configure, Clean, UpdateCBHtoScratch, BuildSessionCleanup

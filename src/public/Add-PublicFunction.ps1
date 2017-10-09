@@ -11,7 +11,7 @@ function Add-PublicFunction {
     .LINK
     https://github.com/zloeber/ModuleBuild
     .EXAMPLE
-    Add-PublicFunction -Name 'New-AwesomeFunction'
+    Add-PublicFunction -Name 'New-AwesomeFunction' -Template:PlainPublicFunction
     #>
 
     [CmdletBinding()]

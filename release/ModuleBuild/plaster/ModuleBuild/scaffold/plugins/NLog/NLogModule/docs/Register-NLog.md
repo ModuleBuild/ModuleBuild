@@ -7,16 +7,22 @@ schema: 2.0.0
 # Register-NLog
 
 ## SYNOPSIS
-Register the NLog dlls and create a file logging target.
+Start NLog logging with a basic configuration.
 
 ## SYNTAX
 
+### Default (Default)
 ```
-Register-NLog [-FileName] <String> [[-LoggerName] <String>]
+Register-NLog -FileName <String> [-LoggerName <String>] [-LogLevel <LogLevel>]
+```
+
+### TargetSupplied
+```
+Register-NLog [-LoggerName <String>] [-LogLevel <LogLevel>] -Target <Object>
 ```
 
 ## DESCRIPTION
-Register the NLog dlls and create a file logging target.
+Start NLog logging with a basic configuration.
 
 ## EXAMPLES
 
@@ -32,11 +38,11 @@ File to start logging to
 
 ```yaml
 Type: String
-Parameter Sets: (All)
+Parameter Sets: Default
 Aliases: 
 
 Required: True
-Position: 1
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -51,8 +57,39 @@ Parameter Sets: (All)
 Aliases: 
 
 Required: False
-Position: 2
+Position: Named
 Default value: TestLogger
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -LogLevel
+Level of logging.
+Default is Info.
+
+```yaml
+Type: LogLevel
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: [NLog.LogLevel]::Debug
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Target
+An NLog target (created with New-NLogFileTarget or New-NLogConsoleTarget)
+
+```yaml
+Type: Object
+Parameter Sets: TargetSupplied
+Aliases: 
+
+Required: True
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

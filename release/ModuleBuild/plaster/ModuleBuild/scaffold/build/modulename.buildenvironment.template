@@ -3,9 +3,7 @@ param (
     [switch]$ForcePersist
 )
 <#
- Update $Script:BuildEnv to suit your PowerShell module build. These variables get dot sourced into
- the build at every run and are exported to an external xml file for persisting through possible build
- engine upgrades.
+ Update $Script:BuildEnv to suit your PowerShell module build. If you make sufficient changes to your build environment json file (via the module commands or otherwise) you should update this as well so those that inherit your project in the future are able to rebuild it from scratch.
 #>
 
 # If the variable is already defined then essentially do nothing.
@@ -26,9 +24,10 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         ModuleAuthor = '<%=$PLASTER_PARAM_ModuleAuthor%>'
         ModuleDescription = '<%=$PLASTER_PARAM_ModuleDescription%>'
 
-        # Options - These affect how your eventual build will be run.
+        # Options - These affect how your build will be run.
         OptionAnalyzeCode = $<%=$PLASTER_PARAM_OptionAnalyzeCode%>
-        OptionCombineFiles = $<%=$PLASTER_PARAM_OptionCombineFiles%>
+        OptionCodeHealthReport = $<%=$PLASTER_PARAM_OptionCodeHealthReport%>
+        OptionCombineFiles = $TRUE
         OptionTranscriptEnabled = $false
         OptionTranscriptLogFile = 'BuildTranscript.Log'
 
@@ -56,12 +55,13 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         PrivateFunctionSource = "src\private"        # Private function source
         OtherModuleSource = "src\other"        # Other module source
         BaseReleaseFolder = 'release'        # Releases directory.
+        BuildReportsFolder = 'buildreports' # Reports from the build process
         BuildToolFolder = 'build'        # Build tool path (these scripts are dot sourced)
         ScratchFolder = 'temp'        # Scratch path - this is where all our scratch work occurs. It will be cleared out at every run.
         FunctionTemplates = "src\templates"  # Location of function template files (*.tem)
 
         # If you will be publishing to the PowerShell Gallery you will need a Nuget API key (can get from the website)
-        # You should not actually enter this key here but should manually enter it in the <%=$PLASTER_PARAM_ModuleName%>.buildenvironment.json file
+        # You should NOT enter this key here but rather manually enter it in the <%=$PLASTER_PARAM_ModuleName%>.buildenvironment.json file with: set-buildenvironment -NugetAPIKey '<key>'
 
         NugetAPIKey  = ''
     }
@@ -128,6 +128,10 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
 
     if ($Script:BuildEnv.OptionGenerateReadTheDocs) {
         $RequiredModules += 'Powershell-YAML'
+    }
+
+    if ($Script:BuildEnv.OptionCodeHealthReport) {
+        $RequiredModules += 'PSCodeHealth'
     }
 
 }

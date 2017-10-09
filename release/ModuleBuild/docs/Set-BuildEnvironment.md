@@ -13,17 +13,17 @@ Sets a stored setting in a buildenvironment.json file.
 
 ```
 Set-BuildEnvironment [[-Path] <String>] [-AdditionalModulePaths <Object[]>] [-BaseReleaseFolder <String>]
- [-BaseSourceFolder <String>] [-BuildToolFolder <String>] [-Encoding <String>] [-FirstRun <Boolean>]
- [-Force <Boolean>] [-ForceInstallModule <Boolean>] [-FunctionTemplates <String>] [-ModuleAuthor <String>]
- [-ModuleCopyright <String>] [-ModuleDescription <String>] [-ModuleLicenseURI <String>]
- [-ModuleTags <Object[]>] [-ModuleToBuild <String>] [-ModuleVersion <String>] [-ModuleWebsite <String>]
- [-NugetAPIKey <String>] [-OptionAnalyzeCode <Boolean>] [-OptionCombineFiles <Boolean>]
- [-OptionGenerateReadTheDocs <Boolean>] [-OptionRunPlatyPSVerbose <Boolean>]
- [-OptionSanitizeSensitiveTerms <Boolean>] [-OptionSensitiveTerms <Object[]>]
- [-OptionSensitiveTermsInitialized <Boolean>] [-OptionTranscriptEnabled <Boolean>]
- [-OptionTranscriptLogFile <String>] [-OptionUpdateVersionAfterPublishing <Boolean>]
- [-OtherModuleSource <String>] [-PrivateFunctionSource <String>] [-PublicFunctionSource <String>]
- [-ScratchFolder <String>]
+ [-BaseSourceFolder <String>] [-BuildReportsFolder <String>] [-BuildToolFolder <String>] [-Encoding <String>]
+ [-FirstRun <Boolean>] [-Force <Boolean>] [-ForceInstallModule <Boolean>] [-FunctionTemplates <String>]
+ [-ModuleAuthor <String>] [-ModuleCopyright <String>] [-ModuleDescription <String>]
+ [-ModuleLicenseURI <String>] [-ModuleTags <Object[]>] [-ModuleToBuild <String>] [-ModuleVersion <String>]
+ [-ModuleWebsite <String>] [-NugetAPIKey <String>] [-OptionAnalyzeCode <Boolean>]
+ [-OptionCodeHealthReport <Boolean>] [-OptionCombineFiles <Boolean>] [-OptionGenerateReadTheDocs <Boolean>]
+ [-OptionRunPlatyPSVerbose <Boolean>] [-OptionSanitizeSensitiveTerms <Boolean>]
+ [-OptionSensitiveTerms <Object[]>] [-OptionSensitiveTermsInitialized <Boolean>]
+ [-OptionTranscriptEnabled <Boolean>] [-OptionTranscriptLogFile <String>]
+ [-OptionUpdateVersionAfterPublishing <Boolean>] [-OtherModuleSource <String>]
+ [-PrivateFunctionSource <String>] [-PublicFunctionSource <String>] [-ScratchFolder <String>]
 ```
 
 ## DESCRIPTION
@@ -85,6 +85,21 @@ Accept wildcard characters: False
 
 ### -BaseSourceFolder
 Update the setting for BaseSourceFolder
+
+```yaml
+Type: String
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -BuildReportsFolder
+Update the setting for BuildReportsFolder
 
 ```yaml
 Type: String
@@ -325,6 +340,21 @@ Accept wildcard characters: False
 
 ### -OptionAnalyzeCode
 Update the setting for OptionAnalyzeCode
+
+```yaml
+Type: Boolean
+Parameter Sets: (All)
+Aliases: 
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
+Accept wildcard characters: False
+```
+
+### -OptionCodeHealthReport
+Update the setting for OptionCodeHealthReport
 
 ```yaml
 Type: Boolean
