@@ -2,6 +2,9 @@
 
 Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloeber/ModuleBuild)
 
+## Version 0.1.10
+- Fixed the -InsertCBH build task.
+
 ## Version 0.1.9
 - Removed plaster option to choose to combine the module source at build time (and simply made that behavior the default that can be changed later via Set-BuildEnvironment -OptionCombineFiles $false)
 - Added option to run a code health report (via PSCodeHealth) against your public and private function directories prior to starting the build
