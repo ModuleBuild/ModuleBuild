@@ -168,18 +168,19 @@
         $CBH_PARAM = @'
 .PARAMETER %%PARAM%%
 %%PARAMHELP%%
+
 '@
 
         $CBHTemplate = @'
-    <#
-    .SYNOPSIS
-        TBD
-    .DESCRIPTION
-        TBD
-    %%PARAMETER%%
-    .EXAMPLE
-        TBD
-    #>
+<#
+.SYNOPSIS
+TBD
+.DESCRIPTION
+TBD
+%%PARAMETER%%
+.EXAMPLE
+TBD
+#>
 '@
 
         $Codeblock = @()
@@ -199,15 +200,15 @@
 
         foreach ($f in $AllFunctions) {
             $OutCBH = @{}
-            $OutCBH.'FunctionName' = $f
+            $OutCBH.FunctionName = $f
             [string]$OutParams = ''
             $fparams = @($AllParams | Where {$_.FunctionName -eq $f} | Sort-Object -Property Position)
             $fparams | foreach {
-                $ParamHelpMessage = if ([string]::IsNullOrEmpty($_.HelpMessage)) {'    ' + $_.ParameterName + " explanation`n`r"} else {'    ' + $_.HelpMessage + "`n`r"}
+                $ParamHelpMessage = if ([string]::IsNullOrEmpty($_.HelpMessage)) {$_.ParameterName + " explanation`n`r"} else { $_.HelpMessage + "`n`r"}
                 $OutParams += $CBH_PARAM -replace '%%PARAM%%',$_.ParameterName -replace '%%PARAMHELP%%',$ParamHelpMessage
             }
 
-            $OutCBH.'CBH' = $Script:CBHTemplate -replace '%%PARAMETER%%',$OutParams
+            $OutCBH.CBH = $CBHTemplate -replace '%%PARAMETER%%',$OutParams
 
             New-Object PSObject -Property $OutCBH
         }
