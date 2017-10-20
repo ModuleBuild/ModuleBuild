@@ -4,6 +4,7 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 
 ## Version 0.1.10
 - Fixed the -InsertCBH build task.
+- Fixed the missing documentation platyps output to show the actual found line that indicates missing CBH.
 
 ## Version 0.1.9
 - Removed plaster option to choose to combine the module source at build time (and simply made that behavior the default that can be changed later via Set-BuildEnvironment -OptionCombineFiles $false)
