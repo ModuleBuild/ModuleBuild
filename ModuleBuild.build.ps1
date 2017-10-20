@@ -521,7 +521,7 @@ task CreateMarkdownHelp GetPublicFunctions, {
         Write-Build White ''
         Write-Build Yellow "Path of files with issues: $($StageReleasePath)\docs\"
         Write-Build White ''
-        $MissingDocumentation | Select-Object FileName, Matches | Format-Table -auto
+        $MissingDocumentation | Select-Object Path, LineNumber, Line | Format-Table -auto
         Write-Build Yellow ''
         pause
 
