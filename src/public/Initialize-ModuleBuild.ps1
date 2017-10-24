@@ -68,9 +68,9 @@ Enjoy!
 
         $PlasterResults = invoke-plaster @PlasterParams -NoLogo -PassThru
 
-        # Get the newly created buildenvironment file and run it the first time to create the fist export file.
+        # Get the newly created buildenvironment file and run it the first time to create the first export file.
         $BuildDefinition = Get-ChildItem (Join-Path $PlasterResults.DestinationPath 'build') -Filter '*.buildenvironment.ps1'
-        $strCommand = "powershell -noprofile -WindowStyle hidden -file $($BuildDefinition.FullName)"
+        $strCommand = "powershell -noprofile -WindowStyle hidden -file '$($BuildDefinition.FullName)'"
 
         try {
 
