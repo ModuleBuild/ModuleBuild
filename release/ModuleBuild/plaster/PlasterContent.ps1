@@ -6,7 +6,7 @@ $Content = @(
         rootModule = '${PLASTER_PARAM_ModuleName}.psm1'
         copyright = '(c) ${PLASTER_Year} ${PLASTER_PARAM_ModuleAuthor}. All rights reserved.'
         projectURI = '${PLASTER_PARAM_ModuleWebsite}'
-        licenseURI = '${PLASTER_PARAM_ModuleWebsite}/raw/master/license.md'
+        licenseURI = '${PLASTER_PARAM_ModuleWebsite}/raw/master/LICENSE.md'
         iconURI = '${PLASTER_PARAM_ModuleWebsite}/raw/master/src/other/powershell-project.png'
         author = '${PLASTER_PARAM_ModuleAuthor}'
         companyname = '${PLASTER_PARAM_ModuleAuthor}'
@@ -31,6 +31,11 @@ $Content = @(
         ContentType = 'templateFile'
         Source = 'scaffold\vscode\*'
         Destination = '.vscode'
+    },
+    @{
+        ContentType = 'templateFile'
+        Source = 'scaffold\github\*'
+        Destination = '.github'
     },
     @{
         ContentType = 'file'
@@ -92,25 +97,25 @@ $Content = @(
     @{
         ContentType = 'templateFile'
         Source = 'scaffold\licenses\CreativeCommons.md'
-        Destination = 'License.md'
+        Destination = 'LICENSE.md'
         Condition = '$PLASTER_PARAM_ProjectLicense -eq "CreativeCommons"'
     },
     @{
         ContentType = 'templateFile'
         Source = 'scaffold\licenses\MIT.md'
-        Destination = 'License.md'
+        Destination = 'LICENSE.md'
         Condition = '$PLASTER_PARAM_ProjectLicense -eq "MIT"'
     },
     @{
         ContentType = 'templateFile'
         Source = 'scaffold\licenses\Apache.md'
-        Destination = 'License.md'
+        Destination = 'LICENSE.md'
         Condition = '$PLASTER_PARAM_ProjectLicense -eq "Apache"'
     },
     @{
         ContentType = 'templateFile'
         Source = 'scaffold\licenses\GPL.md'
-        Destination = 'License.md'
+        Destination = 'LICENSE.md'
         Condition = '$PLASTER_PARAM_ProjectLicense -eq "GPL"'
     },
     @{
@@ -147,11 +152,6 @@ $Content = @(
         ContentType = 'templateFile'
         Source = 'scaffold\build\docs\*'
         Destination = 'build\docs'
-    },
-    @{
-        ContentType = 'templateFile'
-        Source = 'scaffold\build\docs\ReadTheDocs\*'
-        Destination = 'build\docs\ReadTheDocs'
     },
     @{
         ContentType = 'templateFile'

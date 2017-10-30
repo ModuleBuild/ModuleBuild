@@ -2,6 +2,11 @@
 
 Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloeber/ModuleBuild)
 
+## Version 0.2.1
+- Merged pull request #3 to resolve initialization issues for new modules in directories with spaces in their path.
+- Added additional github integration (via .github folder creation with pull and issue template markdown files)
+- Fixed improper spelling of 'license' in license creation templating.
+
 ## Version 0.1.10
 - Fixed the -InsertCBH build task.
 - Fixed the missing documentation platyps output to show the actual found line that indicates missing CBH.

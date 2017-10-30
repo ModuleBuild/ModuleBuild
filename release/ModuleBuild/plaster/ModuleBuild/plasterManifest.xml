@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>f3490e1f-a865-48f4-88ad-4214ee03680f</id>
+    <id>ce1e03f8-a225-4e0c-a242-4888d0a438d1</id>
     <version>0.0.8</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -151,7 +151,7 @@
       tags="${PLASTER_PARAM_ModuleTags}"
       companyName="${PLASTER_PARAM_ModuleAuthor}"
       author="${PLASTER_PARAM_ModuleAuthor}"
-      licenseUri="${PLASTER_PARAM_ModuleWebsite}/raw/master/license.md"
+      licenseUri="${PLASTER_PARAM_ModuleWebsite}/raw/master/LICENSE.md"
       projectUri="${PLASTER_PARAM_ModuleWebsite}"
       rootModule="${PLASTER_PARAM_ModuleName}.psm1"
       variablesToExport=""
@@ -170,6 +170,9 @@
     <templateFile
       source="scaffold\vscode\*"
       destination=".vscode" />
+    <templateFile
+      source="scaffold\github\*"
+      destination=".github" />
     <file
       source="scaffold\src\other\*"
       destination="src\other" />
@@ -207,19 +210,19 @@
       destination="build\tools" />
     <templateFile
       source="scaffold\licenses\CreativeCommons.md"
-      destination="License.md"
+      destination="LICENSE.md"
       condition="$PLASTER_PARAM_ProjectLicense -eq &quot;CreativeCommons&quot;" />
     <templateFile
       source="scaffold\licenses\MIT.md"
-      destination="License.md"
+      destination="LICENSE.md"
       condition="$PLASTER_PARAM_ProjectLicense -eq &quot;MIT&quot;" />
     <templateFile
       source="scaffold\licenses\Apache.md"
-      destination="License.md"
+      destination="LICENSE.md"
       condition="$PLASTER_PARAM_ProjectLicense -eq &quot;Apache&quot;" />
     <templateFile
       source="scaffold\licenses\GPL.md"
-      destination="License.md"
+      destination="LICENSE.md"
       condition="$PLASTER_PARAM_ProjectLicense -eq &quot;GPL&quot;" />
     <templateFile
       source="scaffold\ModuleName.template"
@@ -242,9 +245,6 @@
     <templateFile
       source="scaffold\build\docs\*"
       destination="build\docs" />
-    <templateFile
-      source="scaffold\build\docs\ReadTheDocs\*"
-      destination="build\docs\ReadTheDocs" />
     <templateFile
       source="scaffold\build\docs\en-US\about_ModuleName.help.txt"
       destination="build\docs\en-US\about_${PLASTER_PARAM_ModuleName}.help.txt" />
