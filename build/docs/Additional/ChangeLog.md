@@ -2,6 +2,10 @@
 
 Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloeber/ModuleBuild)
 
+## Version 0.2.2
+- Updated vscode tasks.json to fix depreciated syntax.
+- Fixed `-Force` switch processing on Add-PublicFunction to still create the function if the provided name is detected as plural.
+
 ## Version 0.2.1
 - Merged pull request #3 to resolve initialization issues for new modules in directories with spaces in their path.
 - Added additional github integration (via .github folder creation with pull and issue template markdown files)

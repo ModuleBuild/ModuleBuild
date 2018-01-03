@@ -189,7 +189,7 @@
                 <div class="col-sm-4 col-md-5 col-lg-4 right-header">
                     <h5>
                         Analyzed path :<span class="right-header-data"> src\private</span><br>
-                        Analysis date :<span class="right-header-data"> 2017-10-30 12:22:54Z</span>
+                        Analysis date :<span class="right-header-data"> 2018-01-02 11:48:10Z</span>
                     </h5>
                 </div>
             </div>
@@ -213,7 +213,7 @@
                                 <h3 class="panel-title"><i class="fa fa-file-code-o" aria-hidden="true">&nbsp;</i> Number of Files</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>12</h2>
+                                <h2>13</h2>
                             </div>
                         </div>
                     </div>
@@ -223,7 +223,7 @@
                                 <h3 class="panel-title"><i class="fa fa-code" aria-hidden="true">&nbsp;</i> Number of Functions</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>12</h2>
+                                <h2>13</h2>
                             </div>
                         </div>
                     </div>
@@ -233,7 +233,7 @@
                                 <h3 class="panel-title"><i class="fa fa-arrows-v" aria-hidden="true">&nbsp;</i> Lines of Code - Total</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>738</h2>
+                                <h2>798</h2>
                             </div>
                         </div>
                     </div>
@@ -247,8 +247,8 @@
                             <table class="table">
                                 <tr class="text-success"><td>Errors</td><td>0</td></tr>
                                 <tr class="text-danger"><td>Warnings</td><td>22</td></tr>
-                                <tr class="text-success"><td>Information</td><td>2</td></tr>
-                                <tr class="text-success"><td>Total</td><td>24</td></tr>
+                                <tr class="text-success"><td>Information</td><td>3</td></tr>
+                                <tr class="text-success"><td>Total</td><td>25</td></tr>
                             </table>
                         </div>
                     </div>
@@ -282,7 +282,7 @@
                                 <h3 class="panel-title"><i class="fa fa-plus-square-o" aria-hidden="true">&nbsp;</i> ScriptAnalyzer Findings - Total</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>24</h2>
+                                <h2>25</h2>
                             </div>
                         </div>
                     </div>
@@ -314,7 +314,7 @@
                                 <h3 class="panel-title"><i class="fa fa-bar-chart" aria-hidden="true">&nbsp;</i> ScriptAnalyzer Findings - Average</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>2</h2>
+                                <h2>1.92</h2>
                             </div>
                         </div>
                     </div>
@@ -324,7 +324,7 @@
                                 <h3 class="panel-title"><i class="fa fa-info-circle" aria-hidden="true">&nbsp;</i> ScriptAnalyzer Info</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>2</h2>
+                                <h2>3</h2>
                             </div>
                         </div>
                     </div>
@@ -461,22 +461,6 @@ Message                       : $null should be on the left side of equality com
                                                 </tr>
                                                  <tr>
                                                     <td class="warning cell-largeContent">ScriptName : Get-FunctionParameter.ps1<br>
-Line (in the function) : 54<br>
-Severity                      : Warning<br>
-RuleName                      : PSUseDeclaredVarsMoreThanAssignments<br>
-Message                       : The variable 'functionpredicate' is assigned but never used.<br>
-                                                    </td>
-                                                </tr>
-                                                 <tr>
-                                                    <td class="warning cell-largeContent">ScriptName : Get-FunctionParameter.ps1<br>
-Line (in the function) : 65<br>
-Severity                      : Warning<br>
-RuleName                      : PSUseDeclaredVarsMoreThanAssignments<br>
-Message                       : The variable 'CommonParams' is assigned but never used.<br>
-                                                    </td>
-                                                </tr>
-                                                 <tr>
-                                                    <td class="warning cell-largeContent">ScriptName : Get-FunctionParameter.ps1<br>
 Line (in the function) : 81<br>
 Severity                      : Warning<br>
 RuleName                      : PSAvoidUsingCmdletAliases<br>
@@ -499,6 +483,22 @@ RuleName                      : PSAvoidUsingCmdletAliases<br>
 Message                       : 'Foreach' is an alias of 'ForEach-Object'. Alias can introduce possible problems and make scripts hard to maintain. Please consider changing alias to its full content.<br>
                                                     </td>
                                                 </tr>
+                                                 <tr>
+                                                    <td class="warning cell-largeContent">ScriptName : Get-FunctionParameter.ps1<br>
+Line (in the function) : 54<br>
+Severity                      : Warning<br>
+RuleName                      : PSUseDeclaredVarsMoreThanAssignments<br>
+Message                       : The variable 'functionpredicate' is assigned but never used.<br>
+                                                    </td>
+                                                </tr>
+                                                 <tr>
+                                                    <td class="warning cell-largeContent">ScriptName : Get-FunctionParameter.ps1<br>
+Line (in the function) : 65<br>
+Severity                      : Warning<br>
+RuleName                      : PSUseDeclaredVarsMoreThanAssignments<br>
+Message                       : The variable 'CommonParams' is assigned but never used.<br>
+                                                    </td>
+                                                </tr>
                                              </table>
                                         </td>
                                         <td class="success">True</td>
@@ -519,6 +519,14 @@ Message                       : The cmdlet 'Get-ParentASTTypes' uses a plural no
                                                 </tr>
                                                  <tr>
                                                     <td class="warning cell-largeContent">ScriptName : Get-ParentASTTypes.ps1<br>
+Line (in the function) : 50<br>
+Severity                      : Information<br>
+RuleName                      : PSUseOutputTypeCorrectly<br>
+Message                       : The cmdlet 'Get-ParentASTTypes' returns an object of type 'System.Object[]' but this type is not declared in the OutputType attribute.<br>
+                                                    </td>
+                                                </tr>
+                                                 <tr>
+                                                    <td class="warning cell-largeContent">ScriptName : Get-ParentASTTypes.ps1<br>
 Line (in the function) : 32<br>
 Severity                      : Warning<br>
 RuleName                      : PSPossibleIncorrectComparisonWithNull<br>
@@ -531,14 +539,6 @@ Line (in the function) : 41<br>
 Severity                      : Warning<br>
 RuleName                      : PSPossibleIncorrectComparisonWithNull<br>
 Message                       : $null should be on the left side of equality comparisons.<br>
-                                                    </td>
-                                                </tr>
-                                                 <tr>
-                                                    <td class="warning cell-largeContent">ScriptName : Get-ParentASTTypes.ps1<br>
-Line (in the function) : 50<br>
-Severity                      : Information<br>
-RuleName                      : PSUseOutputTypeCorrectly<br>
-Message                       : The cmdlet 'Get-ParentASTTypes' returns an object of type 'System.Object[]' but this type is not declared in the OutputType attribute.<br>
                                                     </td>
                                                 </tr>
                                              </table>
@@ -577,6 +577,14 @@ Message                       : The cmdlet 'Insert-MissingCBH' uses an unapprove
                                             <table>
                                                  <tr>
                                                     <td class="warning cell-largeContent">ScriptName : New-CommentBasedHelp.ps1<br>
+Line (in the function) : 1<br>
+Severity                      : Warning<br>
+RuleName                      : PSUseShouldProcessForStateChangingFunctions<br>
+Message                       : Function ’New-CommentBasedHelp’ has verb that could change system state. Therefore, the function has to support 'ShouldProcess'.<br>
+                                                    </td>
+                                                </tr>
+                                                 <tr>
+                                                    <td class="warning cell-largeContent">ScriptName : New-CommentBasedHelp.ps1<br>
 Line (in the function) : 68<br>
 Severity                      : Warning<br>
 RuleName                      : PSUseDeclaredVarsMoreThanAssignments<br>
@@ -589,14 +597,6 @@ Line (in the function) : 86<br>
 Severity                      : Warning<br>
 RuleName                      : PSUseDeclaredVarsMoreThanAssignments<br>
 Message                       : The variable 'OutParams' is assigned but never used.<br>
-                                                    </td>
-                                                </tr>
-                                                 <tr>
-                                                    <td class="warning cell-largeContent">ScriptName : New-CommentBasedHelp.ps1<br>
-Line (in the function) : 1<br>
-Severity                      : Warning<br>
-RuleName                      : PSUseShouldProcessForStateChangingFunctions<br>
-Message                       : Function ’New-CommentBasedHelp’ has verb that could change system state. Therefore, the function has to support 'ShouldProcess'.<br>
                                                     </td>
                                                 </tr>
                                                  <tr>
@@ -651,6 +651,24 @@ Message                       : Function ’New-DynamicParameter’ has verb tha
                                         <td class=""></td>
                                         <td class="danger">False</td>
                                     </tr>
+                                    <tr>
+                                        <td>Test-PublicFunctionName</td>
+                                        <td class="success">1</td>
+                                        <td class="info">
+                                            <button type="button" class="btn btn-info btn-sm cell-expand-collapse"> Expand</button>
+                                            <table>
+                                                 <tr>
+                                                    <td class="info cell-largeContent">ScriptName : Test-PublicFunctionName.ps1<br>
+Line (in the function) : 73<br>
+Severity                      : Information<br>
+RuleName                      : PSUseOutputTypeCorrectly<br>
+Message                       : The cmdlet 'Test-PublicFunctionName' returns an object of type 'System.Boolean' but this type is not declared in the OutputType attribute.<br>
+                                                    </td>
+                                                </tr>
+                                             </table>
+                                        </td>
+                                        <td class="success">True</td>
+                                    </tr>
 
                                 </tbody>
                             </table>
@@ -666,7 +684,7 @@ Message                       : Function ’New-DynamicParameter’ has verb tha
                                 <h3 class="panel-title"><i class="fa fa-arrows-v" aria-hidden="true">&nbsp;</i> Lines of Code - Total</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>738</h2>
+                                <h2>798</h2>
                             </div>
                         </div>
                     </div>
@@ -698,7 +716,7 @@ Message                       : Function ’New-DynamicParameter’ has verb tha
                                 <h3 class="panel-title"><i class="fa fa-arrows-v" aria-hidden="true">&nbsp;</i> Lines of Code - Average</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>61.5</h2>
+                                <h2>61.38</h2>
                             </div>
                         </div>
                     </div>
@@ -708,7 +726,7 @@ Message                       : Function ’New-DynamicParameter’ has verb tha
                                 <h3 class="panel-title"><i class="fa fa-arrows-alt" aria-hidden="true">&nbsp;</i> Complexity - Average</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>5.67</h2>
+                                <h2>6.08</h2>
                             </div>
                         </div>
                     </div>
@@ -811,6 +829,12 @@ Message                       : Function ’New-DynamicParameter’ has verb tha
                                         <td class="success">4</td>
                                         <td class="success">1</td>
                                     </tr>
+                                    <tr>
+                                        <td>Test-PublicFunctionName</td>
+                                        <td class="warning">60</td>
+                                        <td class="success">11</td>
+                                        <td class="success">3</td>
+                                    </tr>
 
                                 </tbody>
                             </table>
@@ -853,12 +877,12 @@ Message                       : Function ’New-DynamicParameter’ has verb tha
                 </div>
                 <div class="row col-sm-offset-3 col-md-offset-1 col-lg-offset-2">
                     <div class="col-sm-3 panelContainer">
-                        <div class="panel panel-warning">
+                        <div class="panel panel-danger">
                             <div class="panel-heading">
                                 <h3 class="panel-title"><i class="fa fa-times" aria-hidden="true">&nbsp;</i> Number of Missed Commands</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>391</h2>
+                                <h2>422</h2>
                             </div>
                         </div>
                     </div>
@@ -980,6 +1004,11 @@ Message                       : Function ’New-DynamicParameter’ has verb tha
                                         <td>Read-HostContinue</td>
                                         <td class="danger">0</td>
                                         <td class="danger">14</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Test-PublicFunctionName</td>
+                                        <td class="danger">0</td>
+                                        <td class="danger">31</td>
                                     </tr>
 
                                 </tbody>

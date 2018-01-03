@@ -11,7 +11,7 @@ function Add-PublicFunction {
     .LINK
     https://github.com/zloeber/ModuleBuild
     .EXAMPLE
-    Add-PublicFunction -Name 'New-AwesomeFunction' -Template:PlainPublicFunction
+    Add-PublicFunction -Name 'New-AwesomeFunction' -TemplateName:PlainPublicFunction
     #>
 
     [CmdletBinding()]
@@ -80,7 +80,7 @@ function Add-PublicFunction {
 
         $TemplateData = Get-Content -Path $TemplateLookup[$TemplateName]
         $FunctionFullPath = (Join-Path $PublicFunctionSrc $Name) + ".ps1"
-        if (Test-PublicFunctionName $Name -ShowIssues) {
+        if ((Test-PublicFunctionName $Name -ShowIssues) -or $Force) {
             Write-Verbose "Adding function to be created: $FunctionFullPath"
             $FunctionsToCreate += $FunctionFullPath
         }

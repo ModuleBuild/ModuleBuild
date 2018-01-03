@@ -1,5 +1,6 @@
 ﻿---
 external help file: ModuleBuild-help.xml
+Module Name: ModuleBuild
 online version: https://github.com/zloeber/ModuleBuild
 schema: 2.0.0
 ---
@@ -22,7 +23,7 @@ Adds a public function to your modulebuild based project.
 
 ### -------------------------- EXAMPLE 1 --------------------------
 ```
-Add-PublicFunction -Name 'New-AwesomeFunction' -Template:PlainPublicFunction
+Add-PublicFunction -Name 'New-AwesomeFunction' -TemplateName:PlainPublicFunction
 ```
 
 ## PARAMETERS

@@ -2,7 +2,7 @@
 
 <h6><a id="user-content-you-are-free-to" class="anchor" href="#you-are-free-to" aria-hidden="true"><span class="octicon octicon-link"></span></a>You are free to:</h6>
 
-<p><strong>Share</strong> — copy and redistribute the material in any medium or format</p>
+<p><strong>Share</strong> — copy and redistribute the material in any medium or format </p>
 
 <p><strong>Adapt</strong> — remix, transform, and build upon the material </p>
 

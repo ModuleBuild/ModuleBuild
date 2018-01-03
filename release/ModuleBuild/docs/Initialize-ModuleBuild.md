@@ -1,5 +1,6 @@
 ﻿---
 external help file: ModuleBuild-help.xml
+Module Name: ModuleBuild
 online version: https://github.com/zloeber/ModuleBuild
 schema: 2.0.0
 ---

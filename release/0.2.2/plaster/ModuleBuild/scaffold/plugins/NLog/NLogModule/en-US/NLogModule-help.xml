@@ -1,0 +1,2800 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<helpItems schema="maml" xmlns="http://msh">
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-NLogDllLoadState</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>NLogDllLoadState</command:noun>
+      <maml:description>
+        <maml:para>Validate if the NLog Dll is loaded or not.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Validate if the NLog Dll is loaded or not.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-NLogDllLoadState</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-NLogDllLoadState</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-NLogInstance</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>NLogInstance</command:noun>
+      <maml:description>
+        <maml:para>Gets the current nlog instance for the module</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Gets the current nlog instance for the module</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-NLogInstance</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>$myCurrentNlog = Get-NLogInstance</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Get-NLogMessageLayout</command:name>
+      <command:verb>Get</command:verb>
+      <command:noun>NLogMessageLayout</command:noun>
+      <maml:description>
+        <maml:para>Sets the log message layout</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Defines, how your log message looks like. This function can be enhanced by yourself. I just provided a few examples how log messages can look like</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Get-NLogMessageLayout</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>layoutId</maml:name>
+          <maml:Description>
+            <maml:para>Currently the only defined layout ID is 1. More can be added to suit your needs.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>1</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>layoutId</maml:name>
+        <maml:Description>
+          <maml:para>Currently the only defined layout ID is 1. More can be added to suit your needs.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>1</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>$myFilelogtarget.Layout  = Get-NLogMessageLayout -layoutId 1</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-NLogConfig</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>NLogConfig</command:noun>
+      <maml:description>
+        <maml:para>Creates a new configuration in memory</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Important to add logging behaviour and log targets to your LogManager</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-NLogConfig</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>$myLogconfig = New-NLogConfig</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-NLogConsoleTarget</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>NLogConsoleTarget</command:noun>
+      <maml:description>
+        <maml:para>Creates a new console logging target</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Creates a new console logging target</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-NLogConsoleTarget</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>Encoding</maml:name>
+          <maml:Description>
+            <maml:para>File encoding type</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+          <dev:type>
+            <maml:name>Encoding</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Text.Encoding]::GetEncoding("iso-8859-2")</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>Layout</maml:name>
+          <maml:Description>
+            <maml:para>Message layout for logs to the console</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(Get-NLogMessageLayout -layoutId 3)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ErrorStream</maml:name>
+          <maml:Description>
+            <maml:para>Enable error stream logging</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>Encoding</maml:name>
+        <maml:Description>
+          <maml:para>File encoding type</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+        <dev:type>
+          <maml:name>Encoding</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Text.Encoding]::GetEncoding("iso-8859-2")</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ErrorStream</maml:name>
+        <maml:Description>
+          <maml:para>Enable error stream logging</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>Layout</maml:name>
+        <maml:Description>
+          <maml:para>Message layout for logs to the console</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(Get-NLogMessageLayout -layoutId 3)</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>TBD</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-NLogFileTarget</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>NLogFileTarget</command:noun>
+      <maml:description>
+        <maml:para>Creates a new file logging target</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Creates a new file logging target</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-NLogFileTarget</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>ArchiveAboveSize</maml:name>
+          <maml:Description>
+            <maml:para>Archives file above this many bytes.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>10240000</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+          <maml:name>archiveEvery</maml:name>
+          <maml:Description>
+            <maml:para>Period of time to archive log files</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Month</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+          <maml:name>ArchiveNumbering</maml:name>
+          <maml:Description>
+            <maml:para>How archive files are names</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>Rolling</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+          <maml:name>FileName</maml:name>
+          <maml:Description>
+            <maml:para>Name of log file</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+          <maml:name>Encoding</maml:name>
+          <maml:Description>
+            <maml:para>File encoding type</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+          <dev:type>
+            <maml:name>Encoding</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[System.Text.Encoding]::GetEncoding("iso-8859-2")</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+          <maml:name>Layout</maml:name>
+          <maml:Description>
+            <maml:para>Message layout for logs to the file</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>(Get-NLogMessageLayout -layoutId 1)</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
+          <maml:name>maxArchiveFiles</maml:name>
+          <maml:Description>
+            <maml:para>Maximum number of archive files to retain.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+          <dev:type>
+            <maml:name>Int32</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>1</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>CreateDirs</maml:name>
+          <maml:Description>
+            <maml:para>Create directories when archiving</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>KeepFileOpen</maml:name>
+          <maml:Description>
+            <maml:para>Maintain a lock on the log file</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>ArchiveAboveSize</maml:name>
+        <maml:Description>
+          <maml:para>Archives file above this many bytes.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>10240000</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
+        <maml:name>archiveEvery</maml:name>
+        <maml:Description>
+          <maml:para>Period of time to archive log files</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Month</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="3" aliases="none">
+        <maml:name>ArchiveNumbering</maml:name>
+        <maml:Description>
+          <maml:para>How archive files are names</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>Rolling</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>CreateDirs</maml:name>
+        <maml:Description>
+          <maml:para>Create directories when archiving</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="4" aliases="none">
+        <maml:name>FileName</maml:name>
+        <maml:Description>
+          <maml:para>Name of log file</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="5" aliases="none">
+        <maml:name>Encoding</maml:name>
+        <maml:Description>
+          <maml:para>File encoding type</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Encoding</command:parameterValue>
+        <dev:type>
+          <maml:name>Encoding</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[System.Text.Encoding]::GetEncoding("iso-8859-2")</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>KeepFileOpen</maml:name>
+        <maml:Description>
+          <maml:para>Maintain a lock on the log file</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="6" aliases="none">
+        <maml:name>Layout</maml:name>
+        <maml:Description>
+          <maml:para>Message layout for logs to the file</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>(Get-NLogMessageLayout -layoutId 1)</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="7" aliases="none">
+        <maml:name>maxArchiveFiles</maml:name>
+        <maml:Description>
+          <maml:para>Maximum number of archive files to retain.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Int32</command:parameterValue>
+        <dev:type>
+          <maml:name>Int32</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>1</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>TBD</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-NLogLogger</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>NLogLogger</command:noun>
+      <maml:description>
+        <maml:para>Creates a new LogManager instance</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Important to log messages to file, mail, console etc.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-NLogLogger</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>LoggerName</maml:name>
+          <maml:Description>
+            <maml:para>Name of the logger to get</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>LoggerName</maml:name>
+        <maml:Description>
+          <maml:para>Name of the logger to get</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>$myLogger = New-NLogLogger</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>New-NLogTarget</command:name>
+      <command:verb>New</command:verb>
+      <command:noun>NLogTarget</command:noun>
+      <maml:description>
+        <maml:para>Creates a new logging target</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Logging targets are required to write down the log messages somewhere</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>New-NLogTarget</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+          <maml:name>TargetType</maml:name>
+          <maml:Description>
+            <maml:para>Type of target to return, Console, file, or mail are supported.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="1" aliases="none">
+        <maml:name>TargetType</maml:name>
+        <maml:Description>
+          <maml:para>Type of target to return, Console, file, or mail are supported.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>$myFilelogtarget = New-NLogTarget -targetType "file"</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Register-NLog</command:name>
+      <command:verb>Register</command:verb>
+      <command:noun>NLog</command:noun>
+      <maml:description>
+        <maml:para>Start NLog logging with a basic configuration.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>Start NLog logging with a basic configuration.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Register-NLog</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>FileName</maml:name>
+          <maml:Description>
+            <maml:para>File to start logging to</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>LoggerName</maml:name>
+          <maml:Description>
+            <maml:para>An Nlog name (useful for multiple logging targets)</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>TestLogger</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>LogLevel</maml:name>
+          <maml:Description>
+            <maml:para>Level of logging. Default is Info.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">LogLevel</command:parameterValue>
+          <dev:type>
+            <maml:name>LogLevel</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[NLog.LogLevel]::Debug</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Register-NLog</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>LoggerName</maml:name>
+          <maml:Description>
+            <maml:para>An Nlog name (useful for multiple logging targets)</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>TestLogger</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>LogLevel</maml:name>
+          <maml:Description>
+            <maml:para>Level of logging. Default is Info.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">LogLevel</command:parameterValue>
+          <dev:type>
+            <maml:name>LogLevel</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>[NLog.LogLevel]::Debug</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Target</maml:name>
+          <maml:Description>
+            <maml:para>An NLog target (created with New-NLogFileTarget or New-NLogConsoleTarget)</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <dev:type>
+            <maml:name>Object</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>FileName</maml:name>
+        <maml:Description>
+          <maml:para>File to start logging to</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>LoggerName</maml:name>
+        <maml:Description>
+          <maml:para>An Nlog name (useful for multiple logging targets)</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>TestLogger</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>LogLevel</maml:name>
+        <maml:Description>
+          <maml:para>Level of logging. Default is Info.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">LogLevel</command:parameterValue>
+        <dev:type>
+          <maml:name>LogLevel</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>[NLog.LogLevel]::Debug</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Target</maml:name>
+        <maml:Description>
+          <maml:para>An NLog target (created with New-NLogFileTarget or New-NLogConsoleTarget)</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <dev:type>
+          <maml:name>Object</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Register-NLog -FileName C:\temp\testlogger.log</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>UnRegister-NLog</command:name>
+      <command:verb>UnRegister</command:verb>
+      <command:noun>NLog</command:noun>
+      <maml:description>
+        <maml:para>UnRegister the NLog Target..</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>UnRegister the NLog Target..</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>UnRegister-NLog</maml:name>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters />
+    <command:inputTypes />
+    <command:returnValues />
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>UnRegister-NLog</dev:code>
+        <dev:remarks>
+          <maml:para></maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks />
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Write-Debug</command:name>
+      <command:verb>Write</command:verb>
+      <command:noun>Debug</command:noun>
+      <maml:description>
+        <maml:para>Writes a debug message to the console. Writes a debug message to the console.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Write-Debug cmdlet writes debug messages to the console from a script or command.</maml:para>
+      <maml:para>By default, debug messages are not displayed in the console, but you can display them by using the Debug parameter or the $DebugPreference variable.</maml:para>
+      <maml:para>The Write-Debug cmdlet writes debug messages to the console from a script or command.</maml:para>
+      <maml:para>By default, debug messages are not displayed in the console, but you can display them by using the Debug parameter or the $DebugPreference variable.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Write-Debug</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="Msg">
+          <maml:name>Message</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the debug message to send to the console.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="Msg">
+        <maml:name>Message</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the debug message to send to the console.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>You can pipe a string that contains a debug message to Write-Debug .</maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>Write-Debug writes only to the debug stream. It does not return any output.</maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Write-Debug "Cannot open file."</dev:code>
+        <dev:remarks>
+          <maml:para>This command writes a debug message. Because the value of $DebugPreference is "SilentlyContinue", the message is not displayed in the console.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>$DebugPreference</dev:code>
+        <dev:remarks>
+          <maml:para>SilentlyContinue PS C:\&gt;Write-Debug "Cannot open file." PS C:\&gt; PS C:\&gt;Write-Debug "Cannot open file." -debug DEBUG: Cannot open file. This example shows how to use the Debug common parameter to override the value of the $DebugPreference variable for a particular command. The first command displays the value of the $DebugPreference variable, which is "SilentlyContinue", the default. The second command writes a debug message but, because of the value of $DebugPreference, the message does not appear. The third command writes a debug message. It uses the Debug common parameter to override the value of $DebugPreference and to display the debug messages resulting from this command. As a result, even though the value of $DebugPreference is "SilentlyContinue", the debug message appears. For more information about the Debug common parameter, see about_CommonParameters.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>$DebugPreference</dev:code>
+        <dev:remarks>
+          <maml:para>SilentlyContinue PS C:\&gt;Write-Debug "Cannot open file." PS C:\&gt; PS C:\&gt;$DebugPreference = "Continue" PS C:\&gt;Write-Debug "Cannot open file." DEBUG: Cannot open file. This command shows the effect of changing the value of the $DebugPreference variable on the display of debug messages. The first command displays the value of the $DebugPreference variable, which is "SilentlyContinue", the default. The second command writes a debug message but, because of the value of $DebugPreference, the message does not appear. The third command assigns a value of "Continue" to the $DebugPreference variable. The fourth command writes a debug message, which appears on the console. For more information about $DebugPreference, see about_Preference_Variables.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 1: Understand $DebugPreference</maml:title>
+        <dev:code>PS C:\&gt; Write-Debug "Cannot open file."</dev:code>
+        <dev:remarks>
+          <maml:para>This command writes a debug message. Because the value of $DebugPreference is SilentlyContinue, the message is not displayed in the console.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 2: Use the Debug parameter to override $DebugPreference</maml:title>
+        <dev:code>PS C:\&gt; $DebugPreference
+SilentlyContinue PS C:\&gt; Write-Debug "Cannot open file."
+PS C:\&gt;
+PS C:\&gt; Write-Debug "Cannot open file." -Debug
+DEBUG: Cannot open file.</dev:code>
+        <dev:remarks>
+          <maml:para>This example shows how to use the Debug common parameter to override the value of the $DebugPreference variable for a particular command.</maml:para>
+          <maml:para>The first command displays the value of the $DebugPreference variable, which is SilentlyContinue, the default.</maml:para>
+          <maml:para>The second command writes a debug message but, because of the value of $DebugPreference, the message does not appear.</maml:para>
+          <maml:para>The third command writes a debug message. It uses the Debug common parameter to override the value of $DebugPreference and to display the debug messages resulting from this command.</maml:para>
+          <maml:para>As a result, even though the value of $DebugPreference is SilentlyContinue, the debug message appears.</maml:para>
+          <maml:para>For more information about the Debug common parameter, see about_CommonParameters.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 3: Change the value of $DebugPreference</maml:title>
+        <dev:code>PS C:\&gt;$DebugPreference
+SilentlyContinue PS C:\&gt; Write-Debug "Cannot open file." 
+PS C:\&gt;
+PS C:\&gt; $DebugPreference = "Continue"
+PS C:\&gt; Write-Debug "Cannot open file."
+DEBUG: Cannot open file.</dev:code>
+        <dev:remarks>
+          <maml:para>This command shows the effect of changing the value of the $DebugPreference variable on the display of debug messages.</maml:para>
+          <maml:para>The first command displays the value of the $DebugPreference variable, which is SilentlyContinue, the default.</maml:para>
+          <maml:para>The second command writes a debug message but, because of the value of $DebugPreference, the message does not appear.</maml:para>
+          <maml:para>The third command assigns a value of Continue to the $DebugPreference variable.</maml:para>
+          <maml:para>The fourth command writes a debug message, which appears on the console.</maml:para>
+          <maml:para>For more information about $DebugPreference, see about_Preference_Variables.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://go.microsoft.com/fwlink/?LinkId=821874</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Error</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Host</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Output</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Progress</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Verbose</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Warning</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Write-Error</command:name>
+      <command:verb>Write</command:verb>
+      <command:noun>Error</command:noun>
+      <maml:description>
+        <maml:para>Writes an object to the error stream. Writes an object to the error stream.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Write-Error cmdlet declares a non-terminating error. By default, errors are sent in the error stream to the host program to be displayed, along with output.</maml:para>
+      <maml:para>To write a non-terminating error, enter an error message string, an ErrorRecord object, or an Exception object.  Use the other parameters of Write-Error to populate the error record.</maml:para>
+      <maml:para>Non-terminating errors write an error to the error stream, but they do not stop command processing. If a non-terminating error is declared on one item in a collection of input items, the command continues to process the other items in the collection.</maml:para>
+      <maml:para>To declare a terminating error, use the Throw keyword. For more information, see about_Throw (http://go.microsoft.com/fwlink/?LinkID=145153).</maml:para>
+      <maml:para>The Write-Error cmdlet declares a non-terminating error. By default, errors are sent in the error stream to the host program to be displayed, along with output.</maml:para>
+      <maml:para>To write a non-terminating error, enter an error message string, an ErrorRecord object, or an Exception object.  Use the other parameters of Write-Error to populate the error record.</maml:para>
+      <maml:para>Non-terminating errors write an error to the error stream, but they do not stop command processing. If a non-terminating error is declared on one item in a collection of input items, the command continues to process the other items in the collection.</maml:para>
+      <maml:para>To declare a terminating error, use the Throw keyword. For more information, see about_Throw (http://go.microsoft.com/fwlink/?LinkID=145153).</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Write-Error</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Exception</maml:name>
+          <maml:Description>
+            <maml:para>Specifies an exception object that represents the error. Use the properties of the object to describe the error.</maml:para>
+            <maml:para>To create an exception object, use a hash table or use the New-Object cmdlet.</maml:para>
+            <maml:para>Specifies an exception object that represents the error. Use the properties of the object to describe the error.</maml:para>
+            <maml:para>To create an exception object, use a hash table or use the New-Object cmdlet.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Exception</command:parameterValue>
+          <dev:type>
+            <maml:name>Exception</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="Msg">
+          <maml:name>Message</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the message text of the error.  If the text includes spaces or special characters, enclose it in quotation marks. You can also pipe a message string to Write-Error.</maml:para>
+            <maml:para>Specifies the message text of the error. If the text includes spaces or special characters, enclose it in quotation marks. You can also pipe a message string to Write-Error .</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Category</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the category of the error. The default value is NotSpecified.</maml:para>
+            <maml:para>For information about the error categories, see "ErrorCategory Enumeration" in the MSDN (Microsoft Developer Network) library at http://go.microsoft.com/fwlink/?LinkId=143600.</maml:para>
+            <maml:para>Specifies the category of the error. The default value is NotSpecified. The acceptable values for this parameter are:</maml:para>
+            <maml:para>- NotSpecified</maml:para>
+            <maml:para>- OpenError</maml:para>
+            <maml:para>- CloseError</maml:para>
+            <maml:para>- DeviceError</maml:para>
+            <maml:para>- DeadlockDetected</maml:para>
+            <maml:para>- InvalidArgument</maml:para>
+            <maml:para>- InvalidData</maml:para>
+            <maml:para>- InvalidOperation</maml:para>
+            <maml:para>- InvalidResult</maml:para>
+            <maml:para>- InvalidType</maml:para>
+            <maml:para>- MetadataError</maml:para>
+            <maml:para>- NotImplemented</maml:para>
+            <maml:para>- NotInstalled</maml:para>
+            <maml:para>- ObjectNotFound</maml:para>
+            <maml:para>- OperationStopped</maml:para>
+            <maml:para>- OperationTimeout</maml:para>
+            <maml:para>- SyntaxError</maml:para>
+            <maml:para>- ParserError</maml:para>
+            <maml:para>- PermissionDenied</maml:para>
+            <maml:para>- ResourceBusy</maml:para>
+            <maml:para>- ResourceExists</maml:para>
+            <maml:para>- ResourceUnavailable</maml:para>
+            <maml:para>- ReadError</maml:para>
+            <maml:para>- WriteError</maml:para>
+            <maml:para>- FromStdErr</maml:para>
+            <maml:para>- SecurityError</maml:para>
+            <maml:para>- ProtocolError</maml:para>
+            <maml:para>- ConnectionError</maml:para>
+            <maml:para>- AuthenticationError</maml:para>
+            <maml:para>- LimitsExceeded</maml:para>
+            <maml:para>- QuotaExceeded</maml:para>
+            <maml:para>- NotEnabled</maml:para>
+            <maml:para></maml:para>
+            <maml:para>For information about the error categories, see ErrorCategory Enumerationhttp://go.microsoft.com/fwlink/?LinkId=143600 (http://go.microsoft.com/fwlink/?LinkId=143600) in MSDN.</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">NotSpecified</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OpenError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CloseError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DeviceError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DeadlockDetected</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">InvalidArgument</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">InvalidData</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">InvalidOperation</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">InvalidResult</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">InvalidType</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MetadataError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NotImplemented</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NotInstalled</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ObjectNotFound</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OperationStopped</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OperationTimeout</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SyntaxError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ParserError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PermissionDenied</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ResourceBusy</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ResourceExists</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ResourceUnavailable</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ReadError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WriteError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">FromStdErr</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SecurityError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ProtocolError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ConnectionError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AuthenticationError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LimitsExceeded</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">QuotaExceeded</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NotEnabled</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">ErrorCategory</command:parameterValue>
+          <dev:type>
+            <maml:name>ErrorCategory</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ErrorId</maml:name>
+          <maml:Description>
+            <maml:para>Specifies an ID string to identify the error. The string should be unique to the error.</maml:para>
+            <maml:para>Specifies an ID string to identify the error. The string should be unique to the error.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TargetObject</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the object that was being processed when the error occurred. Enter the object (such as a string), a variable that contains the object, or a command that gets the object.</maml:para>
+            <maml:para>Specifies the object that was being processed when the error occurred. Enter the object, a variable that contains the object, or a command that gets the object.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <dev:type>
+            <maml:name>Object</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>RecommendedAction</maml:name>
+          <maml:Description>
+            <maml:para>Describes the action that the user should take to resolve or prevent the error.</maml:para>
+            <maml:para>Specifies the action that the user should take to resolve or prevent the error.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Activity">
+          <maml:name>CategoryActivity</maml:name>
+          <maml:Description>
+            <maml:para>Describes the action that caused the error.</maml:para>
+            <maml:para>Specifies the action that caused the error.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Reason">
+          <maml:name>CategoryReason</maml:name>
+          <maml:Description>
+            <maml:para>Explains how or why the activity caused the error.</maml:para>
+            <maml:para>Specifies how or why the activity caused the error.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="TargetName">
+          <maml:name>CategoryTargetName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the name of the object that was being processed when the error occurred.</maml:para>
+            <maml:para>Specifies the name of the object that was being processed when the error occurred.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="TargetType">
+          <maml:name>CategoryTargetType</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the type of the object that was being processed when the error occurred.</maml:para>
+            <maml:para>Specifies the type of the object that was being processed when the error occurred.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Write-Error</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="Msg">
+          <maml:name>Message</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the message text of the error.  If the text includes spaces or special characters, enclose it in quotation marks. You can also pipe a message string to Write-Error.</maml:para>
+            <maml:para>Specifies the message text of the error. If the text includes spaces or special characters, enclose it in quotation marks. You can also pipe a message string to Write-Error .</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Category</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the category of the error. The default value is NotSpecified.</maml:para>
+            <maml:para>For information about the error categories, see "ErrorCategory Enumeration" in the MSDN (Microsoft Developer Network) library at http://go.microsoft.com/fwlink/?LinkId=143600.</maml:para>
+            <maml:para>Specifies the category of the error. The default value is NotSpecified. The acceptable values for this parameter are:</maml:para>
+            <maml:para>- NotSpecified</maml:para>
+            <maml:para>- OpenError</maml:para>
+            <maml:para>- CloseError</maml:para>
+            <maml:para>- DeviceError</maml:para>
+            <maml:para>- DeadlockDetected</maml:para>
+            <maml:para>- InvalidArgument</maml:para>
+            <maml:para>- InvalidData</maml:para>
+            <maml:para>- InvalidOperation</maml:para>
+            <maml:para>- InvalidResult</maml:para>
+            <maml:para>- InvalidType</maml:para>
+            <maml:para>- MetadataError</maml:para>
+            <maml:para>- NotImplemented</maml:para>
+            <maml:para>- NotInstalled</maml:para>
+            <maml:para>- ObjectNotFound</maml:para>
+            <maml:para>- OperationStopped</maml:para>
+            <maml:para>- OperationTimeout</maml:para>
+            <maml:para>- SyntaxError</maml:para>
+            <maml:para>- ParserError</maml:para>
+            <maml:para>- PermissionDenied</maml:para>
+            <maml:para>- ResourceBusy</maml:para>
+            <maml:para>- ResourceExists</maml:para>
+            <maml:para>- ResourceUnavailable</maml:para>
+            <maml:para>- ReadError</maml:para>
+            <maml:para>- WriteError</maml:para>
+            <maml:para>- FromStdErr</maml:para>
+            <maml:para>- SecurityError</maml:para>
+            <maml:para>- ProtocolError</maml:para>
+            <maml:para>- ConnectionError</maml:para>
+            <maml:para>- AuthenticationError</maml:para>
+            <maml:para>- LimitsExceeded</maml:para>
+            <maml:para>- QuotaExceeded</maml:para>
+            <maml:para>- NotEnabled</maml:para>
+            <maml:para></maml:para>
+            <maml:para>For information about the error categories, see ErrorCategory Enumerationhttp://go.microsoft.com/fwlink/?LinkId=143600 (http://go.microsoft.com/fwlink/?LinkId=143600) in MSDN.</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">NotSpecified</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OpenError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">CloseError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DeviceError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DeadlockDetected</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">InvalidArgument</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">InvalidData</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">InvalidOperation</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">InvalidResult</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">InvalidType</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">MetadataError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NotImplemented</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NotInstalled</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ObjectNotFound</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OperationStopped</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">OperationTimeout</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SyntaxError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ParserError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">PermissionDenied</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ResourceBusy</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ResourceExists</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ResourceUnavailable</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ReadError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">WriteError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">FromStdErr</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">SecurityError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ProtocolError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">ConnectionError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">AuthenticationError</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">LimitsExceeded</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">QuotaExceeded</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">NotEnabled</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">ErrorCategory</command:parameterValue>
+          <dev:type>
+            <maml:name>ErrorCategory</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ErrorId</maml:name>
+          <maml:Description>
+            <maml:para>Specifies an ID string to identify the error. The string should be unique to the error.</maml:para>
+            <maml:para>Specifies an ID string to identify the error. The string should be unique to the error.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>TargetObject</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the object that was being processed when the error occurred. Enter the object (such as a string), a variable that contains the object, or a command that gets the object.</maml:para>
+            <maml:para>Specifies the object that was being processed when the error occurred. Enter the object, a variable that contains the object, or a command that gets the object.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <dev:type>
+            <maml:name>Object</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>RecommendedAction</maml:name>
+          <maml:Description>
+            <maml:para>Describes the action that the user should take to resolve or prevent the error.</maml:para>
+            <maml:para>Specifies the action that the user should take to resolve or prevent the error.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Activity">
+          <maml:name>CategoryActivity</maml:name>
+          <maml:Description>
+            <maml:para>Describes the action that caused the error.</maml:para>
+            <maml:para>Specifies the action that caused the error.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Reason">
+          <maml:name>CategoryReason</maml:name>
+          <maml:Description>
+            <maml:para>Explains how or why the activity caused the error.</maml:para>
+            <maml:para>Specifies how or why the activity caused the error.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="TargetName">
+          <maml:name>CategoryTargetName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the name of the object that was being processed when the error occurred.</maml:para>
+            <maml:para>Specifies the name of the object that was being processed when the error occurred.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="TargetType">
+          <maml:name>CategoryTargetType</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the type of the object that was being processed when the error occurred.</maml:para>
+            <maml:para>Specifies the type of the object that was being processed when the error occurred.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+      <command:syntaxItem>
+        <maml:name>Write-Error</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ErrorRecord</maml:name>
+          <maml:Description>
+            <maml:para>Specifies an error record object that represents the error. Use the properties of the object to describe the error.</maml:para>
+            <maml:para>To create an error record object, use the New-Object cmdlet or get an error record object from the array in the $Error automatic variable.</maml:para>
+            <maml:para>Specifies an error record object that represents the error. Use the properties of the object to describe the error.</maml:para>
+            <maml:para>To create an error record object, use the New-Object cmdlet or get an error record object from the array in the $Error automatic variable.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">ErrorRecord</command:parameterValue>
+          <dev:type>
+            <maml:name>ErrorRecord</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>RecommendedAction</maml:name>
+          <maml:Description>
+            <maml:para>Describes the action that the user should take to resolve or prevent the error.</maml:para>
+            <maml:para>Specifies the action that the user should take to resolve or prevent the error.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Activity">
+          <maml:name>CategoryActivity</maml:name>
+          <maml:Description>
+            <maml:para>Describes the action that caused the error.</maml:para>
+            <maml:para>Specifies the action that caused the error.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Reason">
+          <maml:name>CategoryReason</maml:name>
+          <maml:Description>
+            <maml:para>Explains how or why the activity caused the error.</maml:para>
+            <maml:para>Specifies how or why the activity caused the error.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="TargetName">
+          <maml:name>CategoryTargetName</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the name of the object that was being processed when the error occurred.</maml:para>
+            <maml:para>Specifies the name of the object that was being processed when the error occurred.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="TargetType">
+          <maml:name>CategoryTargetType</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the type of the object that was being processed when the error occurred.</maml:para>
+            <maml:para>Specifies the type of the object that was being processed when the error occurred.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Exception</maml:name>
+        <maml:Description>
+          <maml:para>Specifies an exception object that represents the error. Use the properties of the object to describe the error.</maml:para>
+          <maml:para>To create an exception object, use a hash table or use the New-Object cmdlet.</maml:para>
+          <maml:para>Specifies an exception object that represents the error. Use the properties of the object to describe the error.</maml:para>
+          <maml:para>To create an exception object, use a hash table or use the New-Object cmdlet.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Exception</command:parameterValue>
+        <dev:type>
+          <maml:name>Exception</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="named" aliases="Msg">
+        <maml:name>Message</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the message text of the error.  If the text includes spaces or special characters, enclose it in quotation marks. You can also pipe a message string to Write-Error.</maml:para>
+          <maml:para>Specifies the message text of the error. If the text includes spaces or special characters, enclose it in quotation marks. You can also pipe a message string to Write-Error .</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ErrorRecord</maml:name>
+        <maml:Description>
+          <maml:para>Specifies an error record object that represents the error. Use the properties of the object to describe the error.</maml:para>
+          <maml:para>To create an error record object, use the New-Object cmdlet or get an error record object from the array in the $Error automatic variable.</maml:para>
+          <maml:para>Specifies an error record object that represents the error. Use the properties of the object to describe the error.</maml:para>
+          <maml:para>To create an error record object, use the New-Object cmdlet or get an error record object from the array in the $Error automatic variable.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">ErrorRecord</command:parameterValue>
+        <dev:type>
+          <maml:name>ErrorRecord</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Category</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the category of the error. The default value is NotSpecified.</maml:para>
+          <maml:para>For information about the error categories, see "ErrorCategory Enumeration" in the MSDN (Microsoft Developer Network) library at http://go.microsoft.com/fwlink/?LinkId=143600.</maml:para>
+          <maml:para>Specifies the category of the error. The default value is NotSpecified. The acceptable values for this parameter are:</maml:para>
+          <maml:para>- NotSpecified</maml:para>
+          <maml:para>- OpenError</maml:para>
+          <maml:para>- CloseError</maml:para>
+          <maml:para>- DeviceError</maml:para>
+          <maml:para>- DeadlockDetected</maml:para>
+          <maml:para>- InvalidArgument</maml:para>
+          <maml:para>- InvalidData</maml:para>
+          <maml:para>- InvalidOperation</maml:para>
+          <maml:para>- InvalidResult</maml:para>
+          <maml:para>- InvalidType</maml:para>
+          <maml:para>- MetadataError</maml:para>
+          <maml:para>- NotImplemented</maml:para>
+          <maml:para>- NotInstalled</maml:para>
+          <maml:para>- ObjectNotFound</maml:para>
+          <maml:para>- OperationStopped</maml:para>
+          <maml:para>- OperationTimeout</maml:para>
+          <maml:para>- SyntaxError</maml:para>
+          <maml:para>- ParserError</maml:para>
+          <maml:para>- PermissionDenied</maml:para>
+          <maml:para>- ResourceBusy</maml:para>
+          <maml:para>- ResourceExists</maml:para>
+          <maml:para>- ResourceUnavailable</maml:para>
+          <maml:para>- ReadError</maml:para>
+          <maml:para>- WriteError</maml:para>
+          <maml:para>- FromStdErr</maml:para>
+          <maml:para>- SecurityError</maml:para>
+          <maml:para>- ProtocolError</maml:para>
+          <maml:para>- ConnectionError</maml:para>
+          <maml:para>- AuthenticationError</maml:para>
+          <maml:para>- LimitsExceeded</maml:para>
+          <maml:para>- QuotaExceeded</maml:para>
+          <maml:para>- NotEnabled</maml:para>
+          <maml:para></maml:para>
+          <maml:para>For information about the error categories, see ErrorCategory Enumerationhttp://go.microsoft.com/fwlink/?LinkId=143600 (http://go.microsoft.com/fwlink/?LinkId=143600) in MSDN.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">ErrorCategory</command:parameterValue>
+        <dev:type>
+          <maml:name>ErrorCategory</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ErrorId</maml:name>
+        <maml:Description>
+          <maml:para>Specifies an ID string to identify the error. The string should be unique to the error.</maml:para>
+          <maml:para>Specifies an ID string to identify the error. The string should be unique to the error.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>TargetObject</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the object that was being processed when the error occurred. Enter the object (such as a string), a variable that contains the object, or a command that gets the object.</maml:para>
+          <maml:para>Specifies the object that was being processed when the error occurred. Enter the object, a variable that contains the object, or a command that gets the object.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <dev:type>
+          <maml:name>Object</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>RecommendedAction</maml:name>
+        <maml:Description>
+          <maml:para>Describes the action that the user should take to resolve or prevent the error.</maml:para>
+          <maml:para>Specifies the action that the user should take to resolve or prevent the error.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Activity">
+        <maml:name>CategoryActivity</maml:name>
+        <maml:Description>
+          <maml:para>Describes the action that caused the error.</maml:para>
+          <maml:para>Specifies the action that caused the error.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="Reason">
+        <maml:name>CategoryReason</maml:name>
+        <maml:Description>
+          <maml:para>Explains how or why the activity caused the error.</maml:para>
+          <maml:para>Specifies how or why the activity caused the error.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="TargetName">
+        <maml:name>CategoryTargetName</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the name of the object that was being processed when the error occurred.</maml:para>
+          <maml:para>Specifies the name of the object that was being processed when the error occurred.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="TargetType">
+        <maml:name>CategoryTargetType</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the type of the object that was being processed when the error occurred.</maml:para>
+          <maml:para>Specifies the type of the object that was being processed when the error occurred.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>You can pipe a string that contains an error message to Write-Error .</maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Error object</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>Error object</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>Write-Error writes only to the error stream. It does not return any objects.</maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Get-ChildItem | ForEach-Object { if ($_.GetType().ToString() -eq "Microsoft.Win32.RegistryKey") {Write-Error "Invalid object" -ErrorID B1 -Targetobject $_ } else {$_ } }</dev:code>
+        <dev:remarks>
+          <maml:para>This command declares a non-terminating error when the Get-ChildItem cmdlet returns a Microsoft.Win32.RegistryKey object, such as the objects in the HKLM: or HKCU: drives of the Windows PowerShell Registry provider.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>Write-Error "Access denied."</dev:code>
+        <dev:remarks>
+          <maml:para>This command declares a non-terminating error and writes an "Access denied" error. The command uses the Message parameter to specify the message, but omits the optional Message parameter name.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>Write-Error -Message "Error: Too many input values." -Category InvalidArgument</dev:code>
+        <dev:remarks>
+          <maml:para>This command declares a non-terminating error and specifies an error category.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>$e = [System.Exception]@{$e = [System.Exception]@{Source="Get-ParameterNames.ps1";HelpLink="http://go.microsoft.com/fwlink/?LinkID=113425"}HelpLink="http://go.microsoft.com/fwlink/?LinkID=113425"}</dev:code>
+        <dev:remarks>
+          <maml:para>PS C:\&gt; Write-Error $e -Message "Files not found. The $Files location does not contain any XML files." This command uses an Exception object to declare a non-terminating error. The first command uses a hash table to create the System.Exception object. It saves the exception object in the $e variable. You can use a hash table to create any object of a type that has a null constructor. The second command uses the Write-Error cmdlet to declare a non-terminating error. The value of the Exception parameter is the Exception object in the $e variable.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 1: Write an error for RegistryKey object</maml:title>
+        <dev:code>PS C:\&gt;Get-ChildItem | ForEach-Object { if ($_.GetType().ToString() -eq "Microsoft.Win32.RegistryKey") {Write-Error "Invalid object" -ErrorID B1 -Targetobject $_ } else {$_ } }</dev:code>
+        <dev:remarks>
+          <maml:para>This command declares a non-terminating error when the Get-ChildItem cmdlet returns a Microsoft.Win32.RegistryKey object, such as the objects in the HKLM: or HKCU: drives of the Windows PowerShell Registry provider.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 2: Write an error message to the console</maml:title>
+        <dev:code>PS C:\&gt;Write-Error "Access denied."</dev:code>
+        <dev:remarks>
+          <maml:para>This command declares a non-terminating error and writes an "Access denied" error. The command uses the Message parameter to specify the message, but omits the optional Message parameter name.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 3: Write an error to the console and specify the category</maml:title>
+        <dev:code>PS C:\&gt;Write-Error -Message "Error: Too many input values." -Category InvalidArgument</dev:code>
+        <dev:remarks>
+          <maml:para>This command declares a non-terminating error and specifies an error category.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 4: Write an error using an Exception object</maml:title>
+        <dev:code>PS C:\&gt;$E = [System.Exception]@{$e = [System.Exception]@{Source="Get-ParameterNames.ps1";HelpLink="http://go.microsoft.com/fwlink/?LinkID=113425"}HelpLink="http://go.microsoft.com/fwlink/?LinkID=113425"}
+PS C:\&gt; Write-Error $E -Message "Files not found. The $Files location does not contain any XML files."</dev:code>
+        <dev:remarks>
+          <maml:para>This command uses an Exception object to declare a non-terminating error.</maml:para>
+          <maml:para>The first command uses a hash table to create the System.Exception object. It saves the exception object in the $E variable. You can use a hash table to create any object of a type that has a null constructor.</maml:para>
+          <maml:para>The second command uses the Write-Error cmdlet to declare a non-terminating error. The value of the Exception parameter is the Exception object in the $E variable.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://go.microsoft.com/fwlink/?LinkId=821875</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Debug</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Host</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Output</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Progress</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Verbose</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Warning</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Write-Host</command:name>
+      <command:verb>Write</command:verb>
+      <command:noun>Host</command:noun>
+      <maml:description>
+        <maml:para>Writes customized output to a host. Writes customized output to a host.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Write-Host cmdlet customizes output. You can specify the color of text by using the ForegroundColor parameter, and you can specify the background color by using the BackgroundColor parameter. The Separator parameter lets you specify a string to use to separate displayed objects. The particular result depends on the program that is hosting Windows PowerShell.</maml:para>
+      <maml:para>The Write-Host cmdlet customizes output. You can specify the color of text by using the ForegroundColor parameter, and you can specify the background color by using the BackgroundColor parameter. The Separator parameter lets you specify a string to use to separate displayed objects. The particular result depends on the program that is hosting Windows PowerShell.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Write-Host</maml:name>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="none">
+          <maml:name>Object</maml:name>
+          <maml:Description>
+            <maml:para>Objects to display in the console.</maml:para>
+            <maml:para>Specifies objects to display in the console.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <dev:type>
+            <maml:name>Object</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>NoNewline</maml:name>
+          <maml:Description>
+            <maml:para>Specifies that the content displayed in the console does not end with a newline character.</maml:para>
+            <maml:para>Specifies that the content displayed in the console does not end with a newline character.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>Separator</maml:name>
+          <maml:Description>
+            <maml:para>String to the output between objects displayed on the console.</maml:para>
+            <maml:para>Specifies a separator string to the output between objects displayed on the console.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+          <dev:type>
+            <maml:name>Object</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>ForegroundColor</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the text color. There is no default.</maml:para>
+            <maml:para>Specifies the text color. There is no default. The acceptable values for this parameter are:</maml:para>
+            <maml:para>- Black</maml:para>
+            <maml:para>- DarkBlue</maml:para>
+            <maml:para>- DarkGreen</maml:para>
+            <maml:para>- DarkCyan</maml:para>
+            <maml:para>- DarkRed</maml:para>
+            <maml:para>- DarkMagenta</maml:para>
+            <maml:para>- DarkYellow</maml:para>
+            <maml:para>- Gray</maml:para>
+            <maml:para>- DarkGray</maml:para>
+            <maml:para>- Blue</maml:para>
+            <maml:para>- Green</maml:para>
+            <maml:para>- Cyan</maml:para>
+            <maml:para>- Red</maml:para>
+            <maml:para>- Magenta</maml:para>
+            <maml:para>- Yellow</maml:para>
+            <maml:para>- White</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Black</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkBlue</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkGreen</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkCyan</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkRed</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkMagenta</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkYellow</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Gray</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkGray</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Blue</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Green</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Cyan</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Red</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Magenta</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Yellow</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">White</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">ConsoleColor</command:parameterValue>
+          <dev:type>
+            <maml:name>ConsoleColor</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>BackgroundColor</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the background color. There is no default.</maml:para>
+            <maml:para>Specifies the background color. There is no default. The acceptable values for this parameter are:</maml:para>
+            <maml:para>- Black</maml:para>
+            <maml:para>- DarkBlue</maml:para>
+            <maml:para>- DarkGreen</maml:para>
+            <maml:para>- DarkCyan</maml:para>
+            <maml:para>- DarkRed</maml:para>
+            <maml:para>- DarkMagenta</maml:para>
+            <maml:para>- DarkYellow</maml:para>
+            <maml:para>- Gray</maml:para>
+            <maml:para>- DarkGray</maml:para>
+            <maml:para>- Blue</maml:para>
+            <maml:para>- Green</maml:para>
+            <maml:para>- Cyan</maml:para>
+            <maml:para>- Red</maml:para>
+            <maml:para>- Magenta</maml:para>
+            <maml:para>- Yellow</maml:para>
+            <maml:para>- White</maml:para>
+          </maml:Description>
+          <command:parameterValueGroup>
+            <command:parameterValue required="false" command:variableLength="false">Black</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkBlue</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkGreen</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkCyan</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkRed</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkMagenta</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkYellow</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Gray</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">DarkGray</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Blue</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Green</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Cyan</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Red</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Magenta</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">Yellow</command:parameterValue>
+            <command:parameterValue required="false" command:variableLength="false">White</command:parameterValue>
+          </command:parameterValueGroup>
+          <command:parameterValue required="true" variableLength="false">ConsoleColor</command:parameterValue>
+          <dev:type>
+            <maml:name>ConsoleColor</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="none">
+        <maml:name>Object</maml:name>
+        <maml:Description>
+          <maml:para>Objects to display in the console.</maml:para>
+          <maml:para>Specifies objects to display in the console.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <dev:type>
+          <maml:name>Object</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>NoNewline</maml:name>
+        <maml:Description>
+          <maml:para>Specifies that the content displayed in the console does not end with a newline character.</maml:para>
+          <maml:para>Specifies that the content displayed in the console does not end with a newline character.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>Separator</maml:name>
+        <maml:Description>
+          <maml:para>String to the output between objects displayed on the console.</maml:para>
+          <maml:para>Specifies a separator string to the output between objects displayed on the console.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">Object</command:parameterValue>
+        <dev:type>
+          <maml:name>Object</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>ForegroundColor</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the text color. There is no default.</maml:para>
+          <maml:para>Specifies the text color. There is no default. The acceptable values for this parameter are:</maml:para>
+          <maml:para>- Black</maml:para>
+          <maml:para>- DarkBlue</maml:para>
+          <maml:para>- DarkGreen</maml:para>
+          <maml:para>- DarkCyan</maml:para>
+          <maml:para>- DarkRed</maml:para>
+          <maml:para>- DarkMagenta</maml:para>
+          <maml:para>- DarkYellow</maml:para>
+          <maml:para>- Gray</maml:para>
+          <maml:para>- DarkGray</maml:para>
+          <maml:para>- Blue</maml:para>
+          <maml:para>- Green</maml:para>
+          <maml:para>- Cyan</maml:para>
+          <maml:para>- Red</maml:para>
+          <maml:para>- Magenta</maml:para>
+          <maml:para>- Yellow</maml:para>
+          <maml:para>- White</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">ConsoleColor</command:parameterValue>
+        <dev:type>
+          <maml:name>ConsoleColor</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>BackgroundColor</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the background color. There is no default.</maml:para>
+          <maml:para>Specifies the background color. There is no default. The acceptable values for this parameter are:</maml:para>
+          <maml:para>- Black</maml:para>
+          <maml:para>- DarkBlue</maml:para>
+          <maml:para>- DarkGreen</maml:para>
+          <maml:para>- DarkCyan</maml:para>
+          <maml:para>- DarkRed</maml:para>
+          <maml:para>- DarkMagenta</maml:para>
+          <maml:para>- DarkYellow</maml:para>
+          <maml:para>- Gray</maml:para>
+          <maml:para>- DarkGray</maml:para>
+          <maml:para>- Blue</maml:para>
+          <maml:para>- Green</maml:para>
+          <maml:para>- Cyan</maml:para>
+          <maml:para>- Red</maml:para>
+          <maml:para>- Magenta</maml:para>
+          <maml:para>- Yellow</maml:para>
+          <maml:para>- White</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">ConsoleColor</command:parameterValue>
+        <dev:type>
+          <maml:name>ConsoleColor</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Object</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Object</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>You can pipe objects to be written to the host.</maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>Write-Host sends the objects to the host. It does not return any objects. However, the host might display the objects that Write-Host sends to it.</maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>write-host "no newline test " -nonewline</dev:code>
+        <dev:remarks>
+          <maml:para>no newline test PS C:\&gt; This command displays the input to the console, but because of the NoNewline parameter, the output is followed directly by the prompt.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>write-host (2,4,6,8,10,12) -Separator ", +2= "</dev:code>
+        <dev:remarks>
+          <maml:para>2, +2= 4, +2= 6, +2= 8, +2= 10, +2= 12 This command displays the even numbers from 2 through 12. The Separator parameter is used to add the string , +2= (comma, space, +, 2, =, space).</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>write-host (2,4,6,8,10,12) -Separator ", -&gt; " -foregroundcolor DarkGreen -backgroundcolor white</dev:code>
+        <dev:remarks>
+          <maml:para>This command displays the even numbers from 2 through 12. It uses the ForegroundColor parameter to output dark green text and the BackgroundColor parameter to display a white background.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>write-host "Red on white text." -ForegroundColor red -BackgroundColor white</dev:code>
+        <dev:remarks>
+          <maml:para>Red on white text. This command displays the string "Red on white text." The text is red, as defined by the ForegroundColor parameter. The background is white, as defined by the BackgroundColor parameter.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 1: Write to the console without adding a new line</maml:title>
+        <dev:code>PS C:\&gt;Write-Host "no newline test " -NoNewline
+no newline test PS C:\&gt;</dev:code>
+        <dev:remarks>
+          <maml:para>This command displays the input to the console, but because of the NoNewline parameter, the output is followed directly by the prompt.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 2: Write to the console and include a separator</maml:title>
+        <dev:code>PS C:\&gt;Write-Host (2,4,6,8,10,12) -Separator ", +2= "
+2, +2= 4, +2= 6, +2= 8, +2= 10, +2= 12</dev:code>
+        <dev:remarks>
+          <maml:para>This command displays the even numbers from 2 through 12. The Separator parameter is used to add the string ", +2= (comma, space, +, 2, =, space)".</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 3: Write with different text and background colors</maml:title>
+        <dev:code>PS C:\&gt;Write-Host (2,4,6,8,10,12) -Separator ", -&gt; " -ForegroundColor DarkGreen -BackgroundColor white</dev:code>
+        <dev:remarks>
+          <maml:para>This command displays the even numbers from 2 through 12. It uses the ForegroundColor parameter to output dark green text and the BackgroundColor parameter to display a white background.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 4: Write with different text and background colors</maml:title>
+        <dev:code>PS C:\&gt;Write-Host "Red on white text." -ForegroundColor red -BackgroundColor white
+Red on white text.</dev:code>
+        <dev:remarks>
+          <maml:para>This command displays the string "Red on white text." The text is red, as defined by the ForegroundColor parameter. The background is white, as defined by the BackgroundColor parameter.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://go.microsoft.com/fwlink/?LinkId=821876</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Clear-Host</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Debug</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Error</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Output</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Progress</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Verbose</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Warning</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Write-Output</command:name>
+      <command:verb>Write</command:verb>
+      <command:noun>Output</command:noun>
+      <maml:description>
+        <maml:para>Sends the specified objects to the next command in the pipeline. If the command is the last command in the pipeline, the objects are displayed in the console. Sends the specified objects to the next command in the pipeline. If the command is the last command in the pipeline, the objects are displayed in the console.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Write-Output cmdlet sends the specified object down the pipeline to the next command. If the command is the last command in the pipeline, the object is displayed in the console.</maml:para>
+      <maml:para>Write-Output sends objects down the primary pipeline, also known as the "output stream" or the "success pipeline." To send error objects down the error pipeline, use Write-Error.</maml:para>
+      <maml:para>This cmdlet is typically used in scripts to display strings and other objects on the console. However, because the default behavior is to display the objects at the end of a pipeline, it is generally not necessary to use the cmdlet. For example, "get-process | write-output" is equivalent to "get-process".</maml:para>
+      <maml:para>The Write-Output cmdlet sends the specified object down the pipeline to the next command. If the command is the last command in the pipeline, the object is displayed in the console. Write-Output sends objects down the primary pipeline, also known as the "output stream" or the "success pipeline." To send error objects down the error pipeline, use Write-Error.</maml:para>
+      <maml:para>This cmdlet is typically used in scripts to display strings and other objects on the console. However, because the default behavior is to display the objects at the end of a pipeline, it is generally not necessary to use the cmdlet. For instance, `Get-Process | Write-Output` is equivalent to `Get-Process`.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Write-Output</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="none">
+          <maml:name>InputObject</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the objects to send down the pipeline. Enter a variable that contains the objects, or type a command or expression that gets the objects.</maml:para>
+            <maml:para>Specifies the objects to send down the pipeline. Enter a variable that contains the objects, or type a command or expression that gets the objects.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">PSObject[]</command:parameterValue>
+          <dev:type>
+            <maml:name>PSObject[]</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+          <maml:name>NoEnumerate</maml:name>
+          <maml:Description>
+            <maml:para>By default, the Write-Output cmdlet always enumerates its output. The NoEnumerate parameter suppresses the default behavior, and prevents Write-Output from enumerating output. The NoEnumerate parameter has no effect on collections that were created by wrapping commands in parentheses, because the parentheses force enumeration.</maml:para>
+            <maml:para>By default, the Write-Output cmdlet always enumerates its output. The NoEnumerate parameter suppresses the default behavior, and prevents Write-Output from enumerating output. The NoEnumerate parameter has no effect on collections that were created by wrapping commands in parentheses, because the parentheses force enumeration.</maml:para>
+          </maml:Description>
+          <dev:type>
+            <maml:name>SwitchParameter</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>False</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="none">
+        <maml:name>InputObject</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the objects to send down the pipeline. Enter a variable that contains the objects, or type a command or expression that gets the objects.</maml:para>
+          <maml:para>Specifies the objects to send down the pipeline. Enter a variable that contains the objects, or type a command or expression that gets the objects.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">PSObject[]</command:parameterValue>
+        <dev:type>
+          <maml:name>PSObject[]</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="named" aliases="none">
+        <maml:name>NoEnumerate</maml:name>
+        <maml:Description>
+          <maml:para>By default, the Write-Output cmdlet always enumerates its output. The NoEnumerate parameter suppresses the default behavior, and prevents Write-Output from enumerating output. The NoEnumerate parameter has no effect on collections that were created by wrapping commands in parentheses, because the parentheses force enumeration.</maml:para>
+          <maml:para>By default, the Write-Output cmdlet always enumerates its output. The NoEnumerate parameter suppresses the default behavior, and prevents Write-Output from enumerating output. The NoEnumerate parameter has no effect on collections that were created by wrapping commands in parentheses, because the parentheses force enumeration.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="false" variableLength="false">SwitchParameter</command:parameterValue>
+        <dev:type>
+          <maml:name>SwitchParameter</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>False</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSObject</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSObject</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>You can pipe objects to Write-Output .</maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSObject</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>System.Management.Automation.PSObject</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>Write-Output returns the objects that are submitted as input.</maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para></maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>$p = get-process</dev:code>
+        <dev:remarks>
+          <maml:para>PS C:\&gt;write-output $p PS C:\&gt;$p These commands get objects representing the processes running on the computer and display the objects on the console.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>write-output "test output" | get-member</dev:code>
+        <dev:remarks>
+          <maml:para>This command pipes the "test output" string to the Get-Member cmdlet, which displays the members of the String class, demonstrating that the string was passed along the pipeline.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>write-output @(1,2,3) | measure</dev:code>
+        <dev:remarks>
+          <maml:para>Count    : 3</maml:para>
+          <maml:para>PS C:\&gt;write-output @(1,2,3) -NoEnumerate | measure</maml:para>
+          <maml:para>Count    : 1 This command adds the NoEnumerate parameter to treat a collection or array as a single object through the pipeline.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 1: Get objects and write them to the console</maml:title>
+        <dev:code>PS C:\&gt; $P = Get-Process
+PS C:\&gt; Write-Output $P
+PS C:\&gt; $P</dev:code>
+        <dev:remarks>
+          <maml:para>The first command gets processes running on the computer and stores them in the $P variable.</maml:para>
+          <maml:para>The second and third commands display the process objects in $P on the console.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 2: Pass output to another cmdlet</maml:title>
+        <dev:code>PS C:\&gt; Write-Output "test output" | Get-Member</dev:code>
+        <dev:remarks>
+          <maml:para>This command pipes the "test output" string to the Get-Member cmdlet, which displays the members of the System.String class, demonstrating that the string was passed along the pipeline.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 3: Suppress enumeration in output</maml:title>
+        <dev:code>PS C:\&gt; Write-Output @(1,2,3) | measure
+
+Count    : 3
+...
+
+PS C:\&gt; Write-Output @(1,2,3) -NoEnumerate | measure
+
+Count    : 1</dev:code>
+        <dev:remarks>
+          <maml:para>This command adds the NoEnumerate parameter to treat a collection or array as a single object through the pipeline.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://go.microsoft.com/fwlink/?LinkId=821878</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Tee-Object</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Debug</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Error</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Host</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Information</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Progress</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Verbose</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Warning</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Write-Verbose</command:name>
+      <command:verb>Write</command:verb>
+      <command:noun>Verbose</command:noun>
+      <maml:description>
+        <maml:para>Writes text to the verbose message stream. Writes text to the verbose message stream.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Write-Verbose cmdlet writes text to the verbose message stream in Windows PowerShell. Typically, the verbose message stream is used to deliver information about command processing that is used for debugging a command.</maml:para>
+      <maml:para>By default, the verbose message stream is not displayed, but you can display it by changing the value of the $VerbosePreference variable or using the Verbose common parameter in any command.</maml:para>
+      <maml:para>The Write-Verbose cmdlet writes text to the verbose message stream in Windows PowerShell. Typically, the verbose message stream is used to deliver information about command processing that is used for debugging a command.</maml:para>
+      <maml:para>By default, the verbose message stream is not displayed, but you can display it by changing the value of the $VerbosePreference variable or using the Verbose common parameter in any command.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Write-Verbose</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="Msg">
+          <maml:name>Message</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the message to display. This parameter is required. You can also pipe a message string to Write-Verbose .</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="Msg">
+        <maml:name>Message</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the message to display. This parameter is required. You can also pipe a message string to Write-Verbose .</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>You can pipe a string that contains the message to Write-Verbose .</maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>Write-Verbose writes only to the verbose message stream.</maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>Verbose messages are returned only when the command uses the Verbose common parameter. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216). In Windows PowerShell background jobs and remote commands, the $VerbosePreference variable in the job session and remote session determine whether the verbose message is displayed by default. For more information about the $VerbosePreference variable, see about_Preference_Variables (http://go.microsoft.com/fwlink/?LinkID=113248).</maml:para>
+        <maml:para>Verbose messages are returned only when the command uses the Verbose * common parameter. For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216). In Windows PowerShell background jobs and remote commands, the $VerbosePreference variable in the job session and remote session determine whether the verbose message is displayed by default. For more information about the $VerbosePreference * variable, see about_Preference_Variables (http://go.microsoft.com/fwlink/?LinkID=113248).</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>Write-Verbose -Message "Searching the Application Event Log."</dev:code>
+        <dev:remarks>
+          <maml:para>PS C:\&gt;Write-Verbose -Message "Searching the Application Event Log." -verbose These commands use the Write-Verbose cmdlet to display a status message. By default, the message is not displayed. The second command uses the Verbose common parameter, which displays any verbose messages, regardless of the value of the $VerbosePreference variable.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>$VerbosePreference = "Continue"</dev:code>
+        <dev:remarks>
+          <maml:para>PS C:\&gt;Write-Verbose "Copying file $filename" These commands use the Write-Verbose cmdlet to display a status message. By default, the message is not displayed. The first command assigns a value of "Continue" to the $VerbosePreference preference variable. The default value, "SilentlyContinue", suppresses verbose messages. The second command writes a verbose message.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 1: Write a status message</maml:title>
+        <dev:code>PS C:\&gt;Write-Verbose -Message "Searching the Application Event Log."
+PS C:\&gt;Write-Verbose -Message "Searching the Application Event Log." -Verbose</dev:code>
+        <dev:remarks>
+          <maml:para>These commands use the Write-Verbose cmdlet to display a status message. By default, the message is not displayed.</maml:para>
+          <maml:para>The second command uses the Verbose common parameter, which displays any verbose messages, regardless of the value of the $VerbosePreference variable.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 2: Set $VerbosePreference and write a status message</maml:title>
+        <dev:code>PS C:\&gt;$VerbosePreference = "Continue"
+PS C:\&gt;Write-Verbose "Copying file $filename"</dev:code>
+        <dev:remarks>
+          <maml:para>These commands use the Write-Verbose cmdlet to display a status message. By default, the message is not displayed.</maml:para>
+          <maml:para>The first command assigns a value of Continue to the $VerbosePreference preference variable. The default value, SilentlyContinue, suppresses verbose messages. The second command writes a verbose message.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://go.microsoft.com/fwlink/?LinkId=821880</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Debug</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Error</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Host</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Information</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Output</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Progress</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Warning</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+  <command:command xmlns:maml="http://schemas.microsoft.com/maml/2004/10" xmlns:command="http://schemas.microsoft.com/maml/dev/command/2004/10" xmlns:dev="http://schemas.microsoft.com/maml/dev/2004/10" xmlns:MSHelp="http://msdn.microsoft.com/mshelp">
+    <command:details>
+      <command:name>Write-Warning</command:name>
+      <command:verb>Write</command:verb>
+      <command:noun>Warning</command:noun>
+      <maml:description>
+        <maml:para>Writes a warning message. Writes a warning message.</maml:para>
+      </maml:description>
+    </command:details>
+    <maml:description>
+      <maml:para>The Write-Warning cmdlet writes a warning message to the Windows PowerShell host. The response to the warning depends on the value of the user's $WarningPreference variable and the use of the WarningAction common parameter.</maml:para>
+      <maml:para>The Write-Warning cmdlet writes a warning message to the Windows PowerShell host. The response to the warning depends on the value of the user's $WarningPreference variable and the use of the WarningAction common parameter.</maml:para>
+    </maml:description>
+    <command:syntax>
+      <command:syntaxItem>
+        <maml:name>Write-Warning</maml:name>
+        <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="Msg">
+          <maml:name>Message</maml:name>
+          <maml:Description>
+            <maml:para>Specifies the warning message.</maml:para>
+          </maml:Description>
+          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+          <dev:type>
+            <maml:name>String</maml:name>
+            <maml:uri />
+          </dev:type>
+          <dev:defaultValue>None</dev:defaultValue>
+        </command:parameter>
+      </command:syntaxItem>
+    </command:syntax>
+    <command:parameters>
+      <command:parameter required="true" variableLength="true" globbing="false" pipelineInput="True (ByValue)" position="0" aliases="Msg">
+        <maml:name>Message</maml:name>
+        <maml:Description>
+          <maml:para>Specifies the warning message.</maml:para>
+        </maml:Description>
+        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
+        <dev:type>
+          <maml:name>String</maml:name>
+          <maml:uri />
+        </dev:type>
+        <dev:defaultValue>None</dev:defaultValue>
+      </command:parameter>
+    </command:parameters>
+    <command:inputTypes>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:inputType>
+      <command:inputType>
+        <dev:type>
+          <maml:name>System.String</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>You can pipe a string that contains the warning to Write-Warning .</maml:para>
+        </maml:description>
+      </command:inputType>
+    </command:inputTypes>
+    <command:returnValues>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para></maml:para>
+        </maml:description>
+      </command:returnValue>
+      <command:returnValue>
+        <dev:type>
+          <maml:name>None</maml:name>
+        </dev:type>
+        <maml:description>
+          <maml:para>Write-Warning writes only to the warning stream. It does not generate any other output.</maml:para>
+        </maml:description>
+      </command:returnValue>
+    </command:returnValues>
+    <maml:alertSet>
+      <maml:alert>
+        <maml:para>The default value for the $WarningPreference variable is "Continue", which displays the warning and then continues executing the command. To determine valid values for a preference variable such as $WarningPreference, set it to a string of random characters, such as "abc". The resulting error message will list the valid values.</maml:para>
+        <maml:para>* The default value for the $WarningPreference variable is Continue, which displays the warning and then continues executing the command. To determine valid values for a preference variable such as $WarningPreference, set it to a string of random characters, such as "abc". The resulting error message will list the valid values.</maml:para>
+        <maml:para>*</maml:para>
+      </maml:alert>
+    </maml:alertSet>
+    <command:examples>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
+        <dev:code>write-warning "This is only a test warning."</dev:code>
+        <dev:remarks>
+          <maml:para>This command displays the message "WARNING: This is only a test warning."</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
+        <dev:code>$w = "This is only a test warning."</dev:code>
+        <dev:remarks>
+          <maml:para>PS C:\&gt;$w | write-warning This example shows that you can use a pipeline operator (|) to send a string to Write-Warning. You can save the string in a variable, as shown in this command, or pipe the string directly to Write-Warning.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 3 --------------------------</maml:title>
+        <dev:code>$warningpreference</dev:code>
+        <dev:remarks>
+          <maml:para>Continue</maml:para>
+          <maml:para>PS C:\&gt;write-warning "This is only a test warning." This is only a test warning.</maml:para>
+          <maml:para>PS C:\&gt;$warningpreference = "SilentlyContinue" PS C:\&gt;write-warning "This is only a test warning." PS C:\&gt; PS C:\&gt;$warningpreference = "Stop" PS C:\&gt;write-warning "This is only a test warning."</maml:para>
+          <maml:para>WARNING: This is only a test message. Write-Warning : Command execution stopped because the shell variable "WarningPreference" is set to Stop. At line:1 char:14 + write-warning &lt;&lt;&lt;&lt;  "This is only a test message." This example shows the effect of the value of the $WarningPreference variable on a Write-Warning command. The first command displays the default value of the $WarningPreference variable, which is "Continue". As a result, when you write a warning, the warning message is displayed and execution continues. When you change the value of the $WarningPreference variable, the effect of the Write-Warning command changes again. A value of "SilentlyContinue" suppresses the warning. A value of "Stop" displays the warning and then stops execution of the command. For more information about the $WarningPreference variable, see about_Preference_Variables.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>-------------------------- EXAMPLE 4 --------------------------</maml:title>
+        <dev:code>write-warning "This is only a test warning." -warningaction Inquire</dev:code>
+        <dev:remarks>
+          <maml:para>WARNING: This is only a test warning. Confirm Continue with this operation? [Y] Yes  [A] Yes to All  [H] Halt Command  [S] Suspend  [?] Help (default is "Y"): This example shows the effect of the WarningAction common parameter on a Write-Warning command. You can use the WarningAction common parameter with any cmdlet to determine how Windows PowerShell responds to warnings resulting from that command. The WarningAction common parameter overrides the value of the $WarningPreference only for that particular command. This command uses the Write-Warning cmdlet to display a warning. The WarningAction common parameter with a value of "Inquire" directs the system to prompt the user when the command displays a warning. For more information about the WarningAction common parameter, see about_CommonParameters.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 1: Write a warning message</maml:title>
+        <dev:code>PS C:\&gt;Write-Warning "This is only a test warning."</dev:code>
+        <dev:remarks>
+          <maml:para>This command displays the message "WARNING: This is only a test warning."</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 2: Pass a string to Write-Warning</maml:title>
+        <dev:code>PS C:\&gt;$w = "This is only a test warning."
+PS C:\&gt;$w | Write-Warning</dev:code>
+        <dev:remarks>
+          <maml:para>This command shows that you can use a pipeline operator (|) to send a string to Write-Warning . You can save the string in a variable, as shown in this command, or pipe the string directly to Write-Warning .</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 3: Set the $WarningPreference variable and write a warning</maml:title>
+        <dev:code>PS C:\&gt;$warningpreference
+Continue PS C:\&gt;Write-Warning "This is only a test warning."
+This is only a test warning. PS C:\&gt;$warningpreference = "SilentlyContinue"
+PS C:\&gt;Write-Warning "This is only a test warning."
+PS C:\&gt;
+PS C:\&gt;$warningpreference = "Stop"
+PS C:\&gt;Write-Warning "This is only a test warning."
+WARNING: This is only a test message. 
+Write-Warning : Command execution stopped because the shell variable "WarningPreference" is set to Stop. 
+At line:1 char:14
+     + Write-Warning &lt;&lt;&lt;&lt;  "This is only a test message."</dev:code>
+        <dev:remarks>
+          <maml:para>This example shows the effect of the value of the $WarningPreference variable on a Write-Warning command.</maml:para>
+          <maml:para>The first command displays the default value of the $WarningPreference variable, which is Continue. As a result, when you write a warning, the warning message is displayed and execution continues.</maml:para>
+          <maml:para>When you change the value of the $WarningPreference variable, the effect of the Write-Warning command changes again. A value of SilentlyContinue suppresses the warning. A value of Stop displays the warning and then stops execution of the command.</maml:para>
+          <maml:para>For more information about the $WarningPreference variable, see about_Preference_Variables.</maml:para>
+        </dev:remarks>
+      </command:example>
+      <command:example>
+        <maml:title>Example 4: Set the WarningAction parameter and write a warning</maml:title>
+        <dev:code>PS C:\&gt;Write-Warning "This is only a test warning." -WarningAction Inquire
+WARNING: This is only a test warning. 
+Confirm
+Continue with this operation? 
+ [Y] Yes  [A] Yes to All  [H] Halt Command  [S] Suspend  [?] Help (default is "Y"):</dev:code>
+        <dev:remarks>
+          <maml:para>This example shows the effect of the WarningAction common parameter on a Write-Warning command. You can use the WarningAction common parameter with any cmdlet to determine how Windows PowerShell responds to warnings resulting from that command. The WarningAction common parameter overrides the value of the $WarningPreference only for that particular command.</maml:para>
+          <maml:para>This command uses the Write-Warning cmdlet to display a warning. The WarningAction common parameter with a value of Inquire directs the system to prompt the user when the command displays a warning.</maml:para>
+          <maml:para>For more information about the WarningAction common parameter, see about_CommonParameters.</maml:para>
+        </dev:remarks>
+      </command:example>
+    </command:examples>
+    <command:relatedLinks>
+      <maml:navigationLink>
+        <maml:linkText>Online Version:</maml:linkText>
+        <maml:uri>http://go.microsoft.com/fwlink/?LinkId=821881</maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Debug</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Error</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Host</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Information</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Output</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Progress</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+      <maml:navigationLink>
+        <maml:linkText>Write-Verbose</maml:linkText>
+        <maml:uri></maml:uri>
+      </maml:navigationLink>
+    </command:relatedLinks>
+  </command:command>
+</helpItems>
