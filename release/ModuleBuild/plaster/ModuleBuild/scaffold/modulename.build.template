@@ -503,18 +503,21 @@ task CreateMarkdownHelp GetPublicFunctions, {
 
     # Create the function .md files and the generic module page md as well for the distributable module
     $null = New-MarkdownHelp -module $Script:BuildEnv.ModuleToBuild -OutputFolder "$($StageReleasePath)\docs\" -Force -WithModulePage -Locale 'en-US' -FwLink $FwLink -HelpVersion $Script:BuildEnv.ModuleVersion -Encoding ([System.Text.Encoding]::($Script:BuildEnv.Encoding))
-
-    # Replace each missing element we need for a proper generic module page .md file
+    <#
+     Replace each missing element we need for a proper generic module page .md file
+     Also replace the blank Guid 00000000-0000-0000-0000-000000000000 with the actual module guid
+     (PlatyPS won't know what this is as our module in memory is loaded from the psm1 file not the actual manifest file)
+    #>
     $ModulePageFileContent = Get-Content -raw $ModulePage
     $ModulePageFileContent = $ModulePageFileContent -replace '{{Manually Enter Description Here}}', $Script:Manifest.Description
     $Script:FunctionsToExport | Foreach-Object {
         Write-Description White "Updating definition for the following function: $($_)" -Level 2
         $TextToReplace = "{{Manually Enter $($_) Description Here}}"
         $ReplacementText = (Get-Help -Detailed $_).Synopsis
-        $ModulePageFileContent = $ModulePageFileContent -replace $TextToReplace, $ReplacementText
+        $ModulePageFileContent = $ModulePageFileContent -replace $TextToReplace, $ReplacementText `
+                                  -replace '00000000-0000-0000-0000-000000000000', ($Script:Manifest.Guid).ToString()
     }
     $ModulePageFileContent | Out-File $ModulePage -Force -Encoding $Script:BuildEnv.Encoding
-
     $MissingDocumentation = Select-String -Path "$($StageReleasePath)\docs\*.md" -Pattern "({{.*}})"
 
     if ($MissingDocumentation.Count -gt 0) {
@@ -525,9 +528,7 @@ task CreateMarkdownHelp GetPublicFunctions, {
         Write-Build White ''
         Write-Build Yellow "Path of files with issues: $($StageReleasePath)\docs\"
         Write-Build White ''
-
         $MissingDocumentation | Select-Object Path, LineNumber, Line | Format-Table -auto
-
         Write-Build Yellow ''
         pause
 
@@ -819,6 +820,18 @@ task PreBuildTasks {
     }
 }
 
+# Synopsis: Run post-build scripts (such as file transformations or deployments)
+task PostBuildTasks {
+    Write-Description White 'Running any Post-Build scripts' -accent
+    $BuildToolPath = Join-Path $BuildRoot $Script:BuildEnv.BuildToolFolder
+    $CleanupPath = Join-Path $BuildToolPath 'shutdown'
+    # Dot source any post build cleanup scripts.
+    Get-ChildItem -Path $CleanupPath -Recurse -Filter "*.ps1" -File | Foreach {
+        Write-Description White "Dot sourcing shutdown script file: $($_.Name)" -Level 3
+        . $_.FullName
+    }
+}
+
 # Synopsis: Remove session artifacts like loaded modules and variables
 task BuildSessionCleanup {
     Write-Description White 'Cleaning up the build session' -accent
@@ -831,16 +844,9 @@ task BuildSessionCleanup {
         Remove-Module $_ -Erroraction Ignore
     }
 
-    Write-Description White "Removing $($Script:BuildEnv.ModuleToBuild) module  (if loaded)." -Level 3
+    Write-Description White "Removing $($Script:BuildEnv.ModuleToBuild) module (if loaded)." -Level 3
     Remove-Module $Script:BuildEnv.ModuleToBuild -Erroraction Ignore
 
-    # Dot source any post build cleanup scripts.
-    Write-Description White "Runing post-build scripts" -Level 2
-    $CleanupPath = Join-Path $BuildToolPath 'shutdown'
-    Get-ChildItem -Path $CleanupPath -Recurse -Filter "*.ps1" -File | Foreach {
-        Write-Description White "Dot sourcing shutdown script file: $($_.Name)" -Level 3
-        . $_.FullName
-    }
     if ($Script:BuildEnv.OptionTranscriptEnabled) {
         Stop-Transcript -WarningAction:Ignore
     }
@@ -871,16 +877,16 @@ task GithubPush VersionCheck, {
 }
 
 # Synopsis: Build the module
-task . Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, BuildSessionCleanup
+task . Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, PostBuildTasks, BuildSessionCleanup
 
 # Synopsis: Install and test load the module.
 task InstallAndTestModule InstallModule, TestInstalledModule
 
 # Synopsis: Build, Install, and Test the module
-task BuildInstallAndTestModule Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, BuildSessionCleanup
+task BuildInstallAndTestModule Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, PostBuildTasks, BuildSessionCleanup
 
 # Synopsis: Build, Install, Test, and Publish the module
-task BuildInstallTestAndPublishModule Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, PublishPSGallery, BuildSessionCleanup
+task BuildInstallTestAndPublishModule Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, PublishPSGallery, PostBuildTasks, BuildSessionCleanup
 
 # Synopsis: Instert Comment Based Help where it doesn't already exist (output to scratch directory)
 task InsertMissingCBH Configure, Clean, UpdateCBHtoScratch, BuildSessionCleanup

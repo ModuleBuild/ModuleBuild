@@ -499,18 +499,21 @@ task CreateMarkdownHelp GetPublicFunctions, {
 
     # Create the function .md files and the generic module page md as well for the distributable module
     $null = New-MarkdownHelp -module $Script:BuildEnv.ModuleToBuild -OutputFolder "$($StageReleasePath)\docs\" -Force -WithModulePage -Locale 'en-US' -FwLink $FwLink -HelpVersion $Script:BuildEnv.ModuleVersion -Encoding ([System.Text.Encoding]::($Script:BuildEnv.Encoding))
-
-    # Replace each missing element we need for a proper generic module page .md file
+    <#
+     Replace each missing element we need for a proper generic module page .md file
+     Also replace the blank Guid 00000000-0000-0000-0000-000000000000 with the actual module guid
+     (PlatyPS won't know what this is as our module in memory is loaded from the psm1 file not the actual manifest file)
+    #>
     $ModulePageFileContent = Get-Content -raw $ModulePage
     $ModulePageFileContent = $ModulePageFileContent -replace '{{Manually Enter Description Here}}', $Script:Manifest.Description
     $Script:FunctionsToExport | Foreach-Object {
         Write-Description White "Updating definition for the following function: $($_)" -Level 2
         $TextToReplace = "{{Manually Enter $($_) Description Here}}"
         $ReplacementText = (Get-Help -Detailed $_).Synopsis
-        $ModulePageFileContent = $ModulePageFileContent -replace $TextToReplace, $ReplacementText
+        $ModulePageFileContent = $ModulePageFileContent -replace $TextToReplace, $ReplacementText `
+                                  -replace '00000000-0000-0000-0000-000000000000', ($Script:Manifest.Guid).ToString()
     }
     $ModulePageFileContent | Out-File $ModulePage -Force -Encoding $Script:BuildEnv.Encoding
-
     $MissingDocumentation = Select-String -Path "$($StageReleasePath)\docs\*.md" -Pattern "({{.*}})"
 
     if ($MissingDocumentation.Count -gt 0) {
@@ -802,7 +805,7 @@ task TestInstalledModule VersionCheck, {
     Import-Module -Name $Script:BuildEnv.ModuleToBuild -MinimumVersion $Script:BuildEnv.ModuleVersion -Force
 }
 
-# Synopsis: Run pre-build scripts (such as other builds)
+# Synopsis: Run pre-build scripts (such as other builds). Should be run as a subtask of the configure task.
 task PreBuildTasks {
     Write-Description White 'Running any Pre-Build scripts' -accent
     $BuildToolPath = Join-Path $BuildRoot $Script:BuildEnv.BuildToolFolder
@@ -814,7 +817,7 @@ task PreBuildTasks {
     }
 }
 
-# Synopsis: Run pre-build scripts (such as other builds)
+# Synopsis: Run post-build scripts (such as file transformations or deployments)
 task PostBuildTasks {
     Write-Description White 'Running any Post-Build scripts' -accent
     $BuildToolPath = Join-Path $BuildRoot $Script:BuildEnv.BuildToolFolder
@@ -838,7 +841,7 @@ task BuildSessionCleanup {
         Remove-Module $_ -Erroraction Ignore
     }
 
-    Write-Description White "Removing $($Script:BuildEnv.ModuleToBuild) module  (if loaded)." -Level 3
+    Write-Description White "Removing $($Script:BuildEnv.ModuleToBuild) module (if loaded)." -Level 3
     Remove-Module $Script:BuildEnv.ModuleToBuild -Erroraction Ignore
 
     if ($Script:BuildEnv.OptionTranscriptEnabled) {

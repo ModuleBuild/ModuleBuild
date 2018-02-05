@@ -51,7 +51,8 @@
             "presentation": {
                 "reveal": "always",
                 "panel": "new"
-            }
+            },
+            "problemMatcher": []
         },
         {
             "label": "Build, Install, Load, and Publish Module",
@@ -72,7 +73,8 @@
             "presentation": {
                 "reveal": "always",
                 "panel": "new"
-            }
+            },
+            "problemMatcher": []
         },
         {
             "label": "Insert Missing Comment Based Help",

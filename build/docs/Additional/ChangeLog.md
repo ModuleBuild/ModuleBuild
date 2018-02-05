@@ -5,6 +5,8 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 ## Version 0.2.2
 - Updated vscode tasks.json to fix depreciated syntax.
 - Fixed `-Force` switch processing on Add-PublicFunction to still create the function if the provided name is detected as plural.
+- Fixed [cleanup script modulebuild execution issue](https://github.com/zloeber/ModuleBuild/issues/5) by separating out the postbuildtask into its own Invoke-Build code block (I had done this a while ago and never rolled up the changes into the Plaster template).
+- Fixed a glaring issue with the PlatyPS output where any Guids were 00000000-0000-0000-0000-000000000000 instead of the actual module manifest Guid [reported via issue #6](https://github.com/zloeber/ModuleBuild/issues/6). This happens because we build the module help from the psm1 load of the module in memory, not the psd1 file as that psd1 manifest gets recreated at build time with the appropriate exported functions and such. Basically a chicken/egg scenario. For now we just manually replace the output markdown files with the correct Guid before moving on to the help file packaging.
 
 ## Version 0.2.1
 - Merged pull request #3 to resolve initialization issues for new modules in directories with spaces in their path.
