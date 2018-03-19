@@ -13,7 +13,7 @@ Adds a public function to your modulebuild based project based on defined templa
 ## SYNTAX
 
 ```
-Add-PublicFunction [[-Name] <String>] [-Force] [-TemplateName <String>]
+Add-PublicFunction [[-Name] <String>] [-Force] [-TemplateName <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -21,7 +21,7 @@ Adds a public function to your modulebuild based project.
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 Add-PublicFunction -Name 'New-AwesomeFunction' -TemplateName:PlainPublicFunction
 ```
@@ -35,7 +35,7 @@ Must use a valid PowerShell verb-action format and be singular.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 1
@@ -50,7 +50,7 @@ Ignore function name best practices warnings.
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -65,7 +65,7 @@ Use this template file for the new function
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -73,6 +73,10 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

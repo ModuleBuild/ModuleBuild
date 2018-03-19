@@ -14,7 +14,7 @@ Retrieves private module function definitions and recreates them in your moduleb
 
 ```
 Import-ModulePrivateFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotInsertCBH]
- [[-ExcludePaths] <String[]>] [[-ExcludeFiles] <String[]>] [-WhatIf] [-Confirm]
+ [[-ExcludePaths] <String[]>] [[-ExcludeFiles] <String[]>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -26,7 +26,7 @@ This function will not overwrite any existing private function file of the same 
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 Import-ModulePrivateFunction -ModulePath 'C:\Temp\PSCloudFlare\PSCloudFlare.psd1'
 ```
@@ -41,7 +41,7 @@ Specifies the path to a buildenvironment.json file for an existing modulebuild p
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 1
@@ -57,7 +57,7 @@ Must be a psd1 or psm1 file.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: True
 Position: 2
@@ -73,7 +73,7 @@ If none are specified then all functions will be imported.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 3
@@ -89,7 +89,7 @@ Default for private functions is to skip CBH insertion.
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 4
@@ -104,7 +104,7 @@ Paths within the root of your module source which will be ignored in this import
 ```yaml
 Type: String[]
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 5
@@ -119,7 +119,7 @@ Files, in regex pattern format, that will be ignored in this import.
 ```yaml
 Type: String[]
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 6
@@ -158,6 +158,10 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

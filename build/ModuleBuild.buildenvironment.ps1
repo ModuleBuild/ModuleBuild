@@ -119,20 +119,4 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         Write-Verbose "Exporting the BuildEnv data!"
         $Script:BuildEnv | ConvertTo-Json | Out-File -FilePath $PersistentBuildFile -Encoding $Script:BuildEnv.Encoding -Force
     }
-
-    $RequiredModules = @('PlatyPS', 'Pester')
-
-    # Some optional modules
-    if ($Script:BuildEnv.OptionAnalyzeCode) {
-        $RequiredModules += 'PSScriptAnalyzer'
-    }
-
-    if ($Script:BuildEnv.OptionGenerateReadTheDocs) {
-        $RequiredModules += 'Powershell-YAML'
-    }
-
-    if ($Script:BuildEnv.OptionCodeHealthReport) {
-        $RequiredModules += 'PSCodeHealth'
-    }
-
 }

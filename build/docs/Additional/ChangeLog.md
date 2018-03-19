@@ -2,6 +2,9 @@
 
 Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloeber/ModuleBuild)
 
+## Version 0.2.3
+- Eliminated any customization requirements within the modulename.build.ps1 script to help pave the way for easier modulebuild upgrades to projects.
+- Removed some superfluous code in the base build environment script around the RequiredModules variable.
 ## Version 0.2.2
 - Updated vscode tasks.json to fix depreciated syntax.
 - Fixed `-Force` switch processing on Add-PublicFunction to still create the function if the provided name is detected as plural.

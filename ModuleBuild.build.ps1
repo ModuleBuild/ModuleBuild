@@ -1,6 +1,6 @@
 param (
     [parameter(Position = 0)]
-    [string]$BuildFile = (Join-Path $BuildRoot 'build\ModuleBuild.buildenvironment.ps1'),
+    [string]$BuildFile = @(Get-ChildItem 'build\*.buildenvironment.ps1')[0].FullName,
     [parameter(Position = 1)]
     [version]$NewVersion = $null,
     [parameter(Position = 2)]
@@ -9,8 +9,8 @@ param (
     [switch]$Force
 )
 
-# Basic indented descriptive build output.
 Function Write-Description {
+    # Basic indented descriptive build output.
     param (
         [string]$color = 'White',
         [string]$Description = '',
@@ -33,7 +33,7 @@ if (Test-Path $BuildFile) {
     . $BuildFile
 }
 else {
-    throw "Without a build environment file we are at a loss as to what to      qdo!"
+    throw "Without a build environment file we are at a loss as to what to do!"
 }
 
 if ($Script:BuildEnv.OptionTranscriptEnabled) {
@@ -61,10 +61,13 @@ task LoadRequiredModules {
     if ($Script:BuildEnv.OptionAnalyzeCode) {
         $Script:RequiredModules += 'PSScriptAnalyzer'
     }
-
     if ($Script:BuildEnv.OptionGenerateReadTheDocs) {
         $Script:RequiredModules += 'Powershell-YAML'
     }
+    if ($Script:BuildEnv.OptionCodeHealthReport) {
+        $RequiredModules += 'PSCodeHealth'
+    }
+
     $Script:RequiredModules | Foreach-Object {
         if ((get-module $_ -ListAvailable) -eq $null) {
             Write-Description White "Installing $($_) Module" -Level 2
@@ -769,12 +772,12 @@ task AutoIncreaseVersionBuildLevel -after PublishPSGallery -if {$Script:BuildEnv
 }
 
 # Synopsis: Install the current built module to the local machine
-task InstallModule VersionCheck, {
+task InstallModule VersionCheck, LoadBuildTools, {
     Write-Description White "Attempting to install the current module" -accent
     $CurrentModulePath = Join-Path $Script:BuildEnv.BaseReleaseFolder $Script:BuildEnv.ModuleVersion
     assert (Test-Path $CurrentModulePath) 'The current version module has not been built yet!'
 
-    $MyModulePath = "$($env:USERPROFILE)\Documents\WindowsPowerShell\Modules\"
+    $MyModulePath = "$((Get-SpecialPaths)['MyDocuments'])\WindowsPowerShell\Modules\"
     $ModuleInstallPath = "$($MyModulePath)$($Script:BuildEnv.ModuleToBuild)"
     if (Test-Path $ModuleInstallPath) {
         Write-Description White "Removing installed module $($Script:BuildEnv.ModuleToBuild)" -Level 2
@@ -830,7 +833,7 @@ task PostBuildTasks {
 }
 
 # Synopsis: Remove session artifacts like loaded modules and variables
-task BuildSessionCleanup {
+task BuildSessionCleanup LoadRequiredModules, {
     Write-Description White 'Cleaning up the build session' -accent
 
     $BuildToolPath = Join-Path $BuildRoot $Script:BuildEnv.BuildToolFolder

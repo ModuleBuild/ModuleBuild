@@ -25,6 +25,7 @@ Set-BuildEnvironment [[-Path] <String>] [-AdditionalModulePaths <Object[]>] [-Ba
  [-OptionTranscriptEnabled <Boolean>] [-OptionTranscriptLogFile <String>]
  [-OptionUpdateVersionAfterPublishing <Boolean>] [-OtherModuleSource <String>]
  [-PrivateFunctionSource <String>] [-PublicFunctionSource <String>] [-ScratchFolder <String>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -32,7 +33,7 @@ Sets the stored setting in a buildenvironment.json file.
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 Set-BuildEnvironment -OptionSensitiveTerms @('myapikey','myname','password')
 ```
@@ -45,7 +46,7 @@ Specifies the path to a buildenvironment.json file.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 1
@@ -60,7 +61,7 @@ Update the setting for AdditionalModulePaths
 ```yaml
 Type: Object[]
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -75,7 +76,7 @@ Update the setting for BaseReleaseFolder
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -90,7 +91,7 @@ Update the setting for BaseSourceFolder
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -105,7 +106,7 @@ Update the setting for BuildReportsFolder
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -120,7 +121,7 @@ Update the setting for BuildToolFolder
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -135,7 +136,7 @@ Update the setting for Encoding
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -150,7 +151,7 @@ Update the setting for FirstRun
 ```yaml
 Type: Boolean
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -165,7 +166,7 @@ Update the setting for Force
 ```yaml
 Type: Boolean
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -180,7 +181,7 @@ Update the setting for ForceInstallModule
 ```yaml
 Type: Boolean
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -195,7 +196,7 @@ Update the setting for FunctionTemplates
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -210,7 +211,7 @@ Update the setting for ModuleAuthor
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -225,7 +226,7 @@ Update the setting for ModuleCopyright
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -240,7 +241,7 @@ Update the setting for ModuleDescription
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -255,7 +256,7 @@ Update the setting for ModuleLicenseURI
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -270,7 +271,7 @@ Update the setting for ModuleTags
 ```yaml
 Type: Object[]
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -285,7 +286,7 @@ Update the setting for ModuleToBuild
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -300,7 +301,7 @@ Update the setting for ModuleVersion
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -315,7 +316,7 @@ Update the setting for ModuleWebsite
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -330,7 +331,7 @@ Update the setting for NugetAPIKey
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -345,7 +346,7 @@ Update the setting for OptionAnalyzeCode
 ```yaml
 Type: Boolean
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -360,7 +361,7 @@ Update the setting for OptionCodeHealthReport
 ```yaml
 Type: Boolean
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -375,7 +376,7 @@ Update the setting for OptionCombineFiles
 ```yaml
 Type: Boolean
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -390,7 +391,7 @@ Update the setting for OptionGenerateReadTheDocs
 ```yaml
 Type: Boolean
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -405,7 +406,7 @@ Update the setting for OptionRunPlatyPSVerbose
 ```yaml
 Type: Boolean
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -420,7 +421,7 @@ Update the setting for OptionSanitizeSensitiveTerms
 ```yaml
 Type: Boolean
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -435,7 +436,7 @@ Update the setting for OptionSensitiveTerms
 ```yaml
 Type: Object[]
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -450,7 +451,7 @@ Update the setting for OptionSensitiveTermsInitialized
 ```yaml
 Type: Boolean
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -465,7 +466,7 @@ Update the setting for OptionTranscriptEnabled
 ```yaml
 Type: Boolean
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -480,7 +481,7 @@ Update the setting for OptionTranscriptLogFile
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -495,7 +496,7 @@ Update the setting for OptionUpdateVersionAfterPublishing
 ```yaml
 Type: Boolean
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -510,7 +511,7 @@ Update the setting for OtherModuleSource
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -525,7 +526,7 @@ Update the setting for PrivateFunctionSource
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -540,7 +541,7 @@ Update the setting for PublicFunctionSource
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -555,7 +556,7 @@ Update the setting for ScratchFolder
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: Named
@@ -563,6 +564,10 @@ Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

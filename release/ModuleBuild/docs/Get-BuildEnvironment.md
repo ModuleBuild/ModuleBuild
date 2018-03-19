@@ -13,7 +13,7 @@ Retrieves all the stored settings in a buildenvironment.json file.
 ## SYNTAX
 
 ```
-Get-BuildEnvironment [[-Path] <String>]
+Get-BuildEnvironment [[-Path] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -21,7 +21,7 @@ Retrieves all the stored settings in a buildenvironment.json file.
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 Get-buildenvironment
 ```
@@ -37,7 +37,7 @@ Specifies the path to a buildenvironment.json file.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 1
@@ -45,6 +45,10 @@ Default value: None
 Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

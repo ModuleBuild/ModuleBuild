@@ -1,6 +1,6 @@
 ﻿param (
     [parameter(Position = 0)]
-    [string]$BuildFile = (Join-Path $BuildRoot 'build\<%=$PLASTER_PARAM_ModuleName%>.buildenvironment.ps1'),
+    [string]$BuildFile = @(Get-ChildItem 'build\*.buildenvironment.ps1')[0].FullName,
     [parameter(Position = 1)]
     [version]$NewVersion = $null,
     [parameter(Position = 2)]
@@ -61,9 +61,11 @@ task LoadRequiredModules {
     if ($Script:BuildEnv.OptionAnalyzeCode) {
         $Script:RequiredModules += 'PSScriptAnalyzer'
     }
-
     if ($Script:BuildEnv.OptionGenerateReadTheDocs) {
         $Script:RequiredModules += 'Powershell-YAML'
+    }
+    if ($Script:BuildEnv.OptionCodeHealthReport) {
+        $RequiredModules += 'PSCodeHealth'
     }
     $Script:RequiredModules | Foreach-Object {
         if ((get-module $_ -ListAvailable) -eq $null) {
@@ -777,7 +779,7 @@ task InstallModule VersionCheck, {
     $CurrentModulePath = Join-Path $Script:BuildEnv.BaseReleaseFolder $Script:BuildEnv.ModuleVersion
     assert (Test-Path $CurrentModulePath) 'The current version module has not been built yet!'
 
-    $MyModulePath = "$($env:USERPROFILE)\Documents\WindowsPowerShell\Modules\"
+    $MyModulePath = "$((Get-SpecialPaths)['MyDocuments'])\WindowsPowerShell\Modules\"
     $ModuleInstallPath = "$($MyModulePath)$($Script:BuildEnv.ModuleToBuild)"
     if (Test-Path $ModuleInstallPath) {
         Write-Description White "Removing installed module $($Script:BuildEnv.ModuleToBuild)" -Level 2
@@ -833,7 +835,7 @@ task PostBuildTasks {
 }
 
 # Synopsis: Remove session artifacts like loaded modules and variables
-task BuildSessionCleanup {
+task BuildSessionCleanup LoadRequiredModules, {
     Write-Description White 'Cleaning up the build session' -accent
 
     $BuildToolPath = Join-Path $BuildRoot $Script:BuildEnv.BuildToolFolder

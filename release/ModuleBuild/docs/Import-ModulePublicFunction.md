@@ -14,7 +14,7 @@ Retrieves public module function definitions and recreates them in your modulebu
 
 ```
 Import-ModulePublicFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotInsertCBH]
- [-WhatIf] [-Confirm]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -24,7 +24,7 @@ This function will load and then unload the module to work its magic.
 
 ## EXAMPLES
 
-### -------------------------- EXAMPLE 1 --------------------------
+### EXAMPLE 1
 ```
 Import-ModulePrivateFunction -ModulePath 'C:\Temp\PSCloudFlare\release\PSCloudFlare\PSCloudFlare.psd1' -force
 ```
@@ -39,7 +39,7 @@ Specifies the path to a buildenvironment.json file for an existing modulebuild p
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 1
@@ -55,7 +55,7 @@ Must be a psm1 or psd1 file.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: True
 Position: 2
@@ -71,7 +71,7 @@ If none are specified then all functions will be imported.
 ```yaml
 Type: String
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 3
@@ -86,7 +86,7 @@ Do not attempt to find and insert comment based help into the function.
 ```yaml
 Type: SwitchParameter
 Parameter Sets: (All)
-Aliases: 
+Aliases:
 
 Required: False
 Position: 4
@@ -125,6 +125,10 @@ Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
+
+### CommonParameters
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
+For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

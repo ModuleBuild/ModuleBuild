@@ -189,7 +189,7 @@
                 <div class="col-sm-4 col-md-5 col-lg-4 right-header">
                     <h5>
                         Analyzed path :<span class="right-header-data"> src\private</span><br>
-                        Analysis date :<span class="right-header-data"> 2018-02-04 22:23:40Z</span>
+                        Analysis date :<span class="right-header-data"> 2018-03-19 07:47:09Z</span>
                     </h5>
                 </div>
             </div>
@@ -391,16 +391,16 @@ Message                       : '%' is an alias of 'ForEach-Object'. Alias can i
                                                     <td class="warning cell-largeContent">ScriptName : Get-BuildFilePath.ps1<br>
 Line (in the function) : 2<br>
 Severity                      : Warning<br>
-RuleName                      : PSAvoidUsingCmdletAliases<br>
-Message                       : 'select' is an alias of 'Select-Object'. Alias can introduce possible problems and make scripts hard to maintain. Please consider changing alias to its full content.<br>
+RuleName                      : PSUseDeclaredVarsMoreThanAssignments<br>
+Message                       : The variable 'BuildPath' is assigned but never used.<br>
                                                     </td>
                                                 </tr>
                                                  <tr>
                                                     <td class="warning cell-largeContent">ScriptName : Get-BuildFilePath.ps1<br>
 Line (in the function) : 2<br>
 Severity                      : Warning<br>
-RuleName                      : PSUseDeclaredVarsMoreThanAssignments<br>
-Message                       : The variable 'BuildPath' is assigned but never used.<br>
+RuleName                      : PSAvoidUsingCmdletAliases<br>
+Message                       : 'select' is an alias of 'Select-Object'. Alias can introduce possible problems and make scripts hard to maintain. Please consider changing alias to its full content.<br>
                                                     </td>
                                                 </tr>
                                              </table>
@@ -453,14 +453,6 @@ Message                       : The cmdlet 'Get-CommonParameters' uses a plural 
                                             <table>
                                                  <tr>
                                                     <td class="warning cell-largeContent">ScriptName : Get-FunctionParameter.ps1<br>
-Line (in the function) : 105<br>
-Severity                      : Warning<br>
-RuleName                      : PSPossibleIncorrectComparisonWithNull<br>
-Message                       : $null should be on the left side of equality comparisons.<br>
-                                                    </td>
-                                                </tr>
-                                                 <tr>
-                                                    <td class="warning cell-largeContent">ScriptName : Get-FunctionParameter.ps1<br>
 Line (in the function) : 54<br>
 Severity                      : Warning<br>
 RuleName                      : PSUseDeclaredVarsMoreThanAssignments<br>
@@ -473,6 +465,14 @@ Line (in the function) : 65<br>
 Severity                      : Warning<br>
 RuleName                      : PSUseDeclaredVarsMoreThanAssignments<br>
 Message                       : The variable 'CommonParams' is assigned but never used.<br>
+                                                    </td>
+                                                </tr>
+                                                 <tr>
+                                                    <td class="warning cell-largeContent">ScriptName : Get-FunctionParameter.ps1<br>
+Line (in the function) : 105<br>
+Severity                      : Warning<br>
+RuleName                      : PSPossibleIncorrectComparisonWithNull<br>
+Message                       : $null should be on the left side of equality comparisons.<br>
                                                     </td>
                                                 </tr>
                                                  <tr>
@@ -511,18 +511,18 @@ Message                       : 'Foreach' is an alias of 'ForEach-Object'. Alias
                                             <table>
                                                  <tr>
                                                     <td class="warning cell-largeContent">ScriptName : Get-ParentASTTypes.ps1<br>
-Line (in the function) : 50<br>
-Severity                      : Information<br>
-RuleName                      : PSUseOutputTypeCorrectly<br>
-Message                       : The cmdlet 'Get-ParentASTTypes' returns an object of type 'System.Object[]' but this type is not declared in the OutputType attribute.<br>
-                                                    </td>
-                                                </tr>
-                                                 <tr>
-                                                    <td class="warning cell-largeContent">ScriptName : Get-ParentASTTypes.ps1<br>
 Line (in the function) : 1<br>
 Severity                      : Warning<br>
 RuleName                      : PSUseSingularNouns<br>
 Message                       : The cmdlet 'Get-ParentASTTypes' uses a plural noun. A singular noun should be used instead.<br>
+                                                    </td>
+                                                </tr>
+                                                 <tr>
+                                                    <td class="warning cell-largeContent">ScriptName : Get-ParentASTTypes.ps1<br>
+Line (in the function) : 50<br>
+Severity                      : Information<br>
+RuleName                      : PSUseOutputTypeCorrectly<br>
+Message                       : The cmdlet 'Get-ParentASTTypes' returns an object of type 'System.Object[]' but this type is not declared in the OutputType attribute.<br>
                                                     </td>
                                                 </tr>
                                                  <tr>
