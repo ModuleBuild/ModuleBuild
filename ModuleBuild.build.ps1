@@ -445,14 +445,14 @@ task UpdateCBH {
 "@
 
     $ScratchPath = Join-Path $BuildRoot $Script:BuildEnv.ScratchFolder
-    $CBHPattern = "(?ms)(\<#.*\.SYNOPSIS.*?#>)"
+    [Regex]$CBHPattern = '(?ms)\<\#(\#(?!\>)|[^#])*\#\>'
     Get-ChildItem -Path "$($ScratchPath)\$($Script:BuildEnv.PublicFunctionSource)\*.ps1" -File | ForEach-Object {
         $FormattedOutFile = $_.FullName
         $FileName = $_.Name
         Write-Description White "Replacing CBH in file: $($FileName)" -level 2
         $FunctionName = $FileName -replace '.ps1', ''
         $NewExternalHelp = $ExternalHelp -replace '{{LINK}}', ($Script:BuildEnv.ModuleWebsite + "/tree/master/$($Script:BuildEnv.BaseReleaseFolder)/$($Script:BuildEnv.ModuleVersion)/docs/Functions/$($FunctionName).md")
-        $UpdatedFile = (get-content  $FormattedOutFile -raw) -replace $CBHPattern, $NewExternalHelp
+        $UpdatedFile = $CBHPattern.Replace( (Get-Content  $FormattedOutFile -raw), $NewExternalHelp, 1)
         $UpdatedFile | Out-File -FilePath $FormattedOutFile -force -Encoding $Script:BuildEnv.Encoding
     }
 }
