@@ -10,8 +10,8 @@ param (
 )
 
 Function Write-Description {
-    # Basic indented descriptive build output.
-    param (
+    # Basic indented descriptive build output. $Description can contain Newlines.
+    Param (
         [string]$color = 'White',
         [string]$Description = '',
         [int]$Level = 0,
@@ -22,11 +22,12 @@ Function Write-Description {
     )
 
     $thisindent = (' ' * $indent) * $level
-    if ($accent) {
+    If ($accent) {
         $accentleft = $AccentL
         $accentright = $AccentR
     }
-    Write-Build $color "$accentleft$thisindent$Description$accentright"
+
+    $Description -split '\r\n|\n' | ForEach-Object { Write-Build $color "$accentleft$thisindent$($_)$accentright" }
 }
 
 if (Test-Path $BuildFile) {
