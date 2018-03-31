@@ -10,8 +10,8 @@ param (
 )
 
 Function Write-Description {
-    # Basic indented descriptive build output.
-    param (
+    # Basic indented descriptive build output. $Description can contain Newlines.
+    Param (
         [string]$color = 'White',
         [string]$Description = '',
         [int]$Level = 0,
@@ -22,11 +22,12 @@ Function Write-Description {
     )
 
     $thisindent = (' ' * $indent) * $level
-    if ($accent) {
+    If ($accent) {
         $accentleft = $AccentL
         $accentright = $AccentR
     }
-    Write-Build $color "$accentleft$thisindent$Description$accentright"
+
+    $Description -split '\r\n|\n' | ForEach-Object { Write-Build $color "$accentleft$thisindent$($_)$accentright" }
 }
 
 if (Test-Path $BuildFile) {
@@ -445,14 +446,14 @@ task UpdateCBH {
 "@
 
     $ScratchPath = Join-Path $BuildRoot $Script:BuildEnv.ScratchFolder
-    $CBHPattern = "(?ms)(\<#.*\.SYNOPSIS.*?#>)"
+    [Regex]$CBHPattern = '(?ms)\<\#(\#(?!\>)|[^#])*\#\>'
     Get-ChildItem -Path "$($ScratchPath)\$($Script:BuildEnv.PublicFunctionSource)\*.ps1" -File | ForEach-Object {
         $FormattedOutFile = $_.FullName
         $FileName = $_.Name
         Write-Description White "Replacing CBH in file: $($FileName)" -level 2
         $FunctionName = $FileName -replace '.ps1', ''
         $NewExternalHelp = $ExternalHelp -replace '{{LINK}}', ($Script:BuildEnv.ModuleWebsite + "/tree/master/$($Script:BuildEnv.BaseReleaseFolder)/$($Script:BuildEnv.ModuleVersion)/docs/Functions/$($FunctionName).md")
-        $UpdatedFile = (get-content  $FormattedOutFile -raw) -replace $CBHPattern, $NewExternalHelp
+        $UpdatedFile = $CBHPattern.Replace( (Get-Content  $FormattedOutFile -raw), $NewExternalHelp, 1)
         $UpdatedFile | Out-File -FilePath $FormattedOutFile -force -Encoding $Script:BuildEnv.Encoding
     }
 }
