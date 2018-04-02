@@ -31,7 +31,7 @@ function Get-BuildEnvironment {
     process {
         # If no path was specified take a few guesses
         if ([string]::IsNullOrEmpty($Path)) {
-            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
 
             if ([string]::IsNullOrEmpty($Path)) {
                 throw 'Unable to locate a *.buildenvironment.json file to parse!'

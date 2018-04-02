@@ -3,6 +3,8 @@
 Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloeber/ModuleBuild)
 
 ## Version 0.2.3
+- Added ability to pull in some basic information about an existing module manifest files when running initialize-modulebuild.
+- Fixed ReadTheDocs generation issues by updating the template to include build\docs\ReadTheDocs in the initialization process.
 - Eliminated any customization requirements within the modulename.build.ps1 script to help pave the way for easier modulebuild upgrades to projects.
 - Removed some superfluous code in the base build environment script around the RequiredModules variable.
 ## Version 0.2.2

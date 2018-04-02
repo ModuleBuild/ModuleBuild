@@ -73,9 +73,9 @@ function Import-ModulePrivateFunction {
         }
 
         Write-Verbose "Source Module Base Path = $SourceModuleBasePath"
-        $AllSourcefiles = @(Get-ChildItem -Path $SourceModuleBasePath -Directory -Exclude $ExcludePaths | Get-ChildItem -File -Recurse) | Where {($_.Name -notmatch $ExFiles) -and (@('.ps1','.psm1') -contains $_.extension)}
+        $AllSourcefiles = @(Get-ChildItem -Path $SourceModuleBasePath -Directory -Exclude $ExcludePaths | Get-ChildItem -File -Recurse) | Where-Object {($_.Name -notmatch $ExFiles) -and (@('.ps1','.psm1') -contains $_.extension)}
 
-        $AllSourcefiles += @(Get-ChildItem -Path $SourceModuleBasePath -File | Where {(@('.ps1','.psm1') -contains $_.extension) -and ($_.Name -notmatch $ExFiles)})
+        $AllSourcefiles += @(Get-ChildItem -Path $SourceModuleBasePath -File | Where-Object {(@('.ps1','.psm1') -contains $_.extension) -and ($_.Name -notmatch $ExFiles)})
 
         $PSBoundParameters.Confirm = $true
 
@@ -84,7 +84,7 @@ function Import-ModulePrivateFunction {
     process {
         # If no build file path was specified take a few guesses
         if ([string]::IsNullOrEmpty($Path)) {
-            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
 
             if ([string]::IsNullOrEmpty($Path)) {
                 throw 'Unable to locate a *.buildenvironment.json file to parse!'
@@ -112,7 +112,7 @@ function Import-ModulePrivateFunction {
                 Get-Content -Path $SourceFile.FullName | Get-Function | ForEach-Object {
                     if ((-not $_.IsEmbedded) -and ($PublicFunctions -notcontains $_.Name) -and ($_.Name -like $Name)) {
                         Write-Verbose "Adding private function definition for $($_.Name)"
-                        $PrivateFunctions += $_ | Select Name,Definition,@{n='SourcePath';e={$SourceFile.FullName}}
+                        $PrivateFunctions += $_ | Select-Object Name,Definition,@{n='SourcePath';e={$SourceFile.FullName}}
                     }
                 }
             }

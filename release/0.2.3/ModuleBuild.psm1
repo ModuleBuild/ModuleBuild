@@ -1446,7 +1446,7 @@ function Add-PublicFunction {
     dynamicparam {
         # Create dictionary
         $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
-        $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+        $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
 
         if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
             try {
@@ -1485,7 +1485,7 @@ function Add-PublicFunction {
         # Attempt to get the build environment data and create our template lookup table
         try {
             $BuildEnvInfo = Get-BuildEnvironment
-            $BuildEnvPath = Split-Path (Split-Path ((Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' -ErrorAction:SilentlyContinue | select -First 1).FullName))
+            $BuildEnvPath = Split-Path (Split-Path ((Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' -ErrorAction:SilentlyContinue | Select-Object -First 1).FullName))
             $PublicFunctionSrc = Join-Path $BuildEnvPath $BuildEnvInfo.PublicFunctionSource
             $TemplatePath = Join-Path $BuildEnvPath $BuildEnvInfo.FunctionTemplates
             $TemplateLookup = @{}
@@ -1556,7 +1556,7 @@ function Get-BuildEnvironment {
     process {
         # If no path was specified take a few guesses
         if ([string]::IsNullOrEmpty($Path)) {
-            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
 
             if ([string]::IsNullOrEmpty($Path)) {
                 throw 'Unable to locate a *.buildenvironment.json file to parse!'
@@ -1622,9 +1622,9 @@ function Import-ModulePrivateFunction {
         }
 
         Write-Verbose "Source Module Base Path = $SourceModuleBasePath"
-        $AllSourcefiles = @(Get-ChildItem -Path $SourceModuleBasePath -Directory -Exclude $ExcludePaths | Get-ChildItem -File -Recurse) | Where {($_.Name -notmatch $ExFiles) -and (@('.ps1','.psm1') -contains $_.extension)}
+        $AllSourcefiles = @(Get-ChildItem -Path $SourceModuleBasePath -Directory -Exclude $ExcludePaths | Get-ChildItem -File -Recurse) | Where-Object {($_.Name -notmatch $ExFiles) -and (@('.ps1','.psm1') -contains $_.extension)}
 
-        $AllSourcefiles += @(Get-ChildItem -Path $SourceModuleBasePath -File | Where {(@('.ps1','.psm1') -contains $_.extension) -and ($_.Name -notmatch $ExFiles)})
+        $AllSourcefiles += @(Get-ChildItem -Path $SourceModuleBasePath -File | Where-Object {(@('.ps1','.psm1') -contains $_.extension) -and ($_.Name -notmatch $ExFiles)})
 
         $PSBoundParameters.Confirm = $true
 
@@ -1633,7 +1633,7 @@ function Import-ModulePrivateFunction {
     process {
         # If no build file path was specified take a few guesses
         if ([string]::IsNullOrEmpty($Path)) {
-            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
 
             if ([string]::IsNullOrEmpty($Path)) {
                 throw 'Unable to locate a *.buildenvironment.json file to parse!'
@@ -1661,7 +1661,7 @@ function Import-ModulePrivateFunction {
                 Get-Content -Path $SourceFile.FullName | Get-Function | ForEach-Object {
                     if ((-not $_.IsEmbedded) -and ($PublicFunctions -notcontains $_.Name) -and ($_.Name -like $Name)) {
                         Write-Verbose "Adding private function definition for $($_.Name)"
-                        $PrivateFunctions += $_ | Select Name,Definition,@{n='SourcePath';e={$SourceFile.FullName}}
+                        $PrivateFunctions += $_ | Select-Object Name,Definition,@{n='SourcePath';e={$SourceFile.FullName}}
                     }
                 }
             }
@@ -1732,7 +1732,7 @@ function Import-ModulePublicFunction {
     process {
         # If no path was specified take a few guesses
         if ([string]::IsNullOrEmpty($Path)) {
-            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
 
             if ([string]::IsNullOrEmpty($Path)) {
                 throw 'Unable to locate a *.buildenvironment.json file to parse!'
@@ -1801,11 +1801,18 @@ function Initialize-ModuleBuild {
     [CmdletBinding()]
     param(
         [parameter(Position = 0, ValueFromPipeline = $TRUE)]
-        [String]$Path
+        [String]$Path,
+        [parameter(Position = 1)]
+        [String]$SourceModule
     )
     begin {
         if ($script:ThisModuleLoaded -eq $true) {
             Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+        }
+        if (-not [string]::IsNullOrEmpty($SourceModule)) {
+<#
+
+#>
         }
     }
     process {
@@ -1822,13 +1829,30 @@ A few items to consider doing next:
 7. If you enabled sensitive terminology scanning then review and update your terms defined in your buildenvironment.json file (using get-buildenvironment & set-buildenvironment).
 8. Change your project logo at src\other\powershell-project.png
 9. Build your project with .\Build.ps1
-10. Enter a PowerShell Gallery (aka Nuget) API key. Without this you will not be able to upload your module to the Gallery using Set-BuildEnvironment -NugetAPIKey
+10. Enter a PowerShell Gallery (aka Nuget) API key using Set-BuildEnvironment -NugetAPIKey. Without this you will not be able to upload your module to the Gallery
 
 Run Update-Module ModuleBuild every so often to get more recent releases of this project.
 
 Enjoy!
 '@
 
+        if (-not [string]::IsNullOrEmpty($SourceModule)) {
+            if (-not (test-path $SourceModule) -or ($SourceModule -notmatch '*.psd1')) {
+                throw 'SourceModule was not found or is not a psd1 module manifest file!'
+            }
+
+            $ExistingModuleManifest = Test-ModuleManifest $SourceModule
+
+            $ModuleProps = @{
+                TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\';
+                ModuleName = $ExistingModuleManifest.Name;
+                ModuleDescription = $ExistingModuleManifest.Description;
+                ModuleAuthor = $ExistingModuleManifest.Author;
+                ModuleWebsite = $ExistingModuleManifest.ProjectURI.ToString();
+                ModuleVersion = $ExistingModuleManifest.Version.ToString();
+                ModuleTags = $ExistingModuleManifest.Tags -join ',';
+            }
+        }
         $PlasterParams = @{
             TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\'
         }
@@ -1855,7 +1879,6 @@ Enjoy!
         $strCommand = "powershell -noprofile -WindowStyle hidden -file '$($BuildDefinition.FullName)'"
 
         try {
-
             Invoke-Expression $strCommand
         }
         catch {
@@ -1889,7 +1912,7 @@ function Set-BuildEnvironment {
         # Create dictionary
         $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
         if ([String]::isnullorempty($Path)) {
-            $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+            $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
         }
         else {
             $BuildPath = $Path
@@ -1926,7 +1949,7 @@ function Set-BuildEnvironment {
             Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
         }
         if ([String]::isnullorempty($Path)) {
-            $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+            $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
         }
         else {
             $BuildPath = $Path
