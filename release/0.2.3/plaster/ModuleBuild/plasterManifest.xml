@@ -4,8 +4,8 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>b2caad12-ce60-4081-8486-7cf6cc3da58f</id>
-    <version>0.0.8</version>
+    <id>c0ce518c-f894-4114-91f9-d49945d9dfb1</id>
+    <version>0.0.1</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
     <author>Zachary Loeber</author>
@@ -254,5 +254,8 @@
     <templateFile
       source="scaffold\build\docs\Additional\*"
       destination="docs" />
+    <templateFile
+      source="scaffold\build\docs\ReadTheDocs\*"
+      destination="build\docs\ReadTheDocs" />
   </content>
 </plasterManifest>

@@ -26,7 +26,7 @@ function Set-BuildEnvironment {
         # Create dictionary
         $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
         if ([String]::isnullorempty($Path)) {
-            $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+            $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
         }
         else {
             $BuildPath = $Path
@@ -63,7 +63,7 @@ function Set-BuildEnvironment {
             Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
         }
         if ([String]::isnullorempty($Path)) {
-            $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+            $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
         }
         else {
             $BuildPath = $Path

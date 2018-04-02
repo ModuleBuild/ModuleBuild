@@ -23,7 +23,7 @@ function Add-PublicFunction {
     dynamicparam {
         # Create dictionary
         $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
-        $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | select -First 1).FullName
+        $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
 
         if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
             try {
@@ -62,7 +62,7 @@ function Add-PublicFunction {
         # Attempt to get the build environment data and create our template lookup table
         try {
             $BuildEnvInfo = Get-BuildEnvironment
-            $BuildEnvPath = Split-Path (Split-Path ((Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' -ErrorAction:SilentlyContinue | select -First 1).FullName))
+            $BuildEnvPath = Split-Path (Split-Path ((Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' -ErrorAction:SilentlyContinue | Select-Object -First 1).FullName))
             $PublicFunctionSrc = Join-Path $BuildEnvPath $BuildEnvInfo.PublicFunctionSource
             $TemplatePath = Join-Path $BuildEnvPath $BuildEnvInfo.FunctionTemplates
             $TemplateLookup = @{}

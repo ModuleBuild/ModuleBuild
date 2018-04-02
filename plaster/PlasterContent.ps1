@@ -167,5 +167,10 @@ $Content = @(
         ContentType = 'templateFile'
         Source = 'scaffold\build\docs\Additional\*'
         Destination = 'docs'
+    },
+    @{
+        ContentType = 'templateFile'
+        Source = 'scaffold\build\docs\ReadTheDocs\*'
+        Destination = 'build\docs\ReadTheDocs'
     }
 )
