@@ -1,12 +1,61 @@
+<#
+    .SYNOPSIS
+        This Script will is called by Invoke-Build and builds the Project
+    
+    .DESCRIPTION
+    	Invoke-Build is a Build and test automation in PowerShell Module from Roman Kuzmin
+	    See: https://github.com/nightroman/Invoke-Build
+    
+    .PARAMETER BuildEnvironmentFile
+    	Optional: The file which contains the Build Environment
+        Default: build\*.buildenvironment.ps1
+    
+    .PARAMETER NewVersion
+    	Optional: the new Module Version, e.g. 0.0.0.1
+    
+    .PARAMETER ReleaseNotes
+    	Optional: if ReleaseNotes are available, then the ModuleManifest is updated
+    
+    .PARAMETER IncrementVersion
+	    If defined, then the Version will be incremented
+        ValidateSet: Major, Minor, Patch, Build
+
+        The Argument defines which part of a semantic versioning (see: https://semver.org/)
+        should be automatically incremented: 
+
+        Argument      <Major>.<Minor>.<Patch>.<Build>
+        Major           ++       0       0      0
+        Minor          Keep     ++       0      0
+        Patch          Keep    Keep     ++      0
+        Build          Keep    Keep    Keep    ++
+
+	
+        Comparison of terms:
+        	Semantic Versioning | Microsoft [Version]
+        	Major               | Major
+        	Minor               | Minor
+        	Patch               | Build
+        	Build               | Revision
+    
+    .EXAMPLE
+        PS C:\> .\<Modulename>.build.ps1
+    
+    .NOTES
+        Additional information about the file.
+#>
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '')]
 param (
     [parameter(Position = 0)]
-    [string]$BuildFile = @(Get-ChildItem 'build\*.buildenvironment.ps1')[0].FullName,
+    [string]$BuildEnvironmentFile = @(Get-ChildItem 'build\*.buildenvironment.ps1')[0].FullName,
     [parameter(Position = 1)]
     [version]$NewVersion = $null,
     [parameter(Position = 2)]
     [string]$ReleaseNotes,
     [parameter(Position = 3)]
-    [switch]$Force
+    [switch]$Force,
+    [parameter(Position = 4)]
+    [ValidateSet('Major', 'Minor', 'Patch', 'Build', IgnoreCase)]
+    [string]$IncrementVersion
 )
 
 Function Write-Description {
@@ -30,8 +79,8 @@ Function Write-Description {
     $Description -split '\r\n|\n' | ForEach-Object { Write-Build $color "$accentleft$thisindent$($_)$accentright" }
 }
 
-if (Test-Path $BuildFile) {
-    . $BuildFile
+if (Test-Path $BuildEnvironmentFile) {
+    . $BuildEnvironmentFile
 }
 else {
     throw "Without a build environment file we are at a loss as to what to do!"
@@ -188,7 +237,29 @@ task NewVersion LoadBuildTools, LoadModuleManifest, {
     $ModuleManifestFullPath = Join-Path $BuildRoot "$($Script:BuildEnv.ModuleToBuild).psd1"
     $ReleasePath = Join-Path $BuildRoot $Script:BuildEnv.BaseReleaseFolder
     $AllReleases = @((Get-ChildItem $ReleasePath -Directory | Where-Object {$_.Name -match '^([0-9].[0-9].[0-9])$'} | Select-Object).Name | ForEach-Object {[version]$_})
-
+    
+    # Automatic Version increment?
+    If ($IncrementVersion -ne $null) {
+        # Increment the actual ModuleVersion
+        $CurrentVersion = [version]$Script:BuildEnv.ModuleVersion
+        Switch ($IncrementVersion) {
+            'Major' {
+                $NewVersion = "{0}.{1}.{2}.{3}" -f (($CurrentVersion.Major + 1), 0, 0, 0)
+            }
+            'Minor' {
+                $NewVersion = "{0}.{1}.{2}.{3}" -f ($CurrentVersion.Major, ($CurrentVersion.Minor + 1), 0, 0)
+            }
+            'Patch' {
+                $NewVersion = "{0}.{1}.{2}.{3}" -f ($CurrentVersion.Major, $CurrentVersion.Minor, ($CurrentVersion.Build + 1), 0)
+            }
+            'Build' {
+                $NewVersion = "{0}.{1}.{2}.{3}" -f ($CurrentVersion.Major, $CurrentVersion.Minor, $CurrentVersion.Build, ($CurrentVersion.Revision + 1))
+            }
+        }
+        
+        Write-Description White "Changing Version from $($CurrentVersion) to $($NewVersion)" -level 2
+    }
+    
     # if a new version wasn't passed as a parameter then prompt for one
     if ($null -eq $NewVersion) {
         do {
@@ -877,7 +948,13 @@ task GithubPush VersionCheck, {
     assert (-not $changes) "Please, commit changes."
 }
 
+# Synopsis: Display the current version
+task DisplayVersion {
+    Write-Description White "The current Version is: $($Script:BuildEnv.ModuleVersion)" -level 2
+}
+
 # Synopsis: Build the module
+# '.' is the default Build Task which is called if no explicit Task to execute is declared
 task . Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, PostBuildTasks, BuildSessionCleanup
 
 # Synopsis: Install and test load the module.
@@ -891,3 +968,6 @@ task BuildInstallTestAndPublishModule Configure, CodeHealthReport, Clean, Prepar
 
 # Synopsis: Instert Comment Based Help where it doesn't already exist (output to scratch directory)
 task InsertMissingCBH Configure, Clean, UpdateCBHtoScratch, BuildSessionCleanup
+
+# Synopsis: Display the current version
+task ShowVersion DisplayVersion
