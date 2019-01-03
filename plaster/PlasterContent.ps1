@@ -76,6 +76,24 @@ $Content = @(
     },
     @{
         ContentType = 'file'
+        Source = 'scaffold\plugins\NLog\NLogModule\docs\*'
+        Destination = 'plugins\nlog\NLog\NLogModule\docs'
+        Condition = '$PLASTER_PARAM_PluginModuleLogging -eq "True"'
+    },
+    @{
+        ContentType = 'file'
+        Source = 'scaffold\plugins\NLog\NLogModule\en-US\*'
+        Destination = 'plugins\nlog\NLog\NLogModule\en-US'
+        Condition = '$PLASTER_PARAM_PluginModuleLogging -eq "True"'
+    },
+    @{
+        ContentType = 'file'
+        Source = 'scaffold\plugins\NLog\NLogModule\lib\*'
+        Destination = 'plugins\nlog\NLog\NLogModule\lib'
+        Condition = '$PLASTER_PARAM_PluginModuleLogging -eq "True"'
+    },
+    @{
+        ContentType = 'file'
         Source = 'scaffold\build\cleanup\*'
         Destination = 'build\cleanup'
     },
