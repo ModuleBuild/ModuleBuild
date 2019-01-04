@@ -66,7 +66,7 @@ task LoadRequiredModules {
         $Script:RequiredModules += 'Powershell-YAML'
     }
     if ($Script:BuildEnv.OptionCodeHealthReport) {
-        $RequiredModules += 'PSCodeHealth'
+        $Script:RequiredModules += 'PSCodeHealth'
     }
 
     $Script:RequiredModules | Foreach-Object {
