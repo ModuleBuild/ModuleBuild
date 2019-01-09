@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>c0ce518c-f894-4114-91f9-d49945d9dfb1</id>
+    <id>4b283342-b625-4db2-99c7-cf85de213289</id>
     <version>0.0.1</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -194,7 +194,19 @@
       condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
     <file
       source="scaffold\plugins\NLog\NLogModule\*"
-      destination="plugins\nlog\NLog\NLogModule"
+      destination="plugins\nlog\NLogModule"
+      condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
+    <file
+      source="scaffold\plugins\NLog\NLogModule\docs\*"
+      destination="plugins\nlog\NLogModule\docs"
+      condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
+    <file
+      source="scaffold\plugins\NLog\NLogModule\en-US\*"
+      destination="plugins\nlog\NLogModule\en-US"
+      condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
+    <file
+      source="scaffold\plugins\NLog\NLogModule\lib\*"
+      destination="plugins\nlog\NLogModule\lib"
       condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
     <file
       source="scaffold\build\cleanup\*"
@@ -257,5 +269,8 @@
     <templateFile
       source="scaffold\build\docs\ReadTheDocs\*"
       destination="build\docs\ReadTheDocs" />
+    <file
+      source="scaffold\PSScriptAnalyzerSettings.psd1"
+      destination="PSScriptAnalyzerSettings.psd1" />
   </content>
 </plasterManifest>

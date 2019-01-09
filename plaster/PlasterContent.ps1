@@ -26,7 +26,7 @@ $Content = @(
         ContentType = 'file'
         Source = 'scaffold\gitattributes'
         Destination = '.gitattributes'
-    },
+    },   
     @{
         ContentType = 'templateFile'
         Source = 'scaffold\vscode\*'
@@ -190,5 +190,10 @@ $Content = @(
         ContentType = 'templateFile'
         Source = 'scaffold\build\docs\ReadTheDocs\*'
         Destination = 'build\docs\ReadTheDocs'
+    },
+    @{
+        ContentType = 'file'
+        Source = 'scaffold\PSScriptAnalyzerSettings.psd1'
+        Destination = 'PSScriptAnalyzerSettings.psd1'
     }
 )
