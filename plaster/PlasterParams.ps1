@@ -16,6 +16,11 @@ $Parameters = @(
         ParameterPrompt = "Enter a module author"
     },
     @{
+        ParameterName = "ModuleCompanyName"
+        ParameterType = "text"
+        ParameterPrompt = "Enter a module company name"
+    },
+    @{
         ParameterName = "ModuleWebsite"
         ParameterType = "text"
         ParameterPrompt = "Enter a project website (ie. https://www.github.com/<author>/<modulename>)"
