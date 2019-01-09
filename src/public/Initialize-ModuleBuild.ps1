@@ -68,28 +68,35 @@ Enjoy!
 '@
 
         if (-not [string]::IsNullOrEmpty($SourceModule)) {
-            if (-not (test-path $SourceModule) -or ($SourceModule -notmatch '*.psd1')) {
-                throw 'SourceModule was not found or is not a psd1 module manifest file!'
+            if (-not [string]::IsNullOrEmpty($SourceModule)) 
+            {
+                if (-not (test-path $SourceModule) -or ((Get-Item $SourceModule).Extension -notmatch '.psd1')) {
+                    throw "$($SourceModule) was not found or is not a psd1 module manifest file!"
+                } ElseIf ((test-path $SourceModule) -and (Get-Item $SourceModule).Extension -match '.psd1') {
+                    Write-Verbose "$($SourceModule) Matched to .psd1 file"
+                }
             }
-
+                    
             $ExistingModuleManifest = Test-ModuleManifest $SourceModule
 
-            $ModuleProps = @{
+            $PlasterParams = @{
                 TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\';
                 ModuleName = $ExistingModuleManifest.Name;
                 ModuleDescription = $ExistingModuleManifest.Description;
                 ModuleAuthor = $ExistingModuleManifest.Author;
+                ModuleCompanyName = $ExistingModuleManifest.CompanyName;
                 ModuleWebsite = $ExistingModuleManifest.ProjectURI.ToString();
                 ModuleVersion = $ExistingModuleManifest.Version.ToString();
                 ModuleTags = $ExistingModuleManifest.Tags -join ',';
             }
-        }
-        $PlasterParams = @{
-            TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\'
+        } else {
+            $PlasterParams = @{
+                TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\'
+            }         
         }
         if (-not [string]::IsNullOrEmpty($Path)) {
             $PlasterParams.DestinationPath = $Path
-        }
+        }  
 
         if (get-module Plaster) {
             Write-Output 'Removing already loaded version of Plaster as we need to use our custom version instead..'

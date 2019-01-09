@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>4b283342-b625-4db2-99c7-cf85de213289</id>
+    <id>3fd34e00-75da-4e7d-96c4-64009f3790e2</id>
     <version>0.0.1</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -24,6 +24,10 @@
       name="ModuleAuthor"
       type="text"
       prompt="Enter a module author" />
+    <parameter
+      name="ModuleCompanyName"
+      type="text"
+      prompt="Enter a module company name" />
     <parameter
       name="ModuleWebsite"
       type="text"
@@ -147,9 +151,9 @@
   <content>
     <newModuleManifest
       description="${PLASTER_PARAM_ModuleDescription}"
-      copyright="(c) ${PLASTER_Year} ${PLASTER_PARAM_ModuleAuthor}. All rights reserved."
+      copyright="(c) ${PLASTER_Year} ${PLASTER_PARAM_ModuleCompanyName}. All rights reserved."
       tags="${PLASTER_PARAM_ModuleTags}"
-      companyName="${PLASTER_PARAM_ModuleAuthor}"
+      companyName="${PLASTER_PARAM_ModuleCompanyName}"
       author="${PLASTER_PARAM_ModuleAuthor}"
       licenseUri="${PLASTER_PARAM_ModuleWebsite}/raw/master/LICENSE.md"
       projectUri="${PLASTER_PARAM_ModuleWebsite}"
