@@ -26,7 +26,7 @@ $Content = @(
         ContentType = 'file'
         Source = 'scaffold\gitattributes'
         Destination = '.gitattributes'
-    },   
+    },
     @{
         ContentType = 'templateFile'
         Source = 'scaffold\vscode\*'
@@ -59,8 +59,38 @@ $Content = @(
     },
     @{
         ContentType = 'file'
-        Source = 'scaffold\tests\*'
-        Destination = 'src\tests'
+        Source = 'scaffold\tests\'
+        Destination = 'tests'
+    },
+    @{
+        ContentType = 'file'
+        Source = 'scaffold\tests\intergration'
+        Destination = 'tests\intergration'
+    },
+    @{
+        ContentType = 'file'
+        Source = 'scaffold\tests\unit'
+        Destination = 'tests\unit'
+    },
+    @{
+        ContentType = 'file'
+        Source = 'scaffold\tests\intergration\private\*'
+        Destination = 'tests\intergration\private'
+    },
+    @{
+        ContentType = 'file'
+        Source = 'scaffold\tests\intergration\public\*'
+        Destination = 'tests\intergration\public'
+    },
+    @{
+        ContentType = 'file'
+        Source = 'scaffold\tests\unit\private\*'
+        Destination = 'tests\unit\private'
+    },
+    @{
+        ContentType = 'file'
+        Source = 'scaffold\tests\unit\public\*'
+        Destination = 'tests\unit\public'
     },
     @{
         ContentType = 'templateFile'

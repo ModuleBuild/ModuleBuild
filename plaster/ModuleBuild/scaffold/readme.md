@@ -36,10 +36,11 @@ Studio Code and ensure that the PowerShell extension is installed.
 * [Visual Studio Code]
 * [PowerShell Extension]
 
-This module is tested with the PowerShell testing framework Pester. To run all
-tests, just start the included test script `.\Build.ps1 -test` or invoke Pester
-directly with the `Invoke-Pester` cmdlet in the tests directory. The tests will automatically download
-the latest meta test from the claudiospizzi/PowerShellModuleBase repository.
+// This module is tested with the PowerShell testing framework Pester. To run all
+// tests, just start the included test script `.\Build.ps1 -test` or invoke Pester
+// directly with the `Invoke-Pester` cmdlet in the tests directory.
+
+// Not true at the moment.
 
 ## Other Information
 

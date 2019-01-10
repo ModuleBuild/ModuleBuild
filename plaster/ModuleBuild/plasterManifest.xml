@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>3fd34e00-75da-4e7d-96c4-64009f3790e2</id>
+    <id>4794ac4a-1fbc-49f4-973f-9ece24eaa1d9</id>
     <version>0.0.1</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -190,8 +190,26 @@
       source="scaffold\src\templates\*"
       destination="src\templates" />
     <file
-      source="scaffold\tests\*"
-      destination="src\tests" />
+      source="scaffold\tests\"
+      destination="tests" />
+    <file
+      source="scaffold\tests\intergration"
+      destination="tests\intergration" />
+    <file
+      source="scaffold\tests\unit"
+      destination="tests\unit" />
+    <file
+      source="scaffold\tests\intergration\private\*"
+      destination="tests\intergration\private" />
+    <file
+      source="scaffold\tests\intergration\public\*"
+      destination="tests\intergration\public" />
+    <file
+      source="scaffold\tests\unit\private\*"
+      destination="tests\unit\private" />
+    <file
+      source="scaffold\tests\unit\public\*"
+      destination="tests\unit\public" />
     <templateFile
       source="scaffold\plugins\NLog\*"
       destination="plugins\nlog"
