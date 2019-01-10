@@ -1,1 +1,0 @@
-Intergration tests for scripts in other folder go here
