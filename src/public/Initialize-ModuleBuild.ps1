@@ -1,4 +1,4 @@
-function Initialize-ModuleBuildTesting {
+function Initialize-ModuleBuild {
     <#
     .SYNOPSIS
     Set up the framework for a ModuleBuild project.
@@ -47,7 +47,7 @@ function Initialize-ModuleBuildTesting {
         }
     }
     process {
-        $CustomPlasterModulePath = 'C:\_git\github\ModuleBuild\plaster\PlasterModule\Plaster.psd1'
+        $CustomPlasterModulePath = Join-Path $MyModulePath 'plaster\PlasterModule\Plaster.psd1'
         $PostInitMessage = @'
 A few items to consider doing next:
 
@@ -91,7 +91,7 @@ Enjoy!
             }
         } else {
             $PlasterParams = @{
-                TemplatePath = 'C:\_git\github\ModuleBuild\plaster\ModuleBuild\'
+                TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\'
             }
         }
         if (-not [string]::IsNullOrEmpty($Path)) {
@@ -134,4 +134,3 @@ Enjoy!
         Remove-Module Plaster -Force
     }
 }
-Initialize-ModuleBuildTesting -Path C:\temp\test
