@@ -78,9 +78,9 @@
             $OutCBH = @{}
             $OutCBH.FunctionName = $f
             [string]$OutParams = ''
-            $fparams = @($AllParams | Where {$_.FunctionName -eq $f} | Sort-Object -Property Position)
+            $fparams = @($AllParams | Where-Object {$_.FunctionName -eq $f} | Sort-Object -Property Position)
             if ($fparams.count -gt 0) {
-                $fparams | foreach {
+                $fparams | ForEach-Object {
                     $ParamHelpMessage = if ([string]::IsNullOrEmpty($_.HelpMessage)) { $_.ParameterName + " explanation`n`r`n`r"} else {$_.HelpMessage + "`n`r`n`r"}
 
                     $OutParams += $CBH_PARAM -replace '%%PARAM%%',$_.ParameterName -replace '%%PARAMHELP%%',$ParamHelpMessage

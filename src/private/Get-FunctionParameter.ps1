@@ -78,7 +78,7 @@ function Get-FunctionParameter {
             $functions = $CodeBlock | Get-Function -Name $Name
             if (-not $IncludeEmbedded) {
                 Write-Verbose "$($FunctionName): Not including embedded functions."
-                $functions = $functions | where {-not $_.IsEmbedded}
+                $functions = $functions | Where-Object {-not $_.IsEmbedded}
             }
 
             Foreach ($f in $functions) {
@@ -93,7 +93,7 @@ function Get-FunctionParameter {
                         'ParameterType' = $ParamType[0].typeName.FullName
                     }
                     # This will add in any other parameter attributes if they are specified (default attributes are thus not included and output may not be normalized)
-                    $p.FindAll($paramattributes, $true) | Foreach {
+                    $p.FindAll($paramattributes, $true) | ForEach-Object {
                         $OutProps.($_.ArgumentName) = $_.Argument.Value
                     }
                     $Output += New-Object -TypeName PSObject -Property $OutProps
@@ -114,7 +114,7 @@ function Get-FunctionParameter {
                         'ParameterType' = $ParamType[0].typeName.FullName
                     }
                     # This will add in any other parameter attributes if they are specified (default attributes are thus not included and output may not be normalized)
-                    $p.FindAll($paramattributes, $true) | Foreach {
+                    $p.FindAll($paramattributes, $true) | ForEach-Object {
                         $OutProps.($_.ArgumentName) = $_.Argument.Value
                     }
                     $Output += New-Object -TypeName PSObject -Property $OutProps
