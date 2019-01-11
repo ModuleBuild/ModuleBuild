@@ -72,7 +72,7 @@
             $FuncParams.ScriptParameters = $true
         }
         $AllParams = Get-FunctionParameter @FuncParams -Code $Codeblock | Sort-Object -Property FunctionName
-        $AllFunctions = @($AllParams.FunctionName | Select -unique)
+        $AllFunctions = @($AllParams.FunctionName | Select-Object -unique)
 
         foreach ($f in $AllFunctions) {
             $OutCBH = @{}
