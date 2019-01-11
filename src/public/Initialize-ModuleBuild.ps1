@@ -1,4 +1,4 @@
-function Initialize-ModuleBuild {
+function Initialize-ModuleBuildTesting {
     <#
     .SYNOPSIS
     Set up the framework for a ModuleBuild project.
@@ -47,7 +47,7 @@ function Initialize-ModuleBuild {
         }
     }
     process {
-        $CustomPlasterModulePath = Join-Path $MyModulePath 'plaster\PlasterModule\Plaster.psd1'
+        $CustomPlasterModulePath = 'C:\_git\github\ModuleBuild\plaster\PlasterModule\Plaster.psd1'
         $PostInitMessage = @'
 A few items to consider doing next:
 
@@ -68,7 +68,7 @@ Enjoy!
 '@
 
         if (-not [string]::IsNullOrEmpty($SourceModule)) {
-            if (-not [string]::IsNullOrEmpty($SourceModule)) 
+            if (-not [string]::IsNullOrEmpty($SourceModule))
             {
                 if (-not (test-path $SourceModule) -or ((Get-Item $SourceModule).Extension -notmatch '.psd1')) {
                     throw "$($SourceModule) was not found or is not a psd1 module manifest file!"
@@ -76,7 +76,7 @@ Enjoy!
                     Write-Verbose "$($SourceModule) Matched to .psd1 file"
                 }
             }
-                    
+
             $ExistingModuleManifest = Test-ModuleManifest $SourceModule
 
             $PlasterParams = @{
@@ -91,12 +91,12 @@ Enjoy!
             }
         } else {
             $PlasterParams = @{
-                TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\'
-            }         
+                TemplatePath = 'C:\_git\github\ModuleBuild\plaster\ModuleBuild\'
+            }
         }
         if (-not [string]::IsNullOrEmpty($Path)) {
             $PlasterParams.DestinationPath = $Path
-        }  
+        }
 
         if (get-module Plaster) {
             Write-Output 'Removing already loaded version of Plaster as we need to use our custom version instead..'
@@ -114,10 +114,13 @@ Enjoy!
 
         # Get the newly created buildenvironment file and run it the first time to create the first export file.
         $BuildDefinition = Get-ChildItem (Join-Path $PlasterResults.DestinationPath 'build') -Filter '*.buildenvironment.ps1'
-        $strCommand = "powershell -noprofile -WindowStyle hidden -file '$($BuildDefinition.FullName)'"
-
-        try {
-            Invoke-Expression $strCommand
+        powershell -noprofile -WindowStyle hidden -file $($BuildDefinition.FullName)
+        Try {
+            if ((Test-Path -Path ($BuildDefinition.FullName -replace '.ps1','.json')) -eq 'True') {
+               Write-Verbose 'Found JSON file.'
+            } Else {
+               Write-Error 'Could not find JSON file' -ErrorAction Stop
+           }
         }
         catch {
             throw $_
@@ -131,3 +134,4 @@ Enjoy!
         Remove-Module Plaster -Force
     }
 }
+Initialize-ModuleBuildTesting -Path C:\temp\test
