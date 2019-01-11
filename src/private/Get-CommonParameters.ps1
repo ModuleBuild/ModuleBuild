@@ -1,4 +1,4 @@
-function Get-CommonParameters {
+function Get-CommonParameter {
     # Helper function to get all the automatically added parameters in an
     # advanced function
     function somefunct {

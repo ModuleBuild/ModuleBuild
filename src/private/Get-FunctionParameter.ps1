@@ -62,7 +62,7 @@ function Get-FunctionParameter {
     }
     process {
         $Codeblock += $Code
-        $CommonParams = Get-CommonParameters
+        $CommonParams = Get-CommonParameter
     }
     end {
         $ScriptText = ($Codeblock | Out-String).trim("`r`n")
