@@ -15,7 +15,7 @@ function Import-ModulePrivateFunction {
     .PARAMETER Name
     Function name to import. If none are specified then all functions will be imported.
 
-    .PARAMETER DoNotInsertCBH
+    .PARAMETER DoNotAddCBH
     Do not attempt to find and insert comment based help into the function. Default for private functions is to skip CBH insertion.
 
     .PARAMETER ExcludePaths
@@ -45,7 +45,7 @@ function Import-ModulePrivateFunction {
         [parameter(Position = 2)]
         [String]$Name = '*',
         [parameter(Position = 3)]
-        [Switch]$DoNotInsertCBH = $true,
+        [Switch]$DoNotAddCBH = $true,
         [parameter(Position = 4)]
         [string[]]$ExcludePaths = @('temp','build','.git','.vscode','docs','release','plaster'),
         [parameter(Position = 5)]
@@ -127,13 +127,13 @@ function Import-ModulePrivateFunction {
             # Only attempt to copy over new function files, skip if the name already exists in the destination path
             if (-not (Test-Path $DestPath)) {
                 if ($pscmdlet.ShouldProcess("$($PrivFunc.Name) from file $($PrivFunc.SourcePath)", "Import private function $($PrivFunc.Name) to the project $($LoadedBuildEnv.ModuleToBuild)?")) {
-                    if ($DoNotInsertCBH) {
+                    if ($DoNotAddCBH) {
                         # Skipping comment based help insertion
                         $PrivFunc.definition | Out-File -FilePath $DestPath -Encoding:utf8 -Confirm:$false
                     }
                     else {
                         # inserting comment based help if it doesn't already exist.
-                        $PrivFunc.definition | Insert-MissingCBH | Out-File -FilePath $DestPath -Encoding:utf8 -Confirm:$false
+                        $PrivFunc.definition | Add-MissingCBH | Out-File -FilePath $DestPath -Encoding:utf8 -Confirm:$false
                     }
                 }
             }

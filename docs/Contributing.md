@@ -15,7 +15,7 @@ While any text editor will work well there are included task and setting json fi
 - Build -> Runs the Build task (also can use Shift+Ctrl+B or Shift+Cmd+B)
 - Analyze -> Runs PSScriptAnalyzer against the src/public files.
 - CreateProjectHelp - Creates the project level help.
-- InsertMissingCBH - Analyzes the existing public functions and inserts a template CBH if no CBH already exists and saves it into your scratch folder.
+- AddMissingCBH - Analyzes the existing public functions and inserts a template CBH if no CBH already exists and saves it into your scratch folder.
 
 The plaster manifest file gets automatically recreated at build time so all you need to do is update the plasterparams.ps1 and/or plastercontent.ps1 in the plaster directory to include any required changes you need to make.
 

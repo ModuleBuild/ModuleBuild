@@ -887,4 +887,4 @@ task BuildInstallAndTestModule Configure, CodeHealthReport, Clean, PrepareStage,
 task BuildInstallTestAndPublishModule Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, PublishPSGallery, PostBuildTasks, BuildSessionCleanup
 
 # Synopsis: Instert Comment Based Help where it doesn't already exist (output to scratch directory)
-task InsertMissingCBH Configure, Clean, UpdateCBHtoScratch, BuildSessionCleanup
+task AddMissingCBH Configure, Clean, UpdateCBHtoScratch, BuildSessionCleanup
