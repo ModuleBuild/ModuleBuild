@@ -15,7 +15,7 @@ function Import-ModulePublicFunction {
     .PARAMETER Name
     Function name to import. If none are specified then all functions will be imported.
 
-    .PARAMETER DoNotInsertCBH
+    .PARAMETER DoNotAddCBH
     Do not attempt to find and insert comment based help into the function.
 
     .LINK
@@ -39,7 +39,7 @@ function Import-ModulePublicFunction {
         [parameter(Position = 2)]
         [String]$Name = '*',
         [parameter(Position = 3)]
-        [Switch]$DoNotInsertCBH
+        [Switch]$DoNotAddCBH
     )
     begin {
         if ($script:ThisModuleLoaded -eq $true) {
@@ -89,7 +89,7 @@ function Import-ModulePublicFunction {
                     $NewScript += '}'
 
                     if ($pscmdlet.ShouldProcess("$($LoadedFunction.Name)", "Import public function $($LoadedFunction.Name) to the project $($LoadedBuildEnv.ModuleToBuild)?")) {
-                        if ($DoNotInsertCBH) {
+                        if ($DoNotAddCBH) {
                             try {
                                 Write-Verbose "Writing public script file to $NewScriptFile"
                                 $NewScript | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
@@ -100,7 +100,7 @@ function Import-ModulePublicFunction {
                         }
                         else {
                             try {
-                                $NewScript | Insert-MissingCBH | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
+                                $NewScript | Add-MissingCBH | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
                             }
                             catch {
                                 throw $_

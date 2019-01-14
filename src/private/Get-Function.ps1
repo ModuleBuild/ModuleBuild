@@ -64,7 +64,7 @@ function Get-Function {
                 AST = $Block
             }
 
-            if (@(Get-ParentASTTypes $Block) -contains 'FunctionDefinitionAst') {
+            if (@(Get-ParentASTType $Block) -contains 'FunctionDefinitionAst') {
                 $FunctionProps.IsEmbedded = $true
             }
 

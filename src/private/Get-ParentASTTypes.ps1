@@ -1,13 +1,13 @@
-﻿function Get-ParentASTTypes {
+﻿function Get-ParentASTType {
     <#
     .SYNOPSIS
         Retrieves all parent types of a given AST element.
     .DESCRIPTION
-        
+
     .PARAMETER Code
         Multiline or piped lines of code to process.
     .EXAMPLE
-       
+
        Description
        -----------
 

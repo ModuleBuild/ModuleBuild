@@ -19,7 +19,7 @@ function Convert-ArrayToRegex {
                 '^(' + ($Items -join '|') + ')$'
             }
             else {
-                '^(' + (($Items | %{[regex]::Escape($_)}) -join '|') + ')$'
+                '^(' + (($Items | ForEach-Object{[regex]::Escape($_)}) -join '|') + ')$'
             }
         }
         else {
