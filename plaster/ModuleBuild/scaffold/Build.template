@@ -12,7 +12,7 @@ param (
     [parameter(Position = 5, ParameterSetName = 'Build')]
     [string]$ReleaseNotes,
     [parameter(Position = 6, ParameterSetName = 'CBH')]
-    [switch]$InsertCBH
+    [switch]$AddCBH
 )
 
 function PrerequisitesLoaded {
@@ -53,9 +53,9 @@ if (-not (PrerequisitesLoaded)) {
 
 switch ($psCmdlet.ParameterSetName) {
     'CBH' {
-        if ($InsertCBH) {
+        if ($AddCBH) {
             try {
-                Invoke-Build -Task InsertMissingCBH
+                Invoke-Build -Task AddMissingCBH
             }
             catch {
                 throw
