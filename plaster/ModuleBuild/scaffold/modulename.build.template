@@ -296,19 +296,21 @@ task UpdateCBHtoScratch {
         $CBH = $currscript | New-CommentBasedHelp
         $currscriptblock = [scriptblock]::Create($currscript)
         . $currscriptblock
-        $currfunct = get-command $CBH.FunctionName
-
-
-        if ($currfunct.definition -notmatch $CBHPattern) {
-            $CBHUpdates++
-            Write-Description White "Inserting template CBH and writing to : $($Script:BuildEnv.ScratchFolder)\$($Script:BuildEnv.PublicFunctionSource)\$($FileName)" -Level 3
-            $UpdatedFunct = 'Function ' + $currfunct.Name + ' {' + "`r`n" + $CBH.CBH + "`r`n" + $currfunct.definition + "`r`n" + '}'
-            $UpdatedFunct | Out-File "$($ScratchPath)\$($Script:BuildEnv.PublicFunctionSource)\$($FileName)" -Encoding $Script:BuildEnv.Encoding -force
+        if([string]::IsNullOrEmpty($CBH))
+        {
+            Write-Error "Could not Add CBH, possibly duo having no parameters in $filename" -ErrorAction Stop
+        } else {
+            $currfunct = get-command $CBH.FunctionName
+            if ($currfunct.definition -notmatch $CBHPattern) {
+                $CBHUpdates++
+                Write-Description White "Inserting template CBH and writing to : $($Script:BuildEnv.ScratchFolder)\$($Script:BuildEnv.PublicFunctionSource)\$($FileName)" -Level 3
+                $UpdatedFunct = 'Function ' + $currfunct.Name + ' {' + "`r`n" + $CBH.CBH + "`r`n" + $currfunct.definition + "`r`n" + '}'
+                $UpdatedFunct | Out-File "$($ScratchPath)\$($Script:BuildEnv.PublicFunctionSource)\$($FileName)" -Encoding $Script:BuildEnv.Encoding -force
+            }
+            else {
+                Write-Description Yellow 'Comment based help already exists!' -Level 2
+            }
         }
-        else {
-            Write-Description Yellow 'Comment based help already exists!' -Level 2
-        }
-
         Remove-Item Function:\$($currfunct.Name)
     }
     Write-Build White ''

@@ -30,6 +30,7 @@
        1.0.0 - Initial release
        1.0.1 - Updated for ModuleBuild
        1.0.2 - Added SuppressMessageAttribute
+       1.0.3 - Extra Verbose message to check if function had Params
     #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "ScriptText",Scope="Function",Target="New-CommentBasedHelp",Justification="Seems it's here since duo a copy paste from other functions (Add-MissingCBH,Get-Function,Get-FunctionParameter). Leaving it here since it doesn't do any harm.")]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions","",Scope="Function",Target="New-CommentBasedHelp",Justification="Function does not change system state. Simply outputs a obj with CommentBasedHelp.")]
@@ -76,26 +77,31 @@
         }
         $AllParams = Get-FunctionParameter @FuncParams -Code $Codeblock | Sort-Object -Property FunctionName
         $AllFunctions = @($AllParams.FunctionName | Select-Object -unique)
+        If([string]::IsNullOrEmpty($AllFunctions))
+        {
+            Write-Verbose "$($FunctionName): Found no Params in function."
+        } else
+        {
+            foreach ($f in $AllFunctions) {
+                $OutCBH = @{}
+                $OutCBH.FunctionName = $f
+                [string]$OutParams = ''
+                $fparams = @($AllParams | Where-Object {$_.FunctionName -eq $f} | Sort-Object -Property Position)
+                if ($fparams.count -gt 0) {
+                    $fparams | ForEach-Object {
+                        $ParamHelpMessage = if ([string]::IsNullOrEmpty($_.HelpMessage)) { $_.ParameterName + " explanation`n`r`n`r"} else {$_.HelpMessage + "`n`r`n`r"}
 
-        foreach ($f in $AllFunctions) {
-            $OutCBH = @{}
-            $OutCBH.FunctionName = $f
-            [string]$OutParams = ''
-            $fparams = @($AllParams | Where-Object {$_.FunctionName -eq $f} | Sort-Object -Property Position)
-            if ($fparams.count -gt 0) {
-                $fparams | ForEach-Object {
-                    $ParamHelpMessage = if ([string]::IsNullOrEmpty($_.HelpMessage)) { $_.ParameterName + " explanation`n`r`n`r"} else {$_.HelpMessage + "`n`r`n`r"}
-
-                    $OutParams += $CBH_PARAM -replace '%%PARAM%%',$_.ParameterName -replace '%%PARAMHELP%%',$ParamHelpMessage
+                        $OutParams += $CBH_PARAM -replace '%%PARAM%%',$_.ParameterName -replace '%%PARAMHELP%%',$ParamHelpMessage
+                    }
                 }
+                else {
+
+                }
+
+                $OutCBH.'CBH' = $CBHTemplate -replace '%%PARAMETER%%',$OutParams
+
+                New-Object PSObject -Property $OutCBH
             }
-            else {
-
-            }
-
-            $OutCBH.'CBH' = $CBHTemplate -replace '%%PARAMETER%%',$OutParams
-
-            New-Object PSObject -Property $OutCBH
         }
 
         Write-Verbose "$($FunctionName): End."

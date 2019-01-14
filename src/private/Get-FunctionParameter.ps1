@@ -83,23 +83,28 @@ function Get-FunctionParameter {
                 Write-Verbose "$($FunctionName): Not including embedded functions."
                 $functions = $functions | Where-Object {-not $_.IsEmbedded}
             }
-
-            Foreach ($f in $functions) {
-                $function = $f.ast
-                $Parameters = $function.FindAll($parampredicate, $true)
-                foreach ($p in $Parameters) {
-                    $ParamType = $p.FindAll($typepredicate, $true)
-                    Write-Verbose "$($FunctionName): Processing Parameter of type [$($ParamType.typeName.FullName)] - $($p.Name.VariablePath.ToString())"
-                    $OutProps = @{
-                        'FunctionName' = $function.Name.ToString()
-                        'ParameterName' = $p.Name.VariablePath.ToString()
-                        'ParameterType' = $ParamType[0].typeName.FullName
+            If([string]::IsNullOrEmpty($functions))
+            {
+                Write-Verbose "$($FunctionName): There were no script parameters found"
+            } else
+            {
+                Foreach ($f in $functions) {
+                    $function = $f.ast
+                    $Parameters = $function.FindAll($parampredicate, $true)
+                    foreach ($p in $Parameters) {
+                        $ParamType = $p.FindAll($typepredicate, $true)
+                        Write-Verbose "$($FunctionName): Processing Parameter of type [$($ParamType.typeName.FullName)] - $($p.Name.VariablePath.ToString())"
+                        $OutProps = @{
+                            'FunctionName' = $function.Name.ToString()
+                            'ParameterName' = $p.Name.VariablePath.ToString()
+                            'ParameterType' = $ParamType[0].typeName.FullName
+                        }
+                        # This will add in any other parameter attributes if they are specified (default attributes are thus not included and output may not be normalized)
+                        $p.FindAll($paramattributes, $true) | ForEach-Object {
+                            $OutProps.($_.ArgumentName) = $_.Argument.Value
+                        }
+                        $Output += New-Object -TypeName PSObject -Property $OutProps
                     }
-                    # This will add in any other parameter attributes if they are specified (default attributes are thus not included and output may not be normalized)
-                    $p.FindAll($paramattributes, $true) | ForEach-Object {
-                        $OutProps.($_.ArgumentName) = $_.Argument.Value
-                    }
-                    $Output += New-Object -TypeName PSObject -Property $OutProps
                 }
             }
         }
