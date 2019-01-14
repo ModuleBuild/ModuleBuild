@@ -1,8 +1,5 @@
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "ModuleBuildLoggingEnabled")]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "BuildPath")]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "functionpredicate")]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "CommonParams")]
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "ScriptText")]
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "ModuleBuildLoggingEnabled",Justification="ModuleBuildLoggingEnabled is optional. It's used to enable Nlog-based logging.")]
 param()
 
 $ModuleBuildLoggingEnabled = $false     # Set to true to enable nlog-based logging
+

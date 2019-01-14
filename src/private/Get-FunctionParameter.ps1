@@ -30,7 +30,10 @@ function Get-FunctionParameter {
     1.0.1 - Updated function name to remove plural format
             Added Name parameter and logic for getting script parameters if no function is defined.
             Added ScriptParameters parameter to include parameters for a script (not just ones associated with defined functions)
+    1.0.2 - Added SuppressMessageAttribute for functionpredicate
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments","functionpredicate",Scope="Function",Target='Get-FunctionParameter',Justification="Unused AST filter")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments","CommonParams",Scope="Function",Target='Get-FunctionParameter',Justification="")]
     [CmdletBinding()]
     param(
         [parameter(ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]

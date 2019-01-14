@@ -35,7 +35,7 @@ function Import-ModulePrivateFunction {
     .NOTES
     This only applies to modules of the type 'Script'. Be very careful before importing everything as any wayward functions might get imported and bloat your resulting module needlessly.
     #>
-
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidDefaultValueSwitchParameter", "",Scope="function",Target="Import-ModulePrivateFunction",Justification="Not adding CBH by default is actually useful.")]
     [CmdletBinding( SupportsShouldProcess = $True, ConfirmImpact = 'High' )]
     param(
         [parameter(Position = 0, ValueFromPipeline = $TRUE)]

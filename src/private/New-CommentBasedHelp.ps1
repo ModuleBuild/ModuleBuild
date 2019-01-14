@@ -29,7 +29,10 @@
        Version History
        1.0.0 - Initial release
        1.0.1 - Updated for ModuleBuild
+       1.0.2 - Added SuppressMessageAttribute
     #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "ScriptText",Scope="Function",Target="New-CommentBasedHelp",Justification="Seems it's here since duo a copy paste from other functions (Add-MissingCBH,Get-Function,Get-FunctionParameter). Leaving it here since it doesn't do any harm.")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions","",Scope="Function",Target="New-CommentBasedHelp",Justification="Function does not change system state. Simply outputs a obj with CommentBasedHelp.")]
     [CmdletBinding()]
     param(
         [parameter(Position=0, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
