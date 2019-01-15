@@ -61,8 +61,6 @@ switch ($psCmdlet.ParameterSetName) {
                 throw
             }
         }
-
-        CleanUp
     }
     'Build' {
         if ($NewVersion -ne $null) {
@@ -104,7 +102,5 @@ switch ($psCmdlet.ParameterSetName) {
                 throw 'Unable to upload project to the PowerShell Gallery!'
             }
         }
-
-        CleanUp
     }
 }
