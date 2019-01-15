@@ -226,4 +226,9 @@ $Content = @(
         Source = 'scaffold\PSScriptAnalyzerSettings.psd1'
         Destination = 'PSScriptAnalyzerSettings.psd1'
     }
+    @{
+        ContentType = 'file'
+        Source = 'scaffold\appveyor.yml'
+        Destination = 'appveyor.yml'
+    }
 )
