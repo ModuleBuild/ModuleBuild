@@ -66,7 +66,7 @@ function Add-PublicFunction {
             $PublicFunctionSrc = Join-Path $BuildEnvPath $BuildEnvInfo.PublicFunctionSource
             $TemplatePath = Join-Path $BuildEnvPath $BuildEnvInfo.FunctionTemplates
             $TemplateLookup = @{}
-            Get-ChildItem -Path $TemplatePath -Filter '*.tem' | Foreach {
+            Get-ChildItem -Path $TemplatePath -Filter '*.tem' | ForEach-Object {
                 $TemplateLookup.($_.BaseName) = $_.FullName
             }
             $BuildEnvVars = (Get-Member -Type 'NoteProperty' -InputObject $LoadedBuildEnv).Name
@@ -101,7 +101,7 @@ function Add-PublicFunction {
                 $NewFunctionOutput = $TemplateData -replace '%%FunctionName%%', $FunctionName
 
                 # Next replace any other variables found in our build environment file that exist in the template.
-                $BuildEnvVars | Foreach {
+                $BuildEnvVars | ForEach-Object {
                     Write-Verbose "   Replacing %%$($_)%% with $($BuildEnvInfo.$_) if found in template..."
                     $NewFunctionOutput = $NewFunctionOutput -replace "%%$($_)%%", ($BuildEnvInfo.$_ -join ',')
                 }

@@ -1,4 +1,4 @@
-Function Insert-MissingCBH {
+Function Add-MissingCBH {
     <#
     .SYNOPSIS
         Create comment based help for a function.
@@ -8,7 +8,7 @@ Function Insert-MissingCBH {
         Multi-line or piped lines of code to process.
     .EXAMPLE
        PS > $test = Get-Content 'C:\temp\test.ps1' -raw
-       PS > $test | Insert-MissingCBH | clip
+       PS > $test | Add-MissingCBH | clip
 
        Takes C:\temp\test.ps1 as input, creates basic comment based help and puts the result in the clipboard
        to be pasted elsewhere for review.

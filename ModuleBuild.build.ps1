@@ -1,3 +1,4 @@
+
 param (
     [parameter(Position = 0)]
     [string]$BuildFile = @(Get-ChildItem 'build\*.buildenvironment.ps1')[0].FullName,
@@ -66,7 +67,7 @@ task LoadRequiredModules {
         $Script:RequiredModules += 'Powershell-YAML'
     }
     if ($Script:BuildEnv.OptionCodeHealthReport) {
-        $RequiredModules += 'PSCodeHealth'
+        $Script:RequiredModules += 'PSCodeHealth'
     }
 
     $Script:RequiredModules | Foreach-Object {
@@ -176,12 +177,6 @@ task CodeHealthReport -if {$Script:BuildEnv.OptionCodeHealthReport} ValidateRequ
     }
 }
 
-#Synopsis: Validate script requirements are met, load required modules, load project manifest and module, and load additional build tools.
-task Configure ValidateRequirements, PreBuildTasks, LoadRequiredModules, LoadModuleManifest, LoadModule, VersionCheck, LoadBuildTools, {
-    # If we made it this far then we are configured!
-    Write-Description White 'Configuring build environment' -accent
-}
-
 # Synopsis: Set a new version of the module
 task NewVersion LoadBuildTools, LoadModuleManifest, {
     Write-Description White 'Updating module build version' -accent
@@ -240,9 +235,6 @@ task UpdateRelease LoadBuildTools, LoadModuleManifest, {
         throw $_
     }
 }
-
-# Synopsis: Update the current working module version and release notes
-task UpdateVersion NewVersion, UpdateRelease
 
 # Synopsis: Regenerate scratch staging directory
 task Clean {
@@ -462,33 +454,25 @@ task UpdateCBH {
 task AnalyzeModuleRelease -if {$Script:BuildEnv.OptionAnalyzeCode} {
     Write-Description White 'Analyzing the project with ScriptAnalyzer' -accent
     $StageReleasePath = Join-Path (Join-Path $BuildRoot $Script:BuildEnv.ScratchFolder) $Script:BuildEnv.BaseReleaseFolder
-    $Analysis = Invoke-ScriptAnalyzer -Path $StageReleasePath
-    $AnalysisErrors = @($Analysis | Where-Object {@('Information', 'Warning') -notcontains $_.Severity})
-    if ($AnalysisErrors.Count -ne 0) {
-        Write-Build White 'The following errors came up in the script analysis:' -level 2
-        $AnalysisErrors
-        Write-Build
-        Write-Build White "Note that this was from the script analysis run against $StageReleasePath" -Level 2
-        Prompt-ForBuildBreak -CustomError $AnalysisErrors
+    $Analysis = Invoke-ScriptAnalyzer -Path $StageReleasePath -Settings (Join-Path $BuildRoot "PSScriptAnalyzerSettings.psd1")
+    if ($Analysis.Count) {
+        Write-Description White "Note that this was from the script analysis run against $StageReleasePath" -level 2
+        Write-Description Red "$($Analysis.Count) linting errors or warnings were found:" -level 2
+        $Analysis | Format-Table -AutoSize
+        Write-Error "$($Analysis.Count) linting errors or warnings were found. The build cannot continue." -ErrorAction Stop
     }
 }
 
 # Synopsis: Run PSScriptAnalyzer against the public source files.
 task AnalyzePublic {
-    Write-Description White 'Analyzing the public source files with ScriptAnalyzer.' -accent
-    $Analysis = Invoke-ScriptAnalyzer -Path (Join-Path $BuildRoot $Script:BuildEnv.PublicFunctionSource)
-    $AnalysisErrors = @($Analysis | Where-Object {@('Information', 'Warning') -notcontains $_.Severity})
-
-    if ($AnalysisErrors.Count -ne 0) {
-        Write-Description White 'The following errors came up in the script analysis:' -level 2
-        $AnalysisErrors
-        Write-Description
+    Write-Description White "Analyzing the public source files with ScriptAnalyzer." -accent
+    $Analysis = Invoke-ScriptAnalyzer -Path (Join-Path $BuildRoot $Script:BuildEnv.PublicFunctionSource) -Settings (Join-Path $BuildRoot "PSScriptAnalyzerSettings.psd1")
+    if ($Analysis.Count) {
         Write-Description White "Note that this was from the script analysis run against $($Script:BuildEnv.PublicFunctionSource)" -level 2
+        Write-Description Red "$($Analysis.Count) linting errors or warnings were found:" -level 2
+        $Analysis | Format-Table -AutoSize
     }
 }
-
-# Synopsis: Build help files for module
-task CreateHelp CreateMarkdownHelp, CreateExternalHelp, CreateUpdateableHelpCAB, CreateProjectHelp, AddAdditionalDocFiles
 
 # Synopsis: Build the markdown help files with PlatyPS
 task CreateMarkdownHelp GetPublicFunctions, {
@@ -562,11 +546,6 @@ task CreateUpdateableHelpCAB {
     }
     $LandingPage = "$($StageReleasePath)\docs\$($Script:BuildEnv.ModuleToBuild).md"
     $null = New-ExternalHelpCab -CabFilesFolder "$($StageReleasePath)\en-US\" -LandingPagePath $LandingPage -OutputFolder "$($StageReleasePath)\en-US\" @PlatyPSVerbose
-}
-
-# Synopsis: Build help files for module and ignore missing section errors
-task TestCreateHelp Configure, CreateMarkdownHelp, CreateExternalHelp, CreateUpdateableHelpCAB, {
-    Write-Description White 'Create help files' -accent
 }
 
 # Synopsis: Create a new version release directory for our release and copy our contents to it
@@ -714,9 +693,6 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
         Write-Warning 'The mkdocs.yml file already exists. If you want this regenerated you will need to delete it first.'
     }
 }
-
-# Synopsis: Put together all the various projecet help files
-task CreateProjectHelp BuildProjectHelpFiles, AddAdditionalDocFiles, UpdateReadTheDocs, CreateReadTheDocsYML
 
 # Synopsis: Push the current release of the project to PSScriptGallery
 task PublishPSGallery LoadBuildTools, InstallModule, {
@@ -877,6 +853,26 @@ task GithubPush VersionCheck, {
     assert (-not $changes) "Please, commit changes."
 }
 
+#Synopsis: Validate script requirements are met, load required modules, load project manifest and module, and load additional build tools.
+task Configure ValidateRequirements, PreBuildTasks, LoadRequiredModules, LoadModuleManifest, LoadModule, VersionCheck, LoadBuildTools, {
+    # If we made it this far then we are configured!
+    Write-Description White 'Configuring build environment' -accent
+}
+
+# Synopsis: Build help files for module and ignore missing section errors
+task TestCreateHelp Configure, CreateMarkdownHelp, CreateExternalHelp, CreateUpdateableHelpCAB, {
+    Write-Description White 'Create help files' -accent
+}
+
+# Synopsis: Update the current working module version and release notes
+task UpdateVersion NewVersion, UpdateRelease
+
+# Synopsis: Put together all the various projecet help files
+task CreateProjectHelp BuildProjectHelpFiles, AddAdditionalDocFiles, UpdateReadTheDocs, CreateReadTheDocsYML
+
+# Synopsis: Build help files for module
+task CreateHelp CreateMarkdownHelp, CreateExternalHelp, CreateUpdateableHelpCAB, CreateProjectHelp, AddAdditionalDocFiles
+
 # Synopsis: Build the module
 task . Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, PostBuildTasks, BuildSessionCleanup
 
@@ -890,4 +886,4 @@ task BuildInstallAndTestModule Configure, CodeHealthReport, Clean, PrepareStage,
 task BuildInstallTestAndPublishModule Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, PublishPSGallery, PostBuildTasks, BuildSessionCleanup
 
 # Synopsis: Instert Comment Based Help where it doesn't already exist (output to scratch directory)
-task InsertMissingCBH Configure, Clean, UpdateCBHtoScratch, BuildSessionCleanup
+task AddMissingCBH Configure, Clean, UpdateCBHtoScratch, BuildSessionCleanup

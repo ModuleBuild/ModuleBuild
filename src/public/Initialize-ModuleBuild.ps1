@@ -68,24 +68,31 @@ Enjoy!
 '@
 
         if (-not [string]::IsNullOrEmpty($SourceModule)) {
-            if (-not (test-path $SourceModule) -or ($SourceModule -notmatch '*.psd1')) {
-                throw 'SourceModule was not found or is not a psd1 module manifest file!'
+            if (-not [string]::IsNullOrEmpty($SourceModule))
+            {
+                if (-not (test-path $SourceModule) -or ((Get-Item $SourceModule).Extension -notmatch '.psd1')) {
+                    throw "$($SourceModule) was not found or is not a psd1 module manifest file!"
+                } ElseIf ((test-path $SourceModule) -and (Get-Item $SourceModule).Extension -match '.psd1') {
+                    Write-Verbose "$($SourceModule) Matched to .psd1 file"
+                }
             }
 
             $ExistingModuleManifest = Test-ModuleManifest $SourceModule
 
-            $ModuleProps = @{
+            $PlasterParams = @{
                 TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\';
                 ModuleName = $ExistingModuleManifest.Name;
                 ModuleDescription = $ExistingModuleManifest.Description;
                 ModuleAuthor = $ExistingModuleManifest.Author;
+                ModuleCompanyName = $ExistingModuleManifest.CompanyName;
                 ModuleWebsite = $ExistingModuleManifest.ProjectURI.ToString();
                 ModuleVersion = $ExistingModuleManifest.Version.ToString();
                 ModuleTags = $ExistingModuleManifest.Tags -join ',';
             }
-        }
-        $PlasterParams = @{
-            TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\'
+        } else {
+            $PlasterParams = @{
+                TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\'
+            }
         }
         if (-not [string]::IsNullOrEmpty($Path)) {
             $PlasterParams.DestinationPath = $Path
@@ -107,10 +114,13 @@ Enjoy!
 
         # Get the newly created buildenvironment file and run it the first time to create the first export file.
         $BuildDefinition = Get-ChildItem (Join-Path $PlasterResults.DestinationPath 'build') -Filter '*.buildenvironment.ps1'
-        $strCommand = "powershell -noprofile -WindowStyle hidden -file '$($BuildDefinition.FullName)'"
-
-        try {
-            Invoke-Expression $strCommand
+        powershell -noprofile -WindowStyle hidden -file $($BuildDefinition.FullName)
+        Try {
+            if ((Test-Path -Path ($BuildDefinition.FullName -replace '.ps1','.json')) -eq 'True') {
+               Write-Verbose 'Found JSON file.'
+            } Else {
+               Write-Error 'Could not find JSON file' -ErrorAction Stop
+           }
         }
         catch {
             throw $_

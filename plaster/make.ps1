@@ -19,7 +19,7 @@ catch {
 . .\PlasterParams.ps1
 . .\PlasterContent.ps1
 
-$version = (git describe --match "v[0-9]*") -replace 'v',''
+$version = (git describe --tags --always --match "v[0-9]*") -replace 'v',''
 if ($null -eq $version) {
     $version = '0.0.1'
 }

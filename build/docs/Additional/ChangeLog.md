@@ -19,7 +19,7 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 - Fixed improper spelling of 'license' in license creation templating.
 
 ## Version 0.1.10
-- Fixed the -InsertCBH build task.
+- Fixed the -AddCBH build task.
 - Fixed the missing documentation platyps output to show the actual found line that indicates missing CBH.
 
 ## Version 0.1.9

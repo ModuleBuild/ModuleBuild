@@ -17,7 +17,7 @@ function Set-BuildEnvironment {
     Set-BuildEnvironment -OptionSensitiveTerms @('myapikey','myname','password')
     #>
 
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess=$True)]
     param(
         [parameter(Position = 0, ValueFromPipeline = $TRUE)]
         [String]$Path
@@ -50,7 +50,7 @@ function Set-BuildEnvironment {
                 }
             }
             catch {
-                #throw "Unable to load the build file in $BuildPath"
+                throw "Unable to load the build file in $BuildPath"
             }
         }
 
@@ -75,18 +75,20 @@ function Set-BuildEnvironment {
         New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
         if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
-            try {
-                $LoadedBuildEnv = Get-BuildEnvironment -Path $BuildPath
-                Foreach ($ParamKey in ($PSBoundParameters.Keys | Where-Object {$_ -ne 'Path'})) {
-                    $LoadedBuildEnv.$ParamKey = $PSBoundParameters[$ParamKey]
-                    Write-Output "Updating $ParamKey to be $($PSBoundParameters[$ParamKey])"
+            If ($PSCmdlet.ShouldProcess("Updating buildenvironment.json")) {
+                try {
+                    $LoadedBuildEnv = Get-BuildEnvironment -Path $BuildPath
+                    Foreach ($ParamKey in ($PSBoundParameters.Keys | Where-Object {$_ -ne 'Path'})) {
+                        $LoadedBuildEnv.$ParamKey = $PSBoundParameters[$ParamKey]
+                        Write-Output "Updating $ParamKey to be $($PSBoundParameters[$ParamKey])"
+                    }
+                    $LoadedBuildEnv.PSObject.Properties.remove('Path')
+                    $LoadedBuildEnv | ConvertTo-Json | Out-File -FilePath $BuildPath -Encoding:utf8 -Force
+                    Write-Output "Saved configuration file - $BuildPath"
                 }
-                $LoadedBuildEnv.PSObject.Properties.remove('Path')
-                $LoadedBuildEnv | ConvertTo-Json | Out-File -FilePath $BuildPath -Encoding:utf8 -Force
-                Write-Output "Saved configuration file - $BuildPath"
-            }
-            catch {
-                throw "Unable to load the build file in $BuildPath"
+                catch {
+                    throw "Unable to load the build file in $BuildPath"
+                }
             }
         }
         else {
