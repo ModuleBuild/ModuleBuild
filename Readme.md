@@ -47,8 +47,8 @@ Please feel free to contribute by opening new issues or providing pull requests.
 For the best development experience, open this project as a folder in Visual
 Studio Code and ensure that the PowerShell extension is installed.
 
-* [Visual Studio Code]
-* [PowerShell Extension]
+* [Visual Studio Code](https://code.visualstudio.com/)
+* [PowerShell Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
 
 More contributing information can be found [here](https://github.com/zloeber/ModuleBuild/blob/master/docs/Contributing.md).
 
