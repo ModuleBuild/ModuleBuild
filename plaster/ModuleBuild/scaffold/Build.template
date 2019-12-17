@@ -22,6 +22,7 @@ function PrerequisitesLoaded {
         if ((get-module PSDepend -ListAvailable) -eq $null) {
             Write-Host "Attempting to install the PSDepend module..."
             $null = Install-Module PSDepend -Scope:CurrentUser
+            Write-Host 'Installed!'
         }
         if (get-module PSDepend -ListAvailable) {
             Write-Host -NoNewLine "Importing PSDepend module"

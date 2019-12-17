@@ -1,4 +1,5 @@
 #Requires -Version 5
+#Requires -RunAsAdministrator
 [CmdletBinding(DefaultParameterSetName = 'Build')]
 param (
     [parameter(Position = 0, ParameterSetName = 'Build')]
@@ -21,6 +22,7 @@ function PrerequisitesLoaded {
         if ((get-module PSDepend -ListAvailable) -eq $null) {
             Write-Host "Attempting to install the PSDepend module..."
             $null = Install-Module PSDepend -Scope:CurrentUser
+            Write-Host 'Installed!'
         }
         if (get-module PSDepend -ListAvailable) {
             Write-Host -NoNewLine "Importing PSDepend module"
@@ -45,8 +47,8 @@ function PrerequisitesLoaded {
 
 function CleanUp {
     try {
-        Write-Output ''
-        Write-Output 'Attempting to clean up the session (loaded modules and such)...'
+        Write-Host ''
+        Write-Host 'Attempting to clean up the session (loaded modules and such)...'
         Invoke-Build -Task BuildSessionCleanup
         Remove-Module InvokeBuild
     }
@@ -83,8 +85,8 @@ switch ($psCmdlet.ParameterSetName) {
                 Invoke-Build
             }
             catch {
-                Write-Output 'Build Failed with the following error:'
-                Write-Output $_
+                Write-Host 'Build Failed with the following error:'
+                Write-Host $_
             }
         }
 
@@ -94,8 +96,8 @@ switch ($psCmdlet.ParameterSetName) {
                 Invoke-Build -Task InstallAndTestModule
             }
             catch {
-                Write-Output 'Install and test of module failed:'
-                Write-Output $_
+                Write-Host 'Install and test of module failed:'
+                Write-Host $_
             }
         }
 
