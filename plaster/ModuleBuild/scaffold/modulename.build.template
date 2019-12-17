@@ -815,12 +815,6 @@ task BuildSessionCleanup LoadRequiredModules, {
     Write-Description White 'Cleaning up the build session' -accent
 
     $BuildToolPath = Join-Path $BuildRoot $Script:BuildEnv.BuildToolFolder
-    # Clean up loaded modules if they are loaded
-    Write-Description White "Removing modules" -Level 2
-    $Script:RequiredModules | Foreach-Object {
-        Write-Description White "Removing $($_) module (if loaded)." -Level 3
-        Remove-Module $_ -Erroraction Ignore
-    }
 
     Write-Description White "Removing $($Script:BuildEnv.ModuleToBuild) module (if loaded)." -Level 3
     Remove-Module $Script:BuildEnv.ModuleToBuild -Erroraction Ignore
