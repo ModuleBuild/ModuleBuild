@@ -236,5 +236,10 @@ $Content = @(
         Source = 'scaffold\appveyor.yml'
         Destination = 'appveyor.yml'
         Condition = '$PLASTER_PARAM_CICD -eq "appveyor"'
+    },
+    @{
+        ContentType = 'file'
+        Source = 'scaffold\Requirements.psd1'
+        Destination = 'Requirements.psd1'
     }
 )

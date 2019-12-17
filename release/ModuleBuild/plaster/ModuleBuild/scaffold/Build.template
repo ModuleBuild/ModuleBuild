@@ -1,4 +1,5 @@
 #Requires -Version 5
+#Requires -RunAsAdministrator
 [CmdletBinding(DefaultParameterSetName = 'Build')]
 param (
     [parameter(Position = 0, ParameterSetName = 'Build')]
@@ -18,14 +19,20 @@ param (
 function PrerequisitesLoaded {
     # Install required modules if missing
     try {
-        if ((get-module InvokeBuild -ListAvailable) -eq $null) {
-            Write-Output "Attempting to install the InvokeBuild module..."
-            $null = Install-Module InvokeBuild -Scope:CurrentUser
+        if ((get-module PSDepend -ListAvailable) -eq $null) {
+            Write-Host "Attempting to install the PSDepend module..."
+            $null = Install-Module PSDepend -Scope:CurrentUser
         }
-        if (get-module InvokeBuild -ListAvailable) {
-            Write-Output -NoNewLine "Importing InvokeBuild module"
-            Import-Module InvokeBuild -Force
-            Write-Output '...Loaded!'
+        if (get-module PSDepend -ListAvailable) {
+            Write-Host -NoNewLine "Importing PSDepend module"
+            Import-Module PSDepend -Force
+            Write-Host '...Loaded!'
+
+            Write-Host -NoNewLine 'Installing dependencies...'
+            Invoke-PSDepend -Path $(Join-Path $(Get-Location) 'Requirements.psd1') -Test
+            Invoke-PSDepend -Path $(Join-Path $(Get-Location) 'Requirements.psd1') -Force
+            Invoke-PSDepend -Path $(Join-Path $(Get-Location) 'Requirements.psd1') -Import -Force
+            Write-Host 'Installed!'
             return $true
         }
         else {
@@ -39,8 +46,8 @@ function PrerequisitesLoaded {
 
 function CleanUp {
     try {
-        Write-Output ''
-        Write-Output 'Attempting to clean up the session (loaded modules and such)...'
+        Write-Host ''
+        Write-Host 'Attempting to clean up the session (loaded modules and such)...'
         Invoke-Build -Task BuildSessionCleanup
         Remove-Module InvokeBuild
     }
@@ -77,8 +84,8 @@ switch ($psCmdlet.ParameterSetName) {
                 Invoke-Build
             }
             catch {
-                Write-Output 'Build Failed with the following error:'
-                Write-Output $_
+                Write-Host 'Build Failed with the following error:'
+                Write-Host $_
             }
         }
 
@@ -88,8 +95,8 @@ switch ($psCmdlet.ParameterSetName) {
                 Invoke-Build -Task InstallAndTestModule
             }
             catch {
-                Write-Output 'Install and test of module failed:'
-                Write-Output $_
+                Write-Host 'Install and test of module failed:'
+                Write-Host $_
             }
         }
 
