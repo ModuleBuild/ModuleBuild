@@ -66,18 +66,6 @@ task LoadRequiredModules {
     Invoke-PSDepend -Path $PSDependBuildFile -Import -Force
 }
 
-#Synopsis: Load dot sourced functions into this build session
-task LoadBuildTools {
-    Write-Description White 'Sourcing all of the required build functions' -accent
-    $BuildToolPath = Join-Path $BuildRoot $Script:BuildEnv.BuildToolFolder
-    $BuildTools = Join-Path $BuildToolPath 'dotSource'
-    # Dot source any build script functions we need to use
-    Get-ChildItem $BuildTools -Recurse -Filter "*.ps1" -File | ForEach-Object {
-        Write-Description White "Dot sourcing script file: $($_.Name)" -Level 2
-        . $_.FullName
-    }
-}
-
 # Synopsis: Create new module manifest with explicit function exports included
 task CreateModuleManifest CreateModulePSM1, {
     Write-Description White 'Module manifest file updates' -accent
@@ -159,13 +147,13 @@ task CodeHealthReport -if {$Script:BuildEnv.OptionCodeHealthReport} ValidateRequ
 }
 
 #Synopsis: Validate script requirements are met, load required modules, load project manifest and module, and load additional build tools.
-task Configure ValidateRequirements, PreBuildTasks, LoadRequiredModules, LoadModuleManifest, LoadModule, VersionCheck, LoadBuildTools, {
+task Configure ValidateRequirements, PreBuildTasks, LoadRequiredModules, LoadModuleManifest, LoadModule, VersionCheck, LoadRequiredModules, {
     # If we made it this far then we are configured!
     Write-Description White 'Configuring build environment' -accent
 }
 
 # Synopsis: Set a new version of the module
-task NewVersion LoadBuildTools, LoadModuleManifest, {
+task NewVersion LoadRequiredModules, LoadModuleManifest, {
     Write-Description White 'Updating module build version' -accent
     $ModuleManifestFullPath = Join-Path $BuildRoot "$($Script:BuildEnv.ModuleToBuild).psd1"
     $ReleasePath = Join-Path $BuildRoot $Script:BuildEnv.BaseReleaseFolder
@@ -201,7 +189,7 @@ task NewVersion LoadBuildTools, LoadModuleManifest, {
 }
 
 # Synopsis: Update current module manifest with the version defined in the build config file (if they differ)
-task UpdateRelease LoadBuildTools, LoadModuleManifest, {
+task UpdateRelease LoadRequiredModules, LoadModuleManifest, {
     Write-Description White 'Updating the release notes of this module' -accent
 
     $ModuleManifestFullPath = Join-Path $BuildRoot "$($Script:BuildEnv.ModuleToBuild).psd1"
@@ -695,7 +683,7 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
 task CreateProjectHelp BuildProjectHelpFiles, AddAdditionalDocFiles, UpdateReadTheDocs, CreateReadTheDocsYML
 
 # Synopsis: Push the current release of the project to PSScriptGallery
-task PublishPSGallery LoadBuildTools, InstallModule, {
+task PublishPSGallery LoadRequiredModules, InstallModule, {
     Write-Description White 'Publishing recent module release to the PowerShell Gallery' -accent
 
     $ReleasePath = Join-Path $BuildRoot $Script:BuildEnv.BaseReleaseFolder
