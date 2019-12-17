@@ -17,4 +17,4 @@ While any text editor will work well there are included task and setting json fi
 - Analyze -> Runs PSScriptAnalyzer against the src/public files.
 - CreateProjectHelp - Creates the project level help.
 - Test - Runs Pester tests.
-- InsertMissingCBH - Analyzes the existing public functions and inserts a template CBH if no CBH already exists and saves it into your scratch folder.
+- AddMissingCBH - Analyzes the existing public functions and inserts a template CBH if no CBH already exists and saves it into your scratch folder.

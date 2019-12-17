@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>c0ce518c-f894-4114-91f9-d49945d9dfb1</id>
+    <id>2c8bbc31-049a-4729-9a63-0c3403d91cd1</id>
     <version>0.0.1</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -24,6 +24,10 @@
       name="ModuleAuthor"
       type="text"
       prompt="Enter a module author" />
+    <parameter
+      name="ModuleCompanyName"
+      type="text"
+      prompt="Enter a module company name" />
     <parameter
       name="ModuleWebsite"
       type="text"
@@ -58,6 +62,20 @@
         label="&amp;GPL 3.0"
         help="You may copy, distribute and modify the software as long as you track changes/dates in source files. Any modifications to or software including (via compiler) GPL-licensed code must also be made available under the GPL along with build &amp; install instructions."
         value="GPL" />
+    </parameter>
+    <parameter
+      name="CICD"
+      type="choice"
+      prompt="What CI/CD do you want to use?"
+      default="0">
+      <choice
+        label="&amp;None"
+        help="No CI/CD."
+        value="None" />
+      <choice
+        label="&amp;AppVeyor"
+        help="CI/CD service for Windows, Linux and macOS. Build, test, deploy your apps faster, on any platform"
+        value="appveyor" />
     </parameter>
     <parameter
       name="OptionAnalyzeCode"
@@ -147,9 +165,9 @@
   <content>
     <newModuleManifest
       description="${PLASTER_PARAM_ModuleDescription}"
-      copyright="(c) ${PLASTER_Year} ${PLASTER_PARAM_ModuleAuthor}. All rights reserved."
+      copyright="(c) ${PLASTER_Year} ${PLASTER_PARAM_ModuleCompanyName}. All rights reserved."
       tags="${PLASTER_PARAM_ModuleTags}"
-      companyName="${PLASTER_PARAM_ModuleAuthor}"
+      companyName="${PLASTER_PARAM_ModuleCompanyName}"
       author="${PLASTER_PARAM_ModuleAuthor}"
       licenseUri="${PLASTER_PARAM_ModuleWebsite}/raw/master/LICENSE.md"
       projectUri="${PLASTER_PARAM_ModuleWebsite}"
@@ -186,15 +204,45 @@
       source="scaffold\src\templates\*"
       destination="src\templates" />
     <file
-      source="scaffold\tests\*"
-      destination="src\tests" />
+      source="scaffold\tests\"
+      destination="tests" />
+    <file
+      source="scaffold\tests\intergration"
+      destination="tests\intergration" />
+    <file
+      source="scaffold\tests\unit"
+      destination="tests\unit" />
+    <file
+      source="scaffold\tests\intergration\private\*"
+      destination="tests\intergration\private" />
+    <file
+      source="scaffold\tests\intergration\public\*"
+      destination="tests\intergration\public" />
+    <file
+      source="scaffold\tests\unit\private\*"
+      destination="tests\unit\private" />
+    <file
+      source="scaffold\tests\unit\public\*"
+      destination="tests\unit\public" />
     <templateFile
       source="scaffold\plugins\NLog\*"
       destination="plugins\nlog"
       condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
     <file
       source="scaffold\plugins\NLog\NLogModule\*"
-      destination="plugins\nlog\NLog\NLogModule"
+      destination="plugins\nlog\NLogModule"
+      condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
+    <file
+      source="scaffold\plugins\NLog\NLogModule\docs\*"
+      destination="plugins\nlog\NLogModule\docs"
+      condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
+    <file
+      source="scaffold\plugins\NLog\NLogModule\en-US\*"
+      destination="plugins\nlog\NLogModule\en-US"
+      condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
+    <file
+      source="scaffold\plugins\NLog\NLogModule\lib\*"
+      destination="plugins\nlog\NLogModule\lib"
       condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
     <file
       source="scaffold\build\cleanup\*"
@@ -257,5 +305,12 @@
     <templateFile
       source="scaffold\build\docs\ReadTheDocs\*"
       destination="build\docs\ReadTheDocs" />
+    <file
+      source="scaffold\PSScriptAnalyzerSettings.psd1"
+      destination="PSScriptAnalyzerSettings.psd1" />
+    <file
+      source="scaffold\appveyor.yml"
+      destination="appveyor.yml"
+      condition="$PLASTER_PARAM_CICD -eq &quot;appveyor&quot;" />
   </content>
 </plasterManifest>

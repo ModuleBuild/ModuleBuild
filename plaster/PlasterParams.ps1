@@ -65,6 +65,24 @@ $Parameters = @(
         )
     },
     @{
+        ParameterName = "CICD"
+        ParameterType = "choice"
+        ParameterPrompt = "What CI/CD do you want to use?"
+        Default = "0"
+        Choices = @(
+            @{
+                Label = "&None"
+                Help = "No CI/CD."
+                Value = "None"
+            },
+            @{
+                Label = "&AppVeyor"
+                Help = "CI/CD service for Windows, Linux and macOS. Build, test, deploy your apps faster, on any platform"
+                Value = "appveyor"
+            }
+        )
+    },
+    @{
         ParameterName = "OptionAnalyzeCode"
         ParameterType = "choice"
         ParameterPrompt = "Use PSScriptAnalyzer in the module build process (Recommended for Gallery uploading)?"

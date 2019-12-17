@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>fc5c0ee0-65ae-4cc0-b8af-85c2598ed8ef</id>
+    <id>2c8bbc31-049a-4729-9a63-0c3403d91cd1</id>
     <version>0.0.1</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -62,6 +62,20 @@
         label="&amp;GPL 3.0"
         help="You may copy, distribute and modify the software as long as you track changes/dates in source files. Any modifications to or software including (via compiler) GPL-licensed code must also be made available under the GPL along with build &amp; install instructions."
         value="GPL" />
+    </parameter>
+    <parameter
+      name="CICD"
+      type="choice"
+      prompt="What CI/CD do you want to use?"
+      default="0">
+      <choice
+        label="&amp;None"
+        help="No CI/CD."
+        value="None" />
+      <choice
+        label="&amp;AppVeyor"
+        help="CI/CD service for Windows, Linux and macOS. Build, test, deploy your apps faster, on any platform"
+        value="appveyor" />
     </parameter>
     <parameter
       name="OptionAnalyzeCode"
@@ -294,5 +308,9 @@
     <file
       source="scaffold\PSScriptAnalyzerSettings.psd1"
       destination="PSScriptAnalyzerSettings.psd1" />
+    <file
+      source="scaffold\appveyor.yml"
+      destination="appveyor.yml"
+      condition="$PLASTER_PARAM_CICD -eq &quot;appveyor&quot;" />
   </content>
 </plasterManifest>

@@ -13,7 +13,7 @@ Retrieves public module function definitions and recreates them in your modulebu
 ## SYNTAX
 
 ```
-Import-ModulePublicFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotInsertCBH]
+Import-ModulePublicFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotAddCBH]
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -80,7 +80,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DoNotInsertCBH
+### -DoNotAddCBH
 Do not attempt to find and insert comment based help into the function.
 
 ```yaml
