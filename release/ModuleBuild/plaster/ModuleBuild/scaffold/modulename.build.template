@@ -51,7 +51,6 @@ task ValidateRequirements {
     assert ($PSVersionTable.PSVersion.Major.ToString() -eq '5') 'Powershell 5 is required for this build to function properly (you can comment this assert out if you are able to work around this requirement)'
 }
 
-#Synopsis: Load required build modules using PSDepend
 task LoadRequiredModules {
     Write-Description White 'Loading all required modules for the build framework' -accent
 
@@ -63,9 +62,9 @@ task LoadRequiredModules {
     $PSDependFolder = $(Join-Path $Script:BuildEnv.BuildToolFolder 'PSDepend')
     $PSDependBuildFile = $(Join-Path $PSDependFolder 'build.depend.psd1')
     Invoke-PSDepend -Path $PSDependBuildFile -Force
+    $Script:PSDependBuildModules = Invoke-PSDepend -Path $PSDependBuildFile -Test | Select Dependency*
     Invoke-PSDepend -Path $PSDependBuildFile -Import -Force
 }
-
 
 #Synopsis: Load dot sourced functions into this build session
 task LoadBuildTools {
@@ -810,19 +809,24 @@ task PostBuildTasks {
     }
 }
 
-# Synopsis: Remove session artifacts like loaded modules and variables
-task BuildSessionCleanup LoadRequiredModules, {
-    Write-Description White 'Cleaning up the build session' -accent
 
-    $BuildToolPath = Join-Path $BuildRoot $Script:BuildEnv.BuildToolFolder
+# Synopsis: Remove session artifacts like loaded modules and variables
+task BuildSessionCleanup {
+    Write-Description White 'Cleaning up the build session' -accent
 
     Write-Description White "Removing $($Script:BuildEnv.ModuleToBuild) module (if loaded)." -Level 3
     Remove-Module $Script:BuildEnv.ModuleToBuild -Erroraction Ignore
+
+    $Script:PSDependBuildModules | Foreach-Object {
+        Write-Description White "Removing $($_.DependencyName) module (if loaded)." -Level 3
+        Remove-Module $_ -Erroraction Ignore -Force
+    }
 
     if ($Script:BuildEnv.OptionTranscriptEnabled) {
         Stop-Transcript -WarningAction:Ignore
     }
 }
+
 
 # Synopsis: Push with a version tag.
 task GitPushRelease VersionCheck, {

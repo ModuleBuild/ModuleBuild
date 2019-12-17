@@ -1,4 +1,3 @@
-
 param (
     [parameter(Position = 0)]
     [string]$BuildFile = @(Get-ChildItem 'build\*.buildenvironment.ps1')[0].FullName,
@@ -52,38 +51,22 @@ task ValidateRequirements {
     assert ($PSVersionTable.PSVersion.Major.ToString() -eq '5') 'Powershell 5 is required for this build to function properly (you can comment this assert out if you are able to work around this requirement)'
 }
 
-#Synopsis: Load required modules if available. Otherwise try to install, then load it.
+#Synopsis: Load required build modules using PSDepend
 task LoadRequiredModules {
     Write-Description White 'Loading all required modules for the build framework' -accent
 
-    # These are required for a full build process and will be automatically installed if they aren't available
-    $Script:RequiredModules = @('PlatyPS')
-
-    # Some optional modules
-    if ($Script:BuildEnv.OptionAnalyzeCode) {
-        $Script:RequiredModules += 'PSScriptAnalyzer'
-    }
-    if ($Script:BuildEnv.OptionGenerateReadTheDocs) {
-        $Script:RequiredModules += 'Powershell-YAML'
-    }
-    if ($Script:BuildEnv.OptionCodeHealthReport) {
-        $Script:RequiredModules += 'PSCodeHealth'
+    if ((Get-Module PSDepend -ListAvailable) -eq $null) {
+        Write-Description White "Installing PSDepend Module" -Level 2
+        $null = Install-Module PSDepend -Scope:CurrentUser
     }
 
-    $Script:RequiredModules | Foreach-Object {
-        if ((get-module $_ -ListAvailable) -eq $null) {
-            Write-Description White "Installing $($_) Module" -Level 2
-            $null = Install-Module $_ -Scope:CurrentUser
-        }
-        if (get-module $_ -ListAvailable) {
-            Write-Description White "Importing $($_) Module" -Level 2
-            Import-Module $_ -Force
-        }
-        else {
-            throw 'How did you even get here?'
-        }
-    }
+    $PSDependFolder = $(Join-Path $Script:BuildEnv.BuildToolFolder 'PSDepend')
+    $PSDependBuildFile = $(Join-Path $PSDependFolder 'build.depend.psd1')
+    Invoke-PSDepend -Path $PSDependBuildFile -Force
+    $Script:PSDependBuildModules = Invoke-PSDepend -Path $PSDependBuildFile -Test | Select Dependency*
+    Invoke-PSDepend -Path $PSDependBuildFile -Import -Force
 }
+
 
 #Synopsis: Load dot sourced functions into this build session
 task LoadBuildTools {
@@ -177,6 +160,12 @@ task CodeHealthReport -if {$Script:BuildEnv.OptionCodeHealthReport} ValidateRequ
     }
 }
 
+#Synopsis: Validate script requirements are met, load required modules, load project manifest and module, and load additional build tools.
+task Configure ValidateRequirements, PreBuildTasks, LoadRequiredModules, LoadModuleManifest, LoadModule, VersionCheck, LoadBuildTools, {
+    # If we made it this far then we are configured!
+    Write-Description White 'Configuring build environment' -accent
+}
+
 # Synopsis: Set a new version of the module
 task NewVersion LoadBuildTools, LoadModuleManifest, {
     Write-Description White 'Updating module build version' -accent
@@ -236,6 +225,9 @@ task UpdateRelease LoadBuildTools, LoadModuleManifest, {
     }
 }
 
+# Synopsis: Update the current working module version and release notes
+task UpdateVersion NewVersion, UpdateRelease
+
 # Synopsis: Regenerate scratch staging directory
 task Clean {
     Write-Description White "Clean up our scratch/staging directory $($Script:BuildEnv.ScratchFolder)" -accent
@@ -264,7 +256,9 @@ task PrepareStage {
     Copy-Item -Path "$($BuildRoot)\$($Script:BuildEnv.OtherModuleSource)" -Recurse -Destination "$($ScratchPath)\$($Script:BuildEnv.OtherModuleSource)"
     Copy-Item -Path (Join-Path $BuildDocsPath 'en-US') -Recurse -Destination $ScratchPath
     $Script:BuildEnv.AdditionalModulePaths | ForEach-Object {
-        Copy-Item -Path $_ -Recurse -Destination $ScratchPath -Force
+        if (Test-Path $_) {
+            Copy-Item -Path $_ -Recurse -Destination $ScratchPath -Force
+        }
     }
 }
 
@@ -287,19 +281,21 @@ task UpdateCBHtoScratch {
         $CBH = $currscript | New-CommentBasedHelp
         $currscriptblock = [scriptblock]::Create($currscript)
         . $currscriptblock
-        $currfunct = get-command $CBH.FunctionName
-
-
-        if ($currfunct.definition -notmatch $CBHPattern) {
-            $CBHUpdates++
-            Write-Description White "Inserting template CBH and writing to : $($Script:BuildEnv.ScratchFolder)\$($Script:BuildEnv.PublicFunctionSource)\$($FileName)" -Level 3
-            $UpdatedFunct = 'Function ' + $currfunct.Name + ' {' + "`r`n" + $CBH.CBH + "`r`n" + $currfunct.definition + "`r`n" + '}'
-            $UpdatedFunct | Out-File "$($ScratchPath)\$($Script:BuildEnv.PublicFunctionSource)\$($FileName)" -Encoding $Script:BuildEnv.Encoding -force
+        if([string]::IsNullOrEmpty($CBH))
+        {
+            Write-Error "Could not Add CBH, possibly duo having no parameters in $filename" -ErrorAction Stop
+        } else {
+            $currfunct = get-command $CBH.FunctionName
+            if ($currfunct.definition -notmatch $CBHPattern) {
+                $CBHUpdates++
+                Write-Description White "Inserting template CBH and writing to : $($Script:BuildEnv.ScratchFolder)\$($Script:BuildEnv.PublicFunctionSource)\$($FileName)" -Level 3
+                $UpdatedFunct = 'Function ' + $currfunct.Name + ' {' + "`r`n" + $CBH.CBH + "`r`n" + $currfunct.definition + "`r`n" + '}'
+                $UpdatedFunct | Out-File "$($ScratchPath)\$($Script:BuildEnv.PublicFunctionSource)\$($FileName)" -Encoding $Script:BuildEnv.Encoding -force
+            }
+            else {
+                Write-Description Yellow 'Comment based help already exists!' -Level 2
+            }
         }
-        else {
-            Write-Description Yellow 'Comment based help already exists!' -Level 2
-        }
-
         Remove-Item Function:\$($currfunct.Name)
     }
     Write-Build White ''
@@ -386,10 +382,12 @@ task CreateModulePSM1 RemoveScriptSignatures, UpdateCBH, {
     }
 
     if (($Script:BuildEnv.AdditionalModulePaths).Count -gt 0) {
-        Write-Description White 'Copying over additional module paths now.' -Level 2
+        Write-Description White 'Copying over additional module paths now (if they exist).' -Level 2
         $Script:BuildEnv.AdditionalModulePaths | ForEach-Object {
-            Write-Description White "Copying $_" -Level 3
-            Copy-Item -Path $_ -Recurse -Destination $StageReleasePath -Force
+            if (Test-Path $_) {
+                Write-Description White "Copying $_" -Level 3
+                Copy-Item -Path $_ -Recurse -Destination $StageReleasePath -Force
+            }
         }
     }
 }
@@ -438,14 +436,14 @@ task UpdateCBH {
 "@
 
     $ScratchPath = Join-Path $BuildRoot $Script:BuildEnv.ScratchFolder
-    [Regex]$CBHPattern = '(?ms)\<\#(\#(?!\>)|[^#])*\#\>'
+    $CBHPattern = "(?ms)(\<#.*\.SYNOPSIS.*?#>)"
     Get-ChildItem -Path "$($ScratchPath)\$($Script:BuildEnv.PublicFunctionSource)\*.ps1" -File | ForEach-Object {
         $FormattedOutFile = $_.FullName
         $FileName = $_.Name
         Write-Description White "Replacing CBH in file: $($FileName)" -level 2
         $FunctionName = $FileName -replace '.ps1', ''
         $NewExternalHelp = $ExternalHelp -replace '{{LINK}}', ($Script:BuildEnv.ModuleWebsite + "/tree/master/$($Script:BuildEnv.BaseReleaseFolder)/$($Script:BuildEnv.ModuleVersion)/docs/Functions/$($FunctionName).md")
-        $UpdatedFile = $CBHPattern.Replace( (Get-Content  $FormattedOutFile -raw), $NewExternalHelp, 1)
+        $UpdatedFile = (get-content  $FormattedOutFile -raw) -replace $CBHPattern, $NewExternalHelp
         $UpdatedFile | Out-File -FilePath $FormattedOutFile -force -Encoding $Script:BuildEnv.Encoding
     }
 }
@@ -473,6 +471,9 @@ task AnalyzePublic {
         $Analysis | Format-Table -AutoSize
     }
 }
+
+# Synopsis: Build help files for module
+task CreateHelp CreateMarkdownHelp, CreateExternalHelp, CreateUpdateableHelpCAB, CreateProjectHelp, AddAdditionalDocFiles
 
 # Synopsis: Build the markdown help files with PlatyPS
 task CreateMarkdownHelp GetPublicFunctions, {
@@ -540,6 +541,11 @@ task CreateUpdateableHelpCAB {
     }
     $LandingPage = "$($StageReleasePath)\docs\$($Script:BuildEnv.ModuleToBuild).md"
     $null = New-ExternalHelpCab -CabFilesFolder "$($StageReleasePath)\en-US\" -LandingPagePath $LandingPage -OutputFolder "$($StageReleasePath)\en-US\" @PlatyPSVerbose
+}
+
+# Synopsis: Build help files for module and ignore missing section errors
+task TestCreateHelp Configure, CreateMarkdownHelp, CreateExternalHelp, CreateUpdateableHelpCAB, {
+    Write-Description White 'Create help files' -accent
 }
 
 # Synopsis: Create a new version release directory for our release and copy our contents to it
@@ -643,11 +649,10 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
 
     $DocsReleasePath = Join-Path $Script:BuildEnv.BaseReleaseFolder $Script:BuildEnv.ModuleToBuild
     $ProjectDocsPath = Join-Path $BuildRoot 'docs'
-    $ProjectFunctionDocsPath = Join-Path $ProjectDocsPath 'Functions'
+
     $YMLFile = Join-Path $BuildRoot 'mkdocs.yml'
 
     if (-not (Test-Path $YMLFile)) {
-        # If the yml file doesn't exist then go ahead and create it from scratch
         $Pages = @()
 
         $RTDFolders = Get-ChildItem -Path $ProjectDocsPath -Directory | Sort-Object -Property Name
@@ -677,16 +682,19 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
             repo_url = $Script:BuildEnv.ModuleWebsite
             use_directory_urls = $false
             theme = "readthedocs"
-            copyright = "$($Script:BuildEnv.ModuleToBuild) is licensed under this <a href='$($Script:BuildEnv.ModuleWebsite)/blob/master/License.md'> license"
+            copyright = "$($Script:BuildEnv.ModuleToBuild) is licensed under <a href='$($Script:BuildEnv.ModuleWebsite)/blob/master/License.md'>this</a> license"
             pages = $Pages
         }
-        $RTD | ConvertTo-Yaml | Out-File -Encoding $Script:BuildEnv.Encoding -FilePath $YMLFile -Force
 
+        $RTD | ConvertTo-Yaml | Out-File -Encoding $Script:BuildEnv.Encoding -FilePath $YMLFile -Force
     }
     else {
-        Write-Warning 'The mkdocs.yml file already exists. If you want this regenerated you will need to delete it first.'
+        Write-Warning "Skipping ReadTheDocs manifest file creation as it already exists. Please remove the following file if you want it to be regenerated: $YMLFile"
     }
 }
+
+# Synopsis: Put together all the various projecet help files
+task CreateProjectHelp BuildProjectHelpFiles, AddAdditionalDocFiles, UpdateReadTheDocs, CreateReadTheDocsYML
 
 # Synopsis: Push the current release of the project to PSScriptGallery
 task PublishPSGallery LoadBuildTools, InstallModule, {
@@ -743,7 +751,7 @@ task AutoIncreaseVersionBuildLevel -after PublishPSGallery -if {$Script:BuildEnv
 }
 
 # Synopsis: Install the current built module to the local machine
-task InstallModule VersionCheck, LoadBuildTools, {
+task InstallModule VersionCheck, {
     Write-Description White "Attempting to install the current module" -accent
     $CurrentModulePath = Join-Path $Script:BuildEnv.BaseReleaseFolder $Script:BuildEnv.ModuleVersion
     assert (Test-Path $CurrentModulePath) 'The current version module has not been built yet!'
@@ -779,7 +787,7 @@ task TestInstalledModule VersionCheck, {
     Import-Module -Name $Script:BuildEnv.ModuleToBuild -MinimumVersion $Script:BuildEnv.ModuleVersion -Force
 }
 
-# Synopsis: Run pre-build scripts (such as other builds). Should be run as a subtask of the configure task.
+# Synopsis: Run pre-build scripts (such as other builds)
 task PreBuildTasks {
     Write-Description White 'Running any Pre-Build scripts' -accent
     $BuildToolPath = Join-Path $BuildRoot $Script:BuildEnv.BuildToolFolder
@@ -803,20 +811,18 @@ task PostBuildTasks {
     }
 }
 
-# Synopsis: Remove session artifacts like loaded modules and variables
-task BuildSessionCleanup LoadRequiredModules, {
-    Write-Description White 'Cleaning up the build session' -accent
 
-    $BuildToolPath = Join-Path $BuildRoot $Script:BuildEnv.BuildToolFolder
-    # Clean up loaded modules if they are loaded
-    Write-Description White "Removing modules" -Level 2
-    $Script:RequiredModules | Foreach-Object {
-        Write-Description White "Removing $($_) module (if loaded)." -Level 3
-        Remove-Module $_ -Erroraction Ignore
-    }
+# Synopsis: Remove session artifacts like loaded modules and variables
+task BuildSessionCleanup {
+    Write-Description White 'Cleaning up the build session' -accent
 
     Write-Description White "Removing $($Script:BuildEnv.ModuleToBuild) module (if loaded)." -Level 3
     Remove-Module $Script:BuildEnv.ModuleToBuild -Erroraction Ignore
+
+    $Script:PSDependBuildModules | Foreach-Object {
+        Write-Description White "Removing $($_.DependencyName) module (if loaded)." -Level 3
+        Remove-Module $_ -Erroraction Ignore -Force
+    }
 
     if ($Script:BuildEnv.OptionTranscriptEnabled) {
         Stop-Transcript -WarningAction:Ignore
@@ -846,26 +852,6 @@ task GithubPush VersionCheck, {
     $changes = exec { git status --short }
     assert (-not $changes) "Please, commit changes."
 }
-
-#Synopsis: Validate script requirements are met, load required modules, load project manifest and module, and load additional build tools.
-task Configure ValidateRequirements, PreBuildTasks, LoadRequiredModules, LoadModuleManifest, LoadModule, VersionCheck, LoadBuildTools, {
-    # If we made it this far then we are configured!
-    Write-Description White 'Configuring build environment' -accent
-}
-
-# Synopsis: Build help files for module and ignore missing section errors
-task TestCreateHelp Configure, CreateMarkdownHelp, CreateExternalHelp, CreateUpdateableHelpCAB, {
-    Write-Description White 'Create help files' -accent
-}
-
-# Synopsis: Update the current working module version and release notes
-task UpdateVersion NewVersion, UpdateRelease
-
-# Synopsis: Put together all the various projecet help files
-task CreateProjectHelp BuildProjectHelpFiles, AddAdditionalDocFiles, UpdateReadTheDocs, CreateReadTheDocsYML
-
-# Synopsis: Build help files for module
-task CreateHelp CreateMarkdownHelp, CreateExternalHelp, CreateUpdateableHelpCAB, CreateProjectHelp, AddAdditionalDocFiles
 
 # Synopsis: Build the module
 task . Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, PostBuildTasks, BuildSessionCleanup
