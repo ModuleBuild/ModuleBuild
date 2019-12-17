@@ -18,14 +18,20 @@ param (
 function PrerequisitesLoaded {
     # Install required modules if missing
     try {
-        if ((get-module InvokeBuild -ListAvailable) -eq $null) {
-            Write-Output "Attempting to install the InvokeBuild module..."
-            $null = Install-Module InvokeBuild -Scope:CurrentUser
+        if ((get-module PSDepend -ListAvailable) -eq $null) {
+            Write-Host "Attempting to install the PSDepend module..."
+            $null = Install-Module PSDepend -Scope:CurrentUser
         }
-        if (get-module InvokeBuild -ListAvailable) {
-            Write-Output -NoNewLine "Importing InvokeBuild module"
-            Import-Module InvokeBuild -Force
-            Write-Output '...Loaded!'
+        if (get-module PSDepend -ListAvailable) {
+            Write-Host -NoNewLine "Importing PSDepend module"
+            Import-Module PSDepend -Force
+            Write-Host '...Loaded!'
+
+            Write-Host -NoNewLine 'Installing dependencies...'
+            Invoke-PSDepend -Path $(Join-Path $(Get-Location) 'Requirements.psd1') -Test
+            Invoke-PSDepend -Path $(Join-Path $(Get-Location) 'Requirements.psd1') -Force
+            Invoke-PSDepend -Path $(Join-Path $(Get-Location) 'Requirements.psd1') -Import -Force
+            Write-Host 'Installed!'
             return $true
         }
         else {
