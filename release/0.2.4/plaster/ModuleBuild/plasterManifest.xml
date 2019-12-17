@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>44af0521-ca39-46ad-95a4-cd8e2f644434</id>
+    <id>5f0f699c-8cbb-4522-b2a9-d9cebf507c39</id>
     <version>0.0.1</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -253,6 +253,9 @@
     <file
       source="scaffold\build\dotsource\*"
       destination="build\dotsource" />
+    <file
+      source="scaffold\build\PSDepend\*"
+      destination="build\PSDepend" />
     <file
       source="scaffold\build\tools\*"
       destination="build\tools" />

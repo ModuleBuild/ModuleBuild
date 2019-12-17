@@ -51,37 +51,21 @@ task ValidateRequirements {
     assert ($PSVersionTable.PSVersion.Major.ToString() -eq '5') 'Powershell 5 is required for this build to function properly (you can comment this assert out if you are able to work around this requirement)'
 }
 
-#Synopsis: Load required modules if available. Otherwise try to install, then load it.
+#Synopsis: Load required build modules using PSDepend
 task LoadRequiredModules {
     Write-Description White 'Loading all required modules for the build framework' -accent
 
-    # These are required for a full build process and will be automatically installed if they aren't available
-    $Script:RequiredModules = @('PlatyPS')
+    if ((Get-Module PSDepend -ListAvailable) -eq $null) {
+        Write-Description White "Installing PSDepend Module" -Level 2
+        $null = Install-Module PSDepend -Scope:CurrentUser
+    }
 
-    # Some optional modules
-    if ($Script:BuildEnv.OptionAnalyzeCode) {
-        $Script:RequiredModules += 'PSScriptAnalyzer'
-    }
-    if ($Script:BuildEnv.OptionGenerateReadTheDocs) {
-        $Script:RequiredModules += 'Powershell-YAML'
-    }
-    if ($Script:BuildEnv.OptionCodeHealthReport) {
-        $Script:RequiredModules += 'PSCodeHealth'
-    }
-    $Script:RequiredModules | Foreach-Object {
-        if ((get-module $_ -ListAvailable) -eq $null) {
-            Write-Description White "Installing $($_) Module" -Level 2
-            $null = Install-Module $_ -Scope:CurrentUser
-        }
-        if (get-module $_ -ListAvailable) {
-            Write-Description White "Importing $($_) Module" -Level 2
-            Import-Module $_ -Force
-        }
-        else {
-            throw 'How did you even get here?'
-        }
-    }
+    $PSDependFolder = $(Join-Path $Script:BuildEnv.BuildToolFolder 'PSDepend')
+    $PSDependBuildFile = $(Join-Path $PSDependFolder 'build.depend.psd1')
+    Invoke-PSDepend -Path $PSDependBuildFile -Force
+    Invoke-PSDepend -Path $PSDependBuildFile -Import -Force
 }
+
 
 #Synopsis: Load dot sourced functions into this build session
 task LoadBuildTools {
