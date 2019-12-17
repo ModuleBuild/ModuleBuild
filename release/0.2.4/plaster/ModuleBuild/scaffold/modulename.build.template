@@ -153,7 +153,7 @@ task CodeHealthReport -if {$Script:BuildEnv.OptionCodeHealthReport} ValidateRequ
     Write-Description White "Creating a prebuild code health report of your public functions to $($Script:BuildEnv.BuildReportsFolder)" -accent
 
     if (-not (Test-Path $BuildReportsFolder)) {
-        New-Item -Path $BuildReportsFolder -ItemType:Directory
+        [void](New-Item -Path $BuildReportsFolder -ItemType:Directory)
     }
 
     Write-Description White 'Creating a code health report of your public functions' -level 2
