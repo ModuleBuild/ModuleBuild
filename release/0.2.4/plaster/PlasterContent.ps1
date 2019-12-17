@@ -134,11 +134,6 @@ $Content = @(
     },
     @{
         ContentType = 'file'
-        Source = 'scaffold\build\dotsource\*'
-        Destination = 'build\dotsource'
-    },
-    @{
-        ContentType = 'file'
         Source = 'scaffold\build\PSDepend\*'
         Destination = 'build\PSDepend'
     },
