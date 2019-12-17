@@ -1,86 +1,8 @@
 ﻿## Pre-Loaded Module code ##
 
-[Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "ModuleBuildLoggingEnabled",Justification="ModuleBuildLoggingEnabled is optional. It's used to enable Nlog-based logging.")]
-param()
-
 $ModuleBuildLoggingEnabled = $false     # Set to true to enable nlog-based logging
 
-
-
 ## PRIVATE MODULE FUNCTIONS AND DATA ##
-
-Function Add-MissingCBH {
-    <#
-    .SYNOPSIS
-        Create comment based help for a function.
-    .DESCRIPTION
-        Create comment based help for a function.
-    .PARAMETER Code
-        Multi-line or piped lines of code to process.
-    .EXAMPLE
-       PS > $test = Get-Content 'C:\temp\test.ps1' -raw
-       PS > $test | Add-MissingCBH | clip
-
-       Takes C:\temp\test.ps1 as input, creates basic comment based help and puts the result in the clipboard
-       to be pasted elsewhere for review.
-    .NOTES
-       Author: Zachary Loeber
-       Site: http://www.the-little-things.net/
-       Requires: Powershell 3.0
-
-       Version History
-       1.0.0 - Initial release
-       1.0.1 - Updated for ModuleBuild
-    #>
-    [CmdletBinding()]
-    param(
-        [parameter(Position=0, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
-        [string[]]$Code
-    )
-
-    begin {
-        # CBH pattern that tells us CBH likely already exists
-        $CBHPattern = "(?ms)(^\s*\<#.*[\.SYNOPSIS|\.DESCRIPTION|\.PARAMETER|\.EXAMPLE|\.NOTES|\.LINK].*?#>)"
-        $Codeblock = @()
-    }
-    process {
-        $Codeblock += $Code
-    }
-    end {
-        $ScriptText = ($Codeblock | Out-String).trim("`r`n")
-        # If no sign of CBH exists then try to generate and insert it
-        if ($ScriptText -notmatch $CBHPattern) {
-            $CBH = @($ScriptText | New-CommentBasedHelp)
-
-            if ($CBH.Count -gt 1) {
-                throw 'Too many functions are defined in the input string!'
-            }
-
-            if ($CBH.Count -ne 0) {
-                try {
-                    $currscriptblock = [scriptblock]::Create($ScriptText)
-                    . $currscriptblock
-                    $currfunct = get-command $CBH.FunctionName
-                }
-                catch {
-                    throw $_
-                }
-
-                $UpdatedFunct = 'Function ' + $currfunct.Name + ' {' + "`r`n" + $CBH.CBH + "`r`n" + $currfunct.definition + "`r`n" + '}'
-
-                $UpdatedFunct
-            }
-            else {
-                Write-Warning 'Unable to generate CBH for the script text!'
-                $ScriptText
-            }
-        }
-        else {
-            Write-Verbose "Comment based help already exists - skipping CBH insertion and returning original script."
-            $ScriptText
-        }
-    }
-}
 
 function Convert-ArrayToRegex {
     # Takes an array of strings and turns it into a regex matchable string
@@ -103,7 +25,7 @@ function Convert-ArrayToRegex {
                 '^(' + ($Items -join '|') + ')$'
             }
             else {
-                '^(' + (($Items | ForEach-Object{[regex]::Escape($_)}) -join '|') + ')$'
+                '^(' + (($Items | %{[regex]::Escape($_)}) -join '|') + ')$'
             }
         }
         else {
@@ -113,8 +35,7 @@ function Convert-ArrayToRegex {
 }
 
 function Get-BuildFilePath {
-    $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' -ErrorAction:SilentlyContinue | Select-Object -First 1).FullName
-    Return $BuildPath
+    $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' -ErrorAction:SilentlyContinue | select -First 1).FullName
 }
 
 function Get-CallerPreference {
@@ -259,12 +180,11 @@ function Get-CallerPreference {
     }
 }
 
-function Get-CommonParameter {
+function Get-CommonParameters {
     # Helper function to get all the automatically added parameters in an
     # advanced function
     function somefunct {
         [CmdletBinding(SupportsShouldProcess = $true, SupportsPaging = $true, SupportsTransactions = $true)]
-        [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSShouldProcess", "", Scope="Function", Target="somefunct",Justification="This is a dummy function in order to get all CommonParameters without hardcoding them. There is no reason for it to actually use SupportsShouldProcess.")]
         param()
     }
 
@@ -337,7 +257,7 @@ function Get-Function {
                 AST = $Block
             }
 
-            if (@(Get-ParentASTType $Block) -contains 'FunctionDefinitionAst') {
+            if (@(Get-ParentASTTypes $Block) -contains 'FunctionDefinitionAst') {
                 $FunctionProps.IsEmbedded = $true
             }
 
@@ -380,10 +300,7 @@ function Get-FunctionParameter {
     1.0.1 - Updated function name to remove plural format
             Added Name parameter and logic for getting script parameters if no function is defined.
             Added ScriptParameters parameter to include parameters for a script (not just ones associated with defined functions)
-    1.0.2 - Added SuppressMessageAttribute for functionpredicate
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments","functionpredicate",Scope="Function",Target='Get-FunctionParameter',Justification="Unused AST filter")]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments","CommonParams",Scope="Function",Target='Get-FunctionParameter',Justification="")]
     [CmdletBinding()]
     param(
         [parameter(ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
@@ -415,7 +332,7 @@ function Get-FunctionParameter {
     }
     process {
         $Codeblock += $Code
-        $CommonParams = Get-CommonParameter
+        $CommonParams = Get-CommonParameters
     }
     end {
         $ScriptText = ($Codeblock | Out-String).trim("`r`n")
@@ -431,30 +348,25 @@ function Get-FunctionParameter {
             $functions = $CodeBlock | Get-Function -Name $Name
             if (-not $IncludeEmbedded) {
                 Write-Verbose "$($FunctionName): Not including embedded functions."
-                $functions = $functions | Where-Object {-not $_.IsEmbedded}
+                $functions = $functions | where {-not $_.IsEmbedded}
             }
-            If([string]::IsNullOrEmpty($functions))
-            {
-                Write-Verbose "$($FunctionName): There were no script parameters found"
-            } else
-            {
-                Foreach ($f in $functions) {
-                    $function = $f.ast
-                    $Parameters = $function.FindAll($parampredicate, $true)
-                    foreach ($p in $Parameters) {
-                        $ParamType = $p.FindAll($typepredicate, $true)
-                        Write-Verbose "$($FunctionName): Processing Parameter of type [$($ParamType.typeName.FullName)] - $($p.Name.VariablePath.ToString())"
-                        $OutProps = @{
-                            'FunctionName' = $function.Name.ToString()
-                            'ParameterName' = $p.Name.VariablePath.ToString()
-                            'ParameterType' = $ParamType[0].typeName.FullName
-                        }
-                        # This will add in any other parameter attributes if they are specified (default attributes are thus not included and output may not be normalized)
-                        $p.FindAll($paramattributes, $true) | ForEach-Object {
-                            $OutProps.($_.ArgumentName) = $_.Argument.Value
-                        }
-                        $Output += New-Object -TypeName PSObject -Property $OutProps
+
+            Foreach ($f in $functions) {
+                $function = $f.ast
+                $Parameters = $function.FindAll($parampredicate, $true)
+                foreach ($p in $Parameters) {
+                    $ParamType = $p.FindAll($typepredicate, $true)
+                    Write-Verbose "$($FunctionName): Processing Parameter of type [$($ParamType.typeName.FullName)] - $($p.Name.VariablePath.ToString())"
+                    $OutProps = @{
+                        'FunctionName' = $function.Name.ToString()
+                        'ParameterName' = $p.Name.VariablePath.ToString()
+                        'ParameterType' = $ParamType[0].typeName.FullName
                     }
+                    # This will add in any other parameter attributes if they are specified (default attributes are thus not included and output may not be normalized)
+                    $p.FindAll($paramattributes, $true) | Foreach {
+                        $OutProps.($_.ArgumentName) = $_.Argument.Value
+                    }
+                    $Output += New-Object -TypeName PSObject -Property $OutProps
                 }
             }
         }
@@ -472,7 +384,7 @@ function Get-FunctionParameter {
                         'ParameterType' = $ParamType[0].typeName.FullName
                     }
                     # This will add in any other parameter attributes if they are specified (default attributes are thus not included and output may not be normalized)
-                    $p.FindAll($paramattributes, $true) | ForEach-Object {
+                    $p.FindAll($paramattributes, $true) | Foreach {
                         $OutProps.($_.ArgumentName) = $_.Argument.Value
                     }
                     $Output += New-Object -TypeName PSObject -Property $OutProps
@@ -488,16 +400,16 @@ function Get-FunctionParameter {
     }
 }
 
-function Get-ParentASTType {
+function Get-ParentASTTypes {
     <#
     .SYNOPSIS
         Retrieves all parent types of a given AST element.
     .DESCRIPTION
-
+        
     .PARAMETER Code
         Multiline or piped lines of code to process.
     .EXAMPLE
-
+       
        Description
        -----------
 
@@ -539,6 +451,79 @@ function Get-ParentASTType {
 
     $ASTParents
     Write-Verbose "$($FunctionName): End."
+}
+
+Function Insert-MissingCBH {
+    <#
+    .SYNOPSIS
+        Create comment based help for a function.
+    .DESCRIPTION
+        Create comment based help for a function.
+    .PARAMETER Code
+        Multi-line or piped lines of code to process.
+    .EXAMPLE
+       PS > $test = Get-Content 'C:\temp\test.ps1' -raw
+       PS > $test | Insert-MissingCBH | clip
+
+       Takes C:\temp\test.ps1 as input, creates basic comment based help and puts the result in the clipboard
+       to be pasted elsewhere for review.
+    .NOTES
+       Author: Zachary Loeber
+       Site: http://www.the-little-things.net/
+       Requires: Powershell 3.0
+
+       Version History
+       1.0.0 - Initial release
+       1.0.1 - Updated for ModuleBuild
+    #>
+    [CmdletBinding()]
+    param(
+        [parameter(Position=0, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
+        [string[]]$Code
+    )
+
+    begin {
+        # CBH pattern that tells us CBH likely already exists
+        $CBHPattern = "(?ms)(^\s*\<#.*[\.SYNOPSIS|\.DESCRIPTION|\.PARAMETER|\.EXAMPLE|\.NOTES|\.LINK].*?#>)"
+        $Codeblock = @()
+    }
+    process {
+        $Codeblock += $Code
+    }
+    end {
+        $ScriptText = ($Codeblock | Out-String).trim("`r`n")
+        # If no sign of CBH exists then try to generate and insert it
+        if ($ScriptText -notmatch $CBHPattern) {
+            $CBH = @($ScriptText | New-CommentBasedHelp)
+
+            if ($CBH.Count -gt 1) {
+                throw 'Too many functions are defined in the input string!'
+            }
+
+            if ($CBH.Count -ne 0) {
+                try {
+                    $currscriptblock = [scriptblock]::Create($ScriptText)
+                    . $currscriptblock
+                    $currfunct = get-command $CBH.FunctionName
+                }
+                catch {
+                    throw $_
+                }
+
+                $UpdatedFunct = 'Function ' + $currfunct.Name + ' {' + "`r`n" + $CBH.CBH + "`r`n" + $currfunct.definition + "`r`n" + '}'
+
+                $UpdatedFunct
+            }
+            else {
+                Write-Warning 'Unable to generate CBH for the script text!'
+                $ScriptText
+            }
+        }
+        else {
+            Write-Verbose "Comment based help already exists - skipping CBH insertion and returning original script."
+            $ScriptText
+        }
+    }
 }
 
 function IsPlural {
@@ -583,11 +568,7 @@ function New-CommentBasedHelp {
        Version History
        1.0.0 - Initial release
        1.0.1 - Updated for ModuleBuild
-       1.0.2 - Added SuppressMessageAttribute
-       1.0.3 - Extra Verbose message to check if function had Params
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "ScriptText",Scope="Function",Target="New-CommentBasedHelp",Justification="Seems it's here since duo a copy paste from other functions (Add-MissingCBH,Get-Function,Get-FunctionParameter). Leaving it here since it doesn't do any harm.")]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions","",Scope="Function",Target="New-CommentBasedHelp",Justification="Function does not change system state. Simply outputs a obj with CommentBasedHelp.")]
     [CmdletBinding()]
     param(
         [parameter(Position=0, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
@@ -630,32 +611,27 @@ function New-CommentBasedHelp {
             $FuncParams.ScriptParameters = $true
         }
         $AllParams = Get-FunctionParameter @FuncParams -Code $Codeblock | Sort-Object -Property FunctionName
-        $AllFunctions = @($AllParams.FunctionName | Select-Object -unique)
-        If([string]::IsNullOrEmpty($AllFunctions))
-        {
-            Write-Verbose "$($FunctionName): Found no Params in function."
-        } else
-        {
-            foreach ($f in $AllFunctions) {
-                $OutCBH = @{}
-                $OutCBH.FunctionName = $f
-                [string]$OutParams = ''
-                $fparams = @($AllParams | Where-Object {$_.FunctionName -eq $f} | Sort-Object -Property Position)
-                if ($fparams.count -gt 0) {
-                    $fparams | ForEach-Object {
-                        $ParamHelpMessage = if ([string]::IsNullOrEmpty($_.HelpMessage)) { $_.ParameterName + " explanation`n`r`n`r"} else {$_.HelpMessage + "`n`r`n`r"}
+        $AllFunctions = @($AllParams.FunctionName | Select -unique)
 
-                        $OutParams += $CBH_PARAM -replace '%%PARAM%%',$_.ParameterName -replace '%%PARAMHELP%%',$ParamHelpMessage
-                    }
+        foreach ($f in $AllFunctions) {
+            $OutCBH = @{}
+            $OutCBH.FunctionName = $f
+            [string]$OutParams = ''
+            $fparams = @($AllParams | Where {$_.FunctionName -eq $f} | Sort-Object -Property Position)
+            if ($fparams.count -gt 0) {
+                $fparams | foreach {
+                    $ParamHelpMessage = if ([string]::IsNullOrEmpty($_.HelpMessage)) { $_.ParameterName + " explanation`n`r`n`r"} else {$_.HelpMessage + "`n`r`n`r"}
+
+                    $OutParams += $CBH_PARAM -replace '%%PARAM%%',$_.ParameterName -replace '%%PARAMHELP%%',$ParamHelpMessage
                 }
-                else {
-
-                }
-
-                $OutCBH.'CBH' = $CBHTemplate -replace '%%PARAMETER%%',$OutParams
-
-                New-Object PSObject -Property $OutCBH
             }
+            else {
+
+            }
+
+            $OutCBH.'CBH' = $CBHTemplate -replace '%%PARAMETER%%',$OutParams
+
+            New-Object PSObject -Property $OutCBH
         }
 
         Write-Verbose "$($FunctionName): End."
@@ -1079,7 +1055,6 @@ function New-DynamicParameter {
         }
     }
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions","",Scope="Function",Target="New-DynamicParameter",Justification="Function does not change system state.")]
     [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = 'DynamicParameter')]
     Param
     (
@@ -1514,7 +1489,7 @@ function Add-PublicFunction {
             $PublicFunctionSrc = Join-Path $BuildEnvPath $BuildEnvInfo.PublicFunctionSource
             $TemplatePath = Join-Path $BuildEnvPath $BuildEnvInfo.FunctionTemplates
             $TemplateLookup = @{}
-            Get-ChildItem -Path $TemplatePath -Filter '*.tem' | ForEach-Object {
+            Get-ChildItem -Path $TemplatePath -Filter '*.tem' | Foreach {
                 $TemplateLookup.($_.BaseName) = $_.FullName
             }
             $BuildEnvVars = (Get-Member -Type 'NoteProperty' -InputObject $LoadedBuildEnv).Name
@@ -1549,7 +1524,7 @@ function Add-PublicFunction {
                 $NewFunctionOutput = $TemplateData -replace '%%FunctionName%%', $FunctionName
 
                 # Next replace any other variables found in our build environment file that exist in the template.
-                $BuildEnvVars | ForEach-Object {
+                $BuildEnvVars | Foreach {
                     Write-Verbose "   Replacing %%$($_)%% with $($BuildEnvInfo.$_) if found in template..."
                     $NewFunctionOutput = $NewFunctionOutput -replace "%%$($_)%%", ($BuildEnvInfo.$_ -join ',')
                 }
@@ -1609,7 +1584,7 @@ function Import-ModulePrivateFunction {
     .LINK
         https://github.com/zloeber/ModuleBuild/tree/master/release/0.2.3/docs/Functions/Import-ModulePrivateFunction.md
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidDefaultValueSwitchParameter", "",Scope="function",Target="Import-ModulePrivateFunction",Justification="Not adding CBH by default is actually useful.")]
+
     [CmdletBinding( SupportsShouldProcess = $True, ConfirmImpact = 'High' )]
     param(
         [parameter(Position = 0, ValueFromPipeline = $TRUE)]
@@ -1619,7 +1594,7 @@ function Import-ModulePrivateFunction {
         [parameter(Position = 2)]
         [String]$Name = '*',
         [parameter(Position = 3)]
-        [Switch]$DoNotAddCBH = $true,
+        [Switch]$DoNotInsertCBH = $true,
         [parameter(Position = 4)]
         [string[]]$ExcludePaths = @('temp','build','.git','.vscode','docs','release','plaster'),
         [parameter(Position = 5)]
@@ -1701,13 +1676,13 @@ function Import-ModulePrivateFunction {
             # Only attempt to copy over new function files, skip if the name already exists in the destination path
             if (-not (Test-Path $DestPath)) {
                 if ($pscmdlet.ShouldProcess("$($PrivFunc.Name) from file $($PrivFunc.SourcePath)", "Import private function $($PrivFunc.Name) to the project $($LoadedBuildEnv.ModuleToBuild)?")) {
-                    if ($DoNotAddCBH) {
+                    if ($DoNotInsertCBH) {
                         # Skipping comment based help insertion
                         $PrivFunc.definition | Out-File -FilePath $DestPath -Encoding:utf8 -Confirm:$false
                     }
                     else {
                         # inserting comment based help if it doesn't already exist.
-                        $PrivFunc.definition | Add-MissingCBH | Out-File -FilePath $DestPath -Encoding:utf8 -Confirm:$false
+                        $PrivFunc.definition | Insert-MissingCBH | Out-File -FilePath $DestPath -Encoding:utf8 -Confirm:$false
                     }
                 }
             }
@@ -1735,7 +1710,7 @@ function Import-ModulePublicFunction {
         [parameter(Position = 2)]
         [String]$Name = '*',
         [parameter(Position = 3)]
-        [Switch]$DoNotAddCBH
+        [Switch]$DoNotInsertCBH
     )
     begin {
         if ($script:ThisModuleLoaded -eq $true) {
@@ -1785,7 +1760,7 @@ function Import-ModulePublicFunction {
                     $NewScript += '}'
 
                     if ($pscmdlet.ShouldProcess("$($LoadedFunction.Name)", "Import public function $($LoadedFunction.Name) to the project $($LoadedBuildEnv.ModuleToBuild)?")) {
-                        if ($DoNotAddCBH) {
+                        if ($DoNotInsertCBH) {
                             try {
                                 Write-Verbose "Writing public script file to $NewScriptFile"
                                 $NewScript | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
@@ -1796,7 +1771,7 @@ function Import-ModulePublicFunction {
                         }
                         else {
                             try {
-                                $NewScript | Add-MissingCBH | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
+                                $NewScript | Insert-MissingCBH | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
                             }
                             catch {
                                 throw $_
@@ -1862,31 +1837,24 @@ Enjoy!
 '@
 
         if (-not [string]::IsNullOrEmpty($SourceModule)) {
-            if (-not [string]::IsNullOrEmpty($SourceModule))
-            {
-                if (-not (test-path $SourceModule) -or ((Get-Item $SourceModule).Extension -notmatch '.psd1')) {
-                    throw "$($SourceModule) was not found or is not a psd1 module manifest file!"
-                } ElseIf ((test-path $SourceModule) -and (Get-Item $SourceModule).Extension -match '.psd1') {
-                    Write-Verbose "$($SourceModule) Matched to .psd1 file"
-                }
+            if (-not (test-path $SourceModule) -or ($SourceModule -notmatch '*.psd1')) {
+                throw 'SourceModule was not found or is not a psd1 module manifest file!'
             }
 
             $ExistingModuleManifest = Test-ModuleManifest $SourceModule
 
-            $PlasterParams = @{
+            $ModuleProps = @{
                 TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\';
                 ModuleName = $ExistingModuleManifest.Name;
                 ModuleDescription = $ExistingModuleManifest.Description;
                 ModuleAuthor = $ExistingModuleManifest.Author;
-                ModuleCompanyName = $ExistingModuleManifest.CompanyName;
                 ModuleWebsite = $ExistingModuleManifest.ProjectURI.ToString();
                 ModuleVersion = $ExistingModuleManifest.Version.ToString();
                 ModuleTags = $ExistingModuleManifest.Tags -join ',';
             }
-        } else {
-            $PlasterParams = @{
-                TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\'
-            }
+        }
+        $PlasterParams = @{
+            TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\'
         }
         if (-not [string]::IsNullOrEmpty($Path)) {
             $PlasterParams.DestinationPath = $Path
@@ -1908,13 +1876,10 @@ Enjoy!
 
         # Get the newly created buildenvironment file and run it the first time to create the first export file.
         $BuildDefinition = Get-ChildItem (Join-Path $PlasterResults.DestinationPath 'build') -Filter '*.buildenvironment.ps1'
-        powershell -noprofile -WindowStyle hidden -file $($BuildDefinition.FullName)
-        Try {
-            if ((Test-Path -Path ($BuildDefinition.FullName -replace '.ps1','.json')) -eq 'True') {
-               Write-Verbose 'Found JSON file.'
-            } Else {
-               Write-Error 'Could not find JSON file' -ErrorAction Stop
-           }
+        $strCommand = "powershell -noprofile -WindowStyle hidden -file '$($BuildDefinition.FullName)'"
+
+        try {
+            Invoke-Expression $strCommand
         }
         catch {
             throw $_
@@ -1938,7 +1903,7 @@ function Set-BuildEnvironment {
         https://github.com/zloeber/ModuleBuild/tree/master/release/0.2.3/docs/Functions/Set-BuildEnvironment.md
     #>
 
-    [CmdletBinding(SupportsShouldProcess=$True)]
+    [CmdletBinding()]
     param(
         [parameter(Position = 0, ValueFromPipeline = $TRUE)]
         [String]$Path
@@ -1971,7 +1936,7 @@ function Set-BuildEnvironment {
                 }
             }
             catch {
-                throw "Unable to load the build file in $BuildPath"
+                #throw "Unable to load the build file in $BuildPath"
             }
         }
 
@@ -1996,20 +1961,18 @@ function Set-BuildEnvironment {
         New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
         if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
-            If ($PSCmdlet.ShouldProcess("Updating buildenvironment.json")) {
-                try {
-                    $LoadedBuildEnv = Get-BuildEnvironment -Path $BuildPath
-                    Foreach ($ParamKey in ($PSBoundParameters.Keys | Where-Object {$_ -ne 'Path'})) {
-                        $LoadedBuildEnv.$ParamKey = $PSBoundParameters[$ParamKey]
-                        Write-Output "Updating $ParamKey to be $($PSBoundParameters[$ParamKey])"
-                    }
-                    $LoadedBuildEnv.PSObject.Properties.remove('Path')
-                    $LoadedBuildEnv | ConvertTo-Json | Out-File -FilePath $BuildPath -Encoding:utf8 -Force
-                    Write-Output "Saved configuration file - $BuildPath"
+            try {
+                $LoadedBuildEnv = Get-BuildEnvironment -Path $BuildPath
+                Foreach ($ParamKey in ($PSBoundParameters.Keys | Where-Object {$_ -ne 'Path'})) {
+                    $LoadedBuildEnv.$ParamKey = $PSBoundParameters[$ParamKey]
+                    Write-Output "Updating $ParamKey to be $($PSBoundParameters[$ParamKey])"
                 }
-                catch {
-                    throw "Unable to load the build file in $BuildPath"
-                }
+                $LoadedBuildEnv.PSObject.Properties.remove('Path')
+                $LoadedBuildEnv | ConvertTo-Json | Out-File -FilePath $BuildPath -Encoding:utf8 -Force
+                Write-Output "Saved configuration file - $BuildPath"
+            }
+            catch {
+                throw "Unable to load the build file in $BuildPath"
             }
         }
         else {
@@ -2077,9 +2040,7 @@ $null = Register-EngineEvent -SourceIdentifier ( [System.Management.Automation.P
 }
 
 # Use this in your scripts to check if the function is being called from your module or independantly.
-# Call it immediately to avoid PSScriptAnalyzer 'PSUseDeclaredVarsMoreThanAssignments'
 $ThisModuleLoaded = $true
-$ThisModuleLoaded
 
 # Non-function exported public module members might go here.
 #Export-ModuleMember -Variable SomeVariable -Function  *

@@ -28,7 +28,7 @@ Install-Module -Name <%=$PLASTER_PARAM_ModuleName%> -Scope CurrentUser
 [Notes on contributing to this project](Contributing.md)
 
 ## Change Logs
-[Change notes for each release](ChangeLog.md)
+[Change notes for each release](ChangeLogs.md)
 
 ## Acknowledgements
 [Other projects or sources of inspiration](Acknowledgements.md)

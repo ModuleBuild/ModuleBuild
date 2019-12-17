@@ -66,7 +66,7 @@ task LoadRequiredModules {
         $Script:RequiredModules += 'Powershell-YAML'
     }
     if ($Script:BuildEnv.OptionCodeHealthReport) {
-        $Script:RequiredModules += 'PSCodeHealth'
+        $RequiredModules += 'PSCodeHealth'
     }
     $Script:RequiredModules | Foreach-Object {
         if ((get-module $_ -ListAvailable) -eq $null) {
@@ -296,21 +296,19 @@ task UpdateCBHtoScratch {
         $CBH = $currscript | New-CommentBasedHelp
         $currscriptblock = [scriptblock]::Create($currscript)
         . $currscriptblock
-        if([string]::IsNullOrEmpty($CBH))
-        {
-            Write-Error "Could not Add CBH, possibly duo having no parameters in $filename" -ErrorAction Stop
-        } else {
-            $currfunct = get-command $CBH.FunctionName
-            if ($currfunct.definition -notmatch $CBHPattern) {
-                $CBHUpdates++
-                Write-Description White "Inserting template CBH and writing to : $($Script:BuildEnv.ScratchFolder)\$($Script:BuildEnv.PublicFunctionSource)\$($FileName)" -Level 3
-                $UpdatedFunct = 'Function ' + $currfunct.Name + ' {' + "`r`n" + $CBH.CBH + "`r`n" + $currfunct.definition + "`r`n" + '}'
-                $UpdatedFunct | Out-File "$($ScratchPath)\$($Script:BuildEnv.PublicFunctionSource)\$($FileName)" -Encoding $Script:BuildEnv.Encoding -force
-            }
-            else {
-                Write-Description Yellow 'Comment based help already exists!' -Level 2
-            }
+        $currfunct = get-command $CBH.FunctionName
+
+
+        if ($currfunct.definition -notmatch $CBHPattern) {
+            $CBHUpdates++
+            Write-Description White "Inserting template CBH and writing to : $($Script:BuildEnv.ScratchFolder)\$($Script:BuildEnv.PublicFunctionSource)\$($FileName)" -Level 3
+            $UpdatedFunct = 'Function ' + $currfunct.Name + ' {' + "`r`n" + $CBH.CBH + "`r`n" + $currfunct.definition + "`r`n" + '}'
+            $UpdatedFunct | Out-File "$($ScratchPath)\$($Script:BuildEnv.PublicFunctionSource)\$($FileName)" -Encoding $Script:BuildEnv.Encoding -force
         }
+        else {
+            Write-Description Yellow 'Comment based help already exists!' -Level 2
+        }
+
         Remove-Item Function:\$($currfunct.Name)
     }
     Write-Build White ''
@@ -467,23 +465,28 @@ task UpdateCBH {
 task AnalyzeModuleRelease -if {$Script:BuildEnv.OptionAnalyzeCode} {
     Write-Description White 'Analyzing the project with ScriptAnalyzer' -accent
     $StageReleasePath = Join-Path (Join-Path $BuildRoot $Script:BuildEnv.ScratchFolder) $Script:BuildEnv.BaseReleaseFolder
-    $Analysis = Invoke-ScriptAnalyzer -Path $StageReleasePath -Settings (Join-Path $BuildRoot "PSScriptAnalyzerSettings.psd1")
-    if ($Analysis.Count) {
-        Write-Description White "Note that this was from the script analysis run against $StageReleasePath" -level 2
-        Write-Description Red "$($Analysis.Count) linting errors or warnings were found:" -level 2
-        $Analysis | Format-Table -AutoSize
-        Write-Error "$($Analysis.Count) linting errors or warnings were found. The build cannot continue." -ErrorAction Stop
+    $Analysis = Invoke-ScriptAnalyzer -Path $StageReleasePath
+    $AnalysisErrors = @($Analysis | Where-Object {@('Information', 'Warning') -notcontains $_.Severity})
+    if ($AnalysisErrors.Count -ne 0) {
+        Write-Build White 'The following errors came up in the script analysis:' -level 2
+        $AnalysisErrors
+        Write-Build
+        Write-Build White "Note that this was from the script analysis run against $StageReleasePath" -Level 2
+        Prompt-ForBuildBreak -CustomError $AnalysisErrors
     }
 }
 
 # Synopsis: Run PSScriptAnalyzer against the public source files.
 task AnalyzePublic {
-    Write-Description White "Analyzing the public source files with ScriptAnalyzer." -accent
-    $Analysis = Invoke-ScriptAnalyzer -Path (Join-Path $BuildRoot $Script:BuildEnv.PublicFunctionSource) -Settings (Join-Path $BuildRoot "PSScriptAnalyzerSettings.psd1")
-    if ($Analysis.Count) {
+    Write-Description White 'Analyzing the public source files with ScriptAnalyzer.' -accent
+    $Analysis = Invoke-ScriptAnalyzer -Path (Join-Path $BuildRoot $Script:BuildEnv.PublicFunctionSource)
+    $AnalysisErrors = @($Analysis | Where-Object {@('Information', 'Warning') -notcontains $_.Severity})
+
+    if ($AnalysisErrors.Count -ne 0) {
+        Write-Description White 'The following errors came up in the script analysis:' -level 2
+        $AnalysisErrors
+        Write-Description
         Write-Description White "Note that this was from the script analysis run against $($Script:BuildEnv.PublicFunctionSource)" -level 2
-        Write-Description Red "$($Analysis.Count) linting errors or warnings were found:" -level 2
-        $Analysis | Format-Table -AutoSize
     }
 }
 
@@ -889,4 +892,4 @@ task BuildInstallAndTestModule Configure, CodeHealthReport, Clean, PrepareStage,
 task BuildInstallTestAndPublishModule Configure, CodeHealthReport, Clean, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, InstallModule, TestInstalledModule, PublishPSGallery, PostBuildTasks, BuildSessionCleanup
 
 # Synopsis: Instert Comment Based Help where it doesn't already exist (output to scratch directory)
-task AddMissingCBH Configure, Clean, UpdateCBHtoScratch, BuildSessionCleanup
+task InsertMissingCBH Configure, Clean, UpdateCBHtoScratch, BuildSessionCleanup

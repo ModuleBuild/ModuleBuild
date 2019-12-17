@@ -16,11 +16,6 @@ $Parameters = @(
         ParameterPrompt = "Enter a module author"
     },
     @{
-        ParameterName = "ModuleCompanyName"
-        ParameterType = "text"
-        ParameterPrompt = "Enter a module company name"
-    },
-    @{
         ParameterName = "ModuleWebsite"
         ParameterType = "text"
         ParameterPrompt = "Enter a project website (ie. https://www.github.com/<author>/<modulename>)"
@@ -61,24 +56,6 @@ $Parameters = @(
                 Label = "&GPL 3.0"
                 Help = "You may copy, distribute and modify the software as long as you track changes/dates in source files. Any modifications to or software including (via compiler) GPL-licensed code must also be made available under the GPL along with build & install instructions."
                 Value = "GPL"
-            }
-        )
-    },
-    @{
-        ParameterName = "CICD"
-        ParameterType = "choice"
-        ParameterPrompt = "What CI/CD do you want to use?"
-        Default = "0"
-        Choices = @(
-            @{
-                Label = "&None"
-                Help = "No CI/CD."
-                Value = "None"
-            },
-            @{
-                Label = "&AppVeyor"
-                Help = "CI/CD service for Windows, Linux and macOS. Build, test, deploy your apps faster, on any platform"
-                Value = "appveyor"
             }
         )
     },

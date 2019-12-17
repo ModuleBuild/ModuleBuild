@@ -4,12 +4,12 @@ $Content = @(
         Destination = '${PLASTER_PARAM_ModuleName}.psd1'
         moduleVersion = '${PLASTER_PARAM_ModuleVersion}'
         rootModule = '${PLASTER_PARAM_ModuleName}.psm1'
-        copyright = '(c) ${PLASTER_Year} ${PLASTER_PARAM_ModuleCompanyName}. All rights reserved.'
+        copyright = '(c) ${PLASTER_Year} ${PLASTER_PARAM_ModuleAuthor}. All rights reserved.'
         projectURI = '${PLASTER_PARAM_ModuleWebsite}'
         licenseURI = '${PLASTER_PARAM_ModuleWebsite}/raw/master/LICENSE.md'
         iconURI = '${PLASTER_PARAM_ModuleWebsite}/raw/master/src/other/powershell-project.png'
         author = '${PLASTER_PARAM_ModuleAuthor}'
-        companyname = '${PLASTER_PARAM_ModuleCompanyName}'
+        companyname = '${PLASTER_PARAM_ModuleAuthor}'
         description = '${PLASTER_PARAM_ModuleDescription}'
         tags = '${PLASTER_PARAM_ModuleTags}'
         functionsToExport = '*'
@@ -59,38 +59,8 @@ $Content = @(
     },
     @{
         ContentType = 'file'
-        Source = 'scaffold\tests\'
-        Destination = 'tests'
-    },
-    @{
-        ContentType = 'file'
-        Source = 'scaffold\tests\intergration'
-        Destination = 'tests\intergration'
-    },
-    @{
-        ContentType = 'file'
-        Source = 'scaffold\tests\unit'
-        Destination = 'tests\unit'
-    },
-    @{
-        ContentType = 'file'
-        Source = 'scaffold\tests\intergration\private\*'
-        Destination = 'tests\intergration\private'
-    },
-    @{
-        ContentType = 'file'
-        Source = 'scaffold\tests\intergration\public\*'
-        Destination = 'tests\intergration\public'
-    },
-    @{
-        ContentType = 'file'
-        Source = 'scaffold\tests\unit\private\*'
-        Destination = 'tests\unit\private'
-    },
-    @{
-        ContentType = 'file'
-        Source = 'scaffold\tests\unit\public\*'
-        Destination = 'tests\unit\public'
+        Source = 'scaffold\tests\*'
+        Destination = 'src\tests'
     },
     @{
         ContentType = 'templateFile'
@@ -101,25 +71,7 @@ $Content = @(
     @{
         ContentType = 'file'
         Source = 'scaffold\plugins\NLog\NLogModule\*'
-        Destination = 'plugins\nlog\NLogModule'
-        Condition = '$PLASTER_PARAM_PluginModuleLogging -eq "True"'
-    },
-    @{
-        ContentType = 'file'
-        Source = 'scaffold\plugins\NLog\NLogModule\docs\*'
-        Destination = 'plugins\nlog\NLogModule\docs'
-        Condition = '$PLASTER_PARAM_PluginModuleLogging -eq "True"'
-    },
-    @{
-        ContentType = 'file'
-        Source = 'scaffold\plugins\NLog\NLogModule\en-US\*'
-        Destination = 'plugins\nlog\NLogModule\en-US'
-        Condition = '$PLASTER_PARAM_PluginModuleLogging -eq "True"'
-    },
-    @{
-        ContentType = 'file'
-        Source = 'scaffold\plugins\NLog\NLogModule\lib\*'
-        Destination = 'plugins\nlog\NLogModule\lib'
+        Destination = 'plugins\nlog\NLog\NLogModule'
         Condition = '$PLASTER_PARAM_PluginModuleLogging -eq "True"'
     },
     @{
@@ -220,16 +172,5 @@ $Content = @(
         ContentType = 'templateFile'
         Source = 'scaffold\build\docs\ReadTheDocs\*'
         Destination = 'build\docs\ReadTheDocs'
-    },
-    @{
-        ContentType = 'file'
-        Source = 'scaffold\PSScriptAnalyzerSettings.psd1'
-        Destination = 'PSScriptAnalyzerSettings.psd1'
-    }
-    @{
-        ContentType = 'file'
-        Source = 'scaffold\appveyor.yml'
-        Destination = 'appveyor.yml'
-        Condition = '$PLASTER_PARAM_CICD -eq "appveyor"'
     }
 )

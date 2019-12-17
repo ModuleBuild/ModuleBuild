@@ -12,7 +12,7 @@ param (
     [parameter(Position = 5, ParameterSetName = 'Build')]
     [string]$ReleaseNotes,
     [parameter(Position = 6, ParameterSetName = 'CBH')]
-    [switch]$AddCBH
+    [switch]$InsertCBH
 )
 
 function PrerequisitesLoaded {
@@ -53,14 +53,16 @@ if (-not (PrerequisitesLoaded)) {
 
 switch ($psCmdlet.ParameterSetName) {
     'CBH' {
-        if ($AddCBH) {
+        if ($InsertCBH) {
             try {
-                Invoke-Build -Task AddMissingCBH
+                Invoke-Build -Task InsertMissingCBH
             }
             catch {
                 throw
             }
         }
+
+        CleanUp
     }
     'Build' {
         if ($NewVersion -ne $null) {
@@ -102,5 +104,7 @@ switch ($psCmdlet.ParameterSetName) {
                 throw 'Unable to upload project to the PowerShell Gallery!'
             }
         }
+
+        CleanUp
     }
 }

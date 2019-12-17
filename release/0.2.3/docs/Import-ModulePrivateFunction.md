@@ -13,7 +13,7 @@ Retrieves private module function definitions and recreates them in your moduleb
 ## SYNTAX
 
 ```
-Import-ModulePrivateFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotAddCBH]
+Import-ModulePrivateFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotInsertCBH]
  [[-ExcludePaths] <String[]>] [[-ExcludeFiles] <String[]>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -82,7 +82,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DoNotAddCBH
+### -DoNotInsertCBH
 Do not attempt to find and insert comment based help into the function.
 Default for private functions is to skip CBH insertion.
 
