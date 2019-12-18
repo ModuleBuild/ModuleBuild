@@ -154,8 +154,8 @@ $Content = @(
     },
     @{
         ContentType = 'templateFile'
-        Source = 'scaffold\readme.md'
-        Destination = 'Readme.md'
+        Source = 'scaffold\README.md'
+        Destination = 'README.md'
     },
     @{
         ContentType = 'templateFile'

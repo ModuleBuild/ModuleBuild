@@ -51,15 +51,15 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         # Generate a yml file in the root folder of this project for readthedocs.org integration
         OptionGenerateReadTheDocs = $True
         # Most of the following options you probably don't need to change
-        BaseSourceFolder = 'src'        # Base source path
-        PublicFunctionSource = "src\public"         # Public functions (to be exported by file name as the function name)
-        PrivateFunctionSource = "src\private"        # Private function source
-        OtherModuleSource = "src\other"        # Other module source
-        BaseReleaseFolder = 'release'        # Releases directory.
-        BuildReportsFolder = 'buildreports'
-        BuildToolFolder = 'build'        # Build tool path (these scripts are dot sourced)
-        ScratchFolder = 'temp'        # Scratch path - this is where all our scratch work occurs. It will be cleared out at every run.
-        FunctionTemplates = "src\templates"  # Location of function template files (*.tem)
+        BaseSourceFolder = 'src'               # Base source path
+        PublicFunctionSource = "src\public"    # Public functions (to be exported by file name as the function name)
+        PrivateFunctionSource = "src\private"  # Private function source.
+        OtherModuleSource = "src\other"        # Other module source.
+        BaseReleaseFolder = 'release'          # Releases directory.
+        BuildToolFolder = 'build'              # Build tool path.
+        BuildReportsFolder = 'build\reports'   # Location where PSCodeHealth stores its reports.
+        ScratchFolder = 'temp'                 # Scratch path - this is where all our scratch work occurs. It will be cleared out at every run.
+        FunctionTemplates = "src\templates"    # Location of function template files (*.tem)
 
         # If you will be publishing to the PowerShell Gallery you will need a Nuget API key (can get from the website)
         # You should not actually enter this key here but should manually enter it in the ModuleBuild.buildenvironment.json file

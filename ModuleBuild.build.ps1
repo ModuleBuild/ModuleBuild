@@ -120,8 +120,8 @@ task VersionCheck LoadModuleManifest, {
 
 #Synopsis: Create a CodeHealthReport of your existing code
 task CodeHealthReport -if {$Script:BuildEnv.OptionCodeHealthReport} ValidateRequirements, LoadRequiredModules, {
-    $BuildReportsFolder = Join-Path $BuildRoot $Script:BuildEnv.BuildReportsFolder
-    Write-Description White "Creating a prebuild code health report of your public functions to $($Script:BuildEnv.BuildReportsFolder)" -accent
+    $BuildReportsFolder = Join-Path $BuildRoot $(Join-Path $Script:BuildEnv.BuildReportsFolder $Script:BuildEnv.ModuleVersion)
+    Write-Description White "Creating a prebuild code health report of your public functions to $($BuildReportsFolder)" -accent
 
     if (-not (Test-Path $BuildReportsFolder)) {
         [void](New-Item -Path $BuildReportsFolder -ItemType:Directory)
