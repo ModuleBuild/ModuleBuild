@@ -24,7 +24,7 @@ function PrerequisitesLoaded {
             Write-Host 'Installed!'
         }
         if (get-module PSDepend -ListAvailable) {
-            Write-Host "Importing PSDepend module ..." -NoNewLine
+            Write-Host "Importing PSDepend module..." -NoNewLine
             Import-Module PSDepend -Force
             Write-Host 'Loaded!'
 
