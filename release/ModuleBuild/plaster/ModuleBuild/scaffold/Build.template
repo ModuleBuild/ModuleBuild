@@ -1,5 +1,4 @@
 #Requires -Version 5
-#Requires -RunAsAdministrator
 [CmdletBinding(DefaultParameterSetName = 'Build')]
 param (
     [parameter(Position = 0, ParameterSetName = 'Build')]
@@ -22,6 +21,7 @@ function PrerequisitesLoaded {
         if ((get-module PSDepend -ListAvailable) -eq $null) {
             Write-Host "Attempting to install the PSDepend module..."
             $null = Install-Module PSDepend -Scope:CurrentUser
+            Write-Host 'Installed!'
         }
         if (get-module PSDepend -ListAvailable) {
             Write-Host -NoNewLine "Importing PSDepend module"

@@ -1,5 +1,4 @@
 #Requires -Version 5
-#Requires -RunAsAdministrator
 [CmdletBinding(DefaultParameterSetName = 'Build')]
 param (
     [parameter(Position = 0, ParameterSetName = 'Build')]
