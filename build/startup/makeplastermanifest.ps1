@@ -2,22 +2,22 @@
     Make the plaster template manifest file for this project.
 #>
 
-$ModuleBuildPath = Join-Path $BuildToolPath 'plaster\template\plasterManifest.xml'
+$ModuleBuildPath = Join-Path $BuildRoot 'plugins\plaster\template\plasterManifest.xml'
 
 Write-Description 'Creating the plaster manifest file for this project...' -Color White -level 3
 
 # First ensure that our custom version of Plaster is loaded
 Remove-Module Plaster -ErrorAction:SilentlyContinue
 try {
-    Import-Module $(Join-Path $BuildToolPath "dependencies\embeded\plaster\1.1.0-c\Plaster.psd1")
+    Import-Module $(Join-Path $BuildRoot "plugins\plaster\module\1.1.0-c\Plaster.psd1")
 }
 catch {
     throw 'You need the plaster module to build this plaster manifest.'
 }
 
 # Load our parameter and content
-. $(Join-Path $BuildToolPath "plaster\manifesttools\PlasterParams.ps1")
-. $(Join-Path $BuildToolPath "plaster\manifesttools\PlasterContent.ps1")
+. $(Join-Path $BuildRoot "plugins\plaster\manifesttools\PlasterParams.ps1")
+. $(Join-Path $BuildRoot "plugins\plaster\manifesttools\PlasterContent.ps1")
 
 # set version
 $version = (git describe --tags --always --match "v[0-9]*") -replace 'v',''

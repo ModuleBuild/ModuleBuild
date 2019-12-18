@@ -1841,7 +1841,7 @@ function Initialize-ModuleBuild {
         }
     }
     process {
-        $CustomPlasterModulePath = Join-Path $MyModulePath 'plaster\PlasterModule\Plaster.psd1'
+        $CustomPlasterModulePath = Join-Path $MyModulePath 'plugins\plaster\module\1.1.0-c\Plaster.psd1'
         $PostInitMessage = @'
 A few items to consider doing next:
 
@@ -1874,7 +1874,7 @@ Enjoy!
             $ExistingModuleManifest = Test-ModuleManifest $SourceModule
 
             $PlasterParams = @{
-                TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\';
+                TemplatePath = Join-Path $MyModulePath 'plaster\template\';
                 ModuleName = $ExistingModuleManifest.Name;
                 ModuleDescription = $ExistingModuleManifest.Description;
                 ModuleAuthor = $ExistingModuleManifest.Author;
@@ -1885,7 +1885,7 @@ Enjoy!
             }
         } else {
             $PlasterParams = @{
-                TemplatePath = Join-Path $MyModulePath 'plaster\ModuleBuild\'
+                TemplatePath = Join-Path $MyModulePath 'plugins\plaster\template\'
             }
         }
         if (-not [string]::IsNullOrEmpty($Path)) {

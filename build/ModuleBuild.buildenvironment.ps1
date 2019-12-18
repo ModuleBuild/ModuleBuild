@@ -18,7 +18,7 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         ForceInstallModule = $true
         Encoding = 'utf8'
         ModuleToBuild = 'ModuleBuild'
-        ModuleVersion = '0.0.1'
+        ModuleVersion = '0.2.4'
         ModuleWebsite = 'https://github.com/zloeber/ModuleBuild'
         ModuleCopyright = "(c) $((get-date).Year.ToString()) Zachary Loeber. All rights reserved."
         ModuleLicenseURI = 'https://github.com/zloeber/ModuleBuild/LICENSE.md'
@@ -47,7 +47,7 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         OptionUpdateVersionAfterPublishing = $true
 
         # Additional paths in the source module which should be copied over to the final build release
-        AdditionalModulePaths = @('plaster','plugins')
+        AdditionalModulePaths = @('build\dependencies\plaster','plugins')
         # Generate a yml file in the root folder of this project for readthedocs.org integration
         OptionGenerateReadTheDocs = $True
         # Most of the following options you probably don't need to change
