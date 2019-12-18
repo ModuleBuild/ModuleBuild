@@ -138,11 +138,6 @@ $Content = @(
         Destination = 'build\PSDepend'
     },
     @{
-        ContentType = 'file'
-        Source      = 'scaffold\build\tools\*'
-        Destination = 'build\tools'
-    },
-    @{
         ContentType = 'templateFile'
         Source = 'scaffold\licenses\CreativeCommons.md'
         Destination = 'LICENSE.md'
