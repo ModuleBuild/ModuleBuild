@@ -19,7 +19,7 @@ function PrerequisitesLoaded {
     # Install required modules if missing
     try {
         if ((get-module PSDepend -ListAvailable) -eq $null) {
-            Write-Host "Attempting to install the PSDepend module..."
+            Write-Host "Attempting to install the PSDepend module..." -NoNewLine
             $null = Install-Module PSDepend -MinimumVersion 0.3.2 -MaximumVersion 0.3.2 -Scope:CurrentUser
             Write-Host 'Installed!'
         }

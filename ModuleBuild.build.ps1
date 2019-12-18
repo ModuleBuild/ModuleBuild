@@ -73,7 +73,7 @@ task CreateModuleManifest CreateModulePSM1, {
     $StageReleasePath = Join-Path (Join-Path $BuildRoot $Script:BuildEnv.ScratchFolder) $Script:BuildEnv.BaseReleaseFolder
 
     $PSD1OutputFile = Join-Path $StageReleasePath "$($Script:BuildEnv.ModuleToBuild).psd1"
-    $ThisPSD1OutputFile = ".\$($Script:BuildEnv.ScratchFolder)\$($Script:BuildEnv.BaseReleaseFolder)\$($Script:BuildEnv.ModuleToBuild).psd1"
+    $ThisPSD1OutputFile = "$BuildRoot\$($Script:BuildEnv.ScratchFolder)\$($Script:BuildEnv.BaseReleaseFolder)\$($Script:BuildEnv.ModuleToBuild).psd1"
     Write-Description White "Attempting to update the release module manifest file:  $ThisPSD1OutputFile" -Level 2
     $null = Copy-Item -Path $ModuleManifestFullPath -Destination $PSD1OutputFile -Force
     Update-ModuleManifest -Path $PSD1OutputFile -FunctionsToExport $Script:FunctionsToExport
