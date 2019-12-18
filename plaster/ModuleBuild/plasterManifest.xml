@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>c7a31277-1b9d-41a7-82da-058c22121406</id>
+    <id>1daf6f1f-21a7-431e-8b02-bd0909ffc241</id>
     <version>0.0.1</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -224,6 +224,9 @@
     <file
       source="scaffold\tests\unit\public\*"
       destination="tests\unit\public" />
+    <templateFile
+      source="scaffold\plugins\.gitkeep"
+      destination="plugins\.gitkeep" />
     <templateFile
       source="scaffold\plugins\NLog\*"
       destination="plugins\nlog"

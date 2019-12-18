@@ -94,6 +94,11 @@ $Content = @(
     },
     @{
         ContentType = 'templateFile'
+        Source = 'scaffold\plugins\.gitkeep'
+        Destination = 'plugins\.gitkeep'
+    },
+    @{
+        ContentType = 'templateFile'
         Source = 'scaffold\plugins\NLog\*'
         Destination = 'plugins\nlog'
         Condition = '$PLASTER_PARAM_PluginModuleLogging -eq "True"'
