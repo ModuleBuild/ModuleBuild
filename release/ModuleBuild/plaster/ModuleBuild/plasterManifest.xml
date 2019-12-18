@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>5fd995b5-e4b0-4b25-88ea-fa65b8041f67</id>
+    <id>c7a31277-1b9d-41a7-82da-058c22121406</id>
     <version>0.0.1</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -290,7 +290,7 @@
       source="scaffold\PSScriptAnalyzerSettings.psd1"
       destination="PSScriptAnalyzerSettings.psd1" />
     <file
-      source="scaffold\appveyor.yml"
+      source="scaffold\CI\appveyor.yml"
       destination="appveyor.yml"
       condition="$PLASTER_PARAM_CICD -eq &quot;appveyor&quot;" />
     <file
