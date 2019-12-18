@@ -24,11 +24,11 @@ function PrerequisitesLoaded {
             Write-Host 'Installed!'
         }
         if (get-module PSDepend -ListAvailable) {
-            Write-Host -NoNewLine "Importing PSDepend module"
+            Write-Host "Importing PSDepend module ..." -NoNewLine
             Import-Module PSDepend -Force
-            Write-Host '...Loaded!'
+            Write-Host 'Loaded!'
 
-            Write-Host -NoNewLine 'Installing dependencies...'
+            Write-Host 'Installing dependencies...' -NoNewLine
             Invoke-PSDepend -Path $(Join-Path $(Get-Location) 'Requirements.psd1') -Test
             Invoke-PSDepend -Path $(Join-Path $(Get-Location) 'Requirements.psd1') -Force
             Invoke-PSDepend -Path $(Join-Path $(Get-Location) 'Requirements.psd1') -Import -Force
