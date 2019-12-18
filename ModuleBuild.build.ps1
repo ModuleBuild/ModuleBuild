@@ -59,7 +59,7 @@ task LoadRequiredModules {
         $null = Install-Module PSDepend -Scope:CurrentUser
     }
 
-    $PSDependFolder = $(Join-Path $Script:BuildEnv.BuildToolFolder 'PSDepend')
+    $PSDependFolder = $(Join-Path $Script:BuildEnv.BuildToolFolder 'dependencies\PSDepend')
     $PSDependBuildFile = $(Join-Path $PSDependFolder 'build.depend.psd1')
     Invoke-PSDepend -Path $PSDependBuildFile -Force
     $Script:PSDependBuildModules = Invoke-PSDepend -Path $PSDependBuildFile -Test | Select Dependency*

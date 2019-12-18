@@ -1,3 +1,4 @@
+# Our plaster content
 $Content = @(
     @{
         ContentType = 'newModuleManifest'

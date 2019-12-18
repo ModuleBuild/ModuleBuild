@@ -2,9 +2,9 @@
 temp/
 
 # Ignore PSDepend installed build modules dependencies.
-build/PSDepend/*
-!build/PSDepend/README.md
-!build/PSDepend/build.depend.psd1
+build/dependencies/PSDepend/*
+!build/dependencies/PSDepend/README.md
+!build/dependencies/PSDepend/build.depend.psd1
 
 # PSGallery publishing file can contain personal API key and paths and thus we want to ignore it if it exists
 .psgallery
