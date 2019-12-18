@@ -4,7 +4,7 @@
 
 $ModuleBuildPath = '.\ModuleBuild\plasterManifest.xml'
 
-Write-Output 'Creating the plaster manifest file for this project...'
+Write-Description 'Creating the plaster manifest file for this project...' -Color White -level 3
 
 # First ensure that our custom version of Plaster is loaded
 Remove-Module Plaster -ErrorAction:SilentlyContinue
@@ -49,7 +49,7 @@ New-PlasterManifest @params
 
 try {
     $null = Test-PlasterManifest .\ModuleBuild\plasterManifest.xml -Verbose
-    Write-Output 'The new plaster manifest for ModuleBuild has been created in .\ModuleBuild\plasterManifest.xml'
+    Write-Description 'The new plaster manifest for ModuleBuild has been created in .\ModuleBuild\plasterManifest.xml' -Color White -level 3
 }
 catch {
     Test-PlasterManifest .\ModuleBuild\plasterManifest.xml -verbose
