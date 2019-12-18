@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>4a30ad5a-27be-49d1-a119-a2195f6952de</id>
+    <id>55b08727-3388-410c-98af-8221e5b73f0f</id>
     <version>0.0.1</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -227,22 +227,6 @@
     <templateFile
       source="scaffold\plugins\NLog\*"
       destination="plugins\nlog"
-      condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
-    <file
-      source="scaffold\plugins\NLog\NLogModule\*"
-      destination="plugins\nlog\NLogModule"
-      condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
-    <file
-      source="scaffold\plugins\NLog\NLogModule\docs\*"
-      destination="plugins\nlog\NLogModule\docs"
-      condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
-    <file
-      source="scaffold\plugins\NLog\NLogModule\en-US\*"
-      destination="plugins\nlog\NLogModule\en-US"
-      condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
-    <file
-      source="scaffold\plugins\NLog\NLogModule\lib\*"
-      destination="plugins\nlog\NLogModule\lib"
       condition="$PLASTER_PARAM_PluginModuleLogging -eq &quot;True&quot;" />
     <file
       source="scaffold\build\cleanup\*"
