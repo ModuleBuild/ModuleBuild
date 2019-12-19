@@ -1457,10 +1457,10 @@ function Test-PublicFunctionName {
 
 function Add-PublicFunction {
     <#
-    .EXTERNALHELP ModuleBuild-help.xml
-    .LINK
-        https://github.com/zloeber/ModuleBuild/tree/master/release/0.2.4/docs/Functions/Add-PublicFunction.md
-    #>
+        .EXTERNALHELP ModuleBuild-help.xml
+        .LINK
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.2.4/docs/Functions/Add-PublicFunction.md
+        #>
 
     [CmdletBinding()]
     param(
@@ -1563,10 +1563,10 @@ function Add-PublicFunction {
 
 function Get-BuildEnvironment {
     <#
-    .EXTERNALHELP ModuleBuild-help.xml
-    .LINK
-        https://github.com/zloeber/ModuleBuild/tree/master/release/0.2.4/docs/Functions/Get-BuildEnvironment.md
-    #>
+        .EXTERNALHELP ModuleBuild-help.xml
+        .LINK
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.2.4/docs/Functions/Get-BuildEnvironment.md
+        #>
 
     [CmdletBinding()]
     param(
@@ -1605,10 +1605,10 @@ function Get-BuildEnvironment {
 
 function Import-ModulePrivateFunction {
     <#
-    .EXTERNALHELP ModuleBuild-help.xml
-    .LINK
-        https://github.com/zloeber/ModuleBuild/tree/master/release/0.2.4/docs/Functions/Import-ModulePrivateFunction.md
-    #>
+        .EXTERNALHELP ModuleBuild-help.xml
+        .LINK
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.2.4/docs/Functions/Import-ModulePrivateFunction.md
+        #>
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidDefaultValueSwitchParameter", "",Scope="function",Target="Import-ModulePrivateFunction",Justification="Not adding CBH by default is actually useful.")]
     [CmdletBinding( SupportsShouldProcess = $True, ConfirmImpact = 'High' )]
     param(
@@ -1721,10 +1721,10 @@ function Import-ModulePrivateFunction {
 
 function Import-ModulePublicFunction {
     <#
-    .EXTERNALHELP ModuleBuild-help.xml
-    .LINK
-        https://github.com/zloeber/ModuleBuild/tree/master/release/0.2.4/docs/Functions/Import-ModulePublicFunction.md
-    #>
+        .EXTERNALHELP ModuleBuild-help.xml
+        .LINK
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.2.4/docs/Functions/Import-ModulePublicFunction.md
+        #>
 
     [CmdletBinding( SupportsShouldProcess = $True, ConfirmImpact = 'High' )]
     param(
@@ -1818,10 +1818,10 @@ function Import-ModulePublicFunction {
 
 function Initialize-ModuleBuild {
     <#
-    .EXTERNALHELP ModuleBuild-help.xml
-    .LINK
-        https://github.com/zloeber/ModuleBuild/tree/master/release/0.2.4/docs/Functions/Initialize-ModuleBuild.md
-    #>
+        .EXTERNALHELP ModuleBuild-help.xml
+        .LINK
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.2.4/docs/Functions/Initialize-ModuleBuild.md
+        #>
 
     [CmdletBinding()]
     param(
@@ -1933,10 +1933,10 @@ Enjoy!
 
 function Set-BuildEnvironment {
     <#
-    .EXTERNALHELP ModuleBuild-help.xml
-    .LINK
-        https://github.com/zloeber/ModuleBuild/tree/master/release/0.2.4/docs/Functions/Set-BuildEnvironment.md
-    #>
+        .EXTERNALHELP ModuleBuild-help.xml
+        .LINK
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.2.4/docs/Functions/Set-BuildEnvironment.md
+        #>
 
     [CmdletBinding(SupportsShouldProcess=$True)]
     param(

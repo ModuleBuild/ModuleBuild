@@ -399,11 +399,13 @@ task CreateReadTheDocsYML -if {$Script:BuildEnv.OptionGenerateReadTheDocs} Confi
 task UpdateCBH {
     Write-Description White 'Updating Comment Based Help in functions to point to external help links' -accent
 
-    $ExternalHelp = @("<#
-    .EXTERNALHELP $($Script:BuildEnv.ModuleToBuild)-help.xml
-    .LINK
-        {{LINK}}
-    `#>")
+    $ExternalHelp = @"
+<#
+        .EXTERNALHELP $($Script:BuildEnv.ModuleToBuild)-help.xml
+        .LINK
+            {{LINK}}
+        #>
+"@
 
     $ScratchPath = Join-Path $BuildRoot $Script:BuildEnv.ScratchFolder
     $CBHPattern = "(?ms)(\<`#.*\.SYNOPSIS.*?`#>)"
