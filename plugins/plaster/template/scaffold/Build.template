@@ -85,7 +85,7 @@ switch ($psCmdlet.ParameterSetName) {
             }
             catch {
                 Write-Host 'Build Failed with the following error:'
-                Write-Host $_
+                throw $_
             }
         }
 
@@ -96,7 +96,7 @@ switch ($psCmdlet.ParameterSetName) {
             }
             catch {
                 Write-Host 'Install and test of module failed:'
-                Write-Host $_
+                throw $_
             }
         }
 
