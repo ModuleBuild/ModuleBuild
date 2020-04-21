@@ -20,7 +20,7 @@ Describe 'Text files formatting' -Tags @('MetaTest') {
             $allTextFiles | Foreach-Object {
                 if (Test-FileUnicode $_) {
                     $unicodeFilesCount += 1
-                    Write-Warning "File $($_.FullName) contains 0x00 bytes. It's probably uses Unicode and need to be converted to UTF-8. Use Fixer 'Get-UnicodeFilesList `$pwd | ConvertTo-UTF8'."
+                    Write-Warning "File $($_.FullName) contains 0x00 bytes. It's probably uses Unicode and need to be converted to UTF-8."
                 }
             }
             $unicodeFilesCount | Should Be 0
@@ -33,7 +33,7 @@ Describe 'Text files formatting' -Tags @('MetaTest') {
             $allTextFiles | Foreach-Object {
                 $fileName = $_.FullName
                 (Get-Content $_.FullName -Raw) | Select-String "`t" | Foreach-Object {
-                    Write-Warning "There are tab in $fileName. Use Fixer 'Get-TextFilesList `$pwd | ConvertTo-SpaceIndentation'."
+                    Write-Warning "There are tabs in $fileName."
                     $totalTabsCount++
                 }
             }

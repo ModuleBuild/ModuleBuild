@@ -45,6 +45,7 @@ if ($Script:BuildEnv.OptionTranscriptEnabled) {
     Start-Transcript -Path $TranscriptLog -Append -WarningAction:SilentlyContinue
 }
 
+#$Script:BuildRoot = $BuildRoot
 #region Configure
 #Synopsis: Validate system requirements are met
 task ValidateRequirements {
@@ -238,6 +239,50 @@ task RunPSScriptAnalyzeOnPublicSrcFunctions {
         Write-Description Red "$($Analysis.Count) linting errors or warnings were found:" -level 2
         $Analysis | Format-Table -AutoSize
     }
+}
+#endregion
+
+#region Tests
+task RunMetaTests LoadRequiredModules, {
+    Write-Description White 'Running meta tests with Pester' -accent
+    $ENV:BuildRoot = $BuildRoot
+    $invokePesterParams = @{
+        Strict = $true
+        PassThru = $true
+        Verbose = $false
+        EnableExit = $false
+    }
+    $testResults = Invoke-Pester -Tag 'MetaTest' $(Join-Path $BuildRoot 'Tests') @invokePesterParams
+    $numberFails = $testResults.FailedCount
+    assert($numberFails -eq 0) ('Failed "{0}" meta tests.' -f $numberFails)
+}
+
+task RunUnitTests LoadRequiredModules, {
+    Write-Description White 'Running Unit tests with Pester' -accent
+    $ENV:BuildRoot = $BuildRoot
+    $invokePesterParams = @{
+        Strict = $true
+        PassThru = $true
+        Verbose = $false
+        EnableExit = $false
+    }
+    $testResults = Invoke-Pester -tag 'UnitTest' $(Join-Path $BuildRoot 'Tests') @invokePesterParams
+    $numberFails = $testResults.FailedCount
+    assert($numberFails -eq 0) ('Failed "{0}" unit tests.' -f $numberFails)
+}
+
+task RunIntergrationTests LoadRequiredModules, {
+    Write-Description White 'Running Intergration tests with Pester' -accent
+    $ENV:BuildRoot = $BuildRoot
+    $invokePesterParams = @{
+        Strict = $true
+        PassThru = $true
+        Verbose = $false
+        EnableExit = $false
+    }
+    $testResults = Invoke-Pester -tag 'IntergrationTest' $(Join-Path $BuildRoot 'Tests') @invokePesterParams
+    $numberFails = $testResults.FailedCount
+    assert($numberFails -eq 0) ('Failed "{0}" unit tests.' -f $numberFails)
 }
 #endregion
 
@@ -826,6 +871,10 @@ task BuildSessionCleanup CleanScratchDirectory, {
 #endregion
 
 #region Main tasks
+# Synopsis: Run all tests
+task Tests RunMetaTests, RunUnitTests, RunIntergrationTests {
+
+}
 # Synopsis: Build the module
 task Build Configure, CodeHealthReport, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, PostBuildTasks, BuildSessionCleanup, {
 
@@ -847,5 +896,5 @@ task AddMissingCBH Configure, CleanScratchDirectory, InsertCBHInPublicFunctions,
 }
 
 # Synopsis: Default task when running Invoke-Build
-task . Build
+task . Tests, Build
 #endregion

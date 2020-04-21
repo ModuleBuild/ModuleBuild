@@ -258,7 +258,7 @@ task RunMetaTests LoadRequiredModules, {
 }
 
 task RunUnitTests LoadRequiredModules, {
-    Write-Description White 'Running meta tests with Pester' -accent
+    Write-Description White 'Running Unit tests with Pester' -accent
     $ENV:BuildRoot = $BuildRoot
     $invokePesterParams = @{
         Strict = $true
@@ -267,6 +267,20 @@ task RunUnitTests LoadRequiredModules, {
         EnableExit = $false
     }
     $testResults = Invoke-Pester -tag 'UnitTest' $(Join-Path $BuildRoot 'Tests') @invokePesterParams
+    $numberFails = $testResults.FailedCount
+    assert($numberFails -eq 0) ('Failed "{0}" unit tests.' -f $numberFails)
+}
+
+task RunIntergrationTests LoadRequiredModules, {
+    Write-Description White 'Running Intergration tests with Pester' -accent
+    $ENV:BuildRoot = $BuildRoot
+    $invokePesterParams = @{
+        Strict = $true
+        PassThru = $true
+        Verbose = $false
+        EnableExit = $false
+    }
+    $testResults = Invoke-Pester -tag 'IntergrationTest' $(Join-Path $BuildRoot 'Tests') @invokePesterParams
     $numberFails = $testResults.FailedCount
     assert($numberFails -eq 0) ('Failed "{0}" unit tests.' -f $numberFails)
 }
@@ -858,7 +872,7 @@ task BuildSessionCleanup CleanScratchDirectory, {
 
 #region Main tasks
 # Synopsis: Run all tests
-task Tests RunMetaTests, RunUnitTests, {
+task Tests RunMetaTests, RunUnitTests, RunIntergrationTests {
 
 }
 # Synopsis: Build the module
