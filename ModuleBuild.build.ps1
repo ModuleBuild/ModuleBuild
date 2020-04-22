@@ -142,8 +142,9 @@ task CodeHealthReport -if {$Script:BuildEnv.OptionCodeHealthReport} ValidateRequ
 
     Write-Description White 'Creating a code health report of your public functions' -level 2
     $CodeHealthScanPathPublic = Join-Path $BuildRoot $Script:BuildEnv.PublicFunctionSource
+    $CodeHealthScanTestPathPublic = $CodeHealthScanPathPublic -replace  'src', 'tests\\unit'
     $CodeHealthReportPublic = Join-Path $BuildReportsFolder 'CodeHealthReport-Public.html'
-    Invoke-PSCodeHealth -Path $CodeHealthScanPathPublic -HtmlReportPath $CodeHealthReportPublic
+    Invoke-PSCodeHealth -Path $CodeHealthScanPathPublic -HtmlReportPath $CodeHealthReportPublic -TestsPath $CodeHealthScanTestPathPublic
 
     if (Test-Path $CodeHealthReportPublic) {
         (Get-Content -Path $CodeHealthReportPublic -raw) -replace [regex]::escape((Resolve-Path $CodeHealthScanPathPublic)), $Script:BuildEnv.PublicFunctionSource | Out-File -FilePath $CodeHealthReportPublic -Encoding $Script:BuildEnv.Encoding -Force
@@ -151,8 +152,9 @@ task CodeHealthReport -if {$Script:BuildEnv.OptionCodeHealthReport} ValidateRequ
 
     Write-Description White 'Creating a code health report of your private functions' -level 2
     $CodeHealthScanPathPrivate = Join-Path $BuildRoot $Script:BuildEnv.PrivateFunctionSource
+    $CodeHealthScanTestPathPrivate = $CodeHealthScanPathPrivate -replace  'src', 'tests\\unit'
     $CodeHealthReportPrivate = Join-Path $BuildReportsFolder 'CodeHealthReport-Private.html'
-    Invoke-PSCodeHealth -Path $CodeHealthScanPathPrivate -HtmlReportPath $CodeHealthReportPrivate
+    Invoke-PSCodeHealth -Path $CodeHealthScanPathPrivate -HtmlReportPath $CodeHealthReportPrivate -TestsPath $CodeHealthScanTestPathPrivate
 
     if (Test-Path $CodeHealthReportPrivate) {
         (Get-Content -Path $CodeHealthReportPrivate -raw) -replace [regex]::escape((Resolve-Path $CodeHealthScanPathPrivate)), $Script:BuildEnv.PrivateFunctionSource | Out-File -FilePath $CodeHealthReportPrivate -Encoding $Script:BuildEnv.Encoding -Force
@@ -459,7 +461,7 @@ task UpdateCBH {
         $FileName = $_.Name
         Write-Description White "Replacing CBH in file: $($FileName)" -level 2
         $FunctionName = $FileName -replace '.ps1', ''
-        $NewExternalHelp = $ExternalHelp -replace '{{LINK}}', ($Script:BuildEnv.ModuleWebsite + "/tree/master/$($Script:BuildEnv.BaseReleaseFolder)/$($Script:BuildEnv.ModuleVersion)/docs/Functions/$($FunctionName).md")
+        $NewExternalHelp = $ExternalHelp -replace '{{LINK}}', ($Script:BuildEnv.ModuleWebsite + "/tree/master/$($Script:BuildEnv.BaseReleaseFolder)/$($Script:BuildEnv.ModuleVersion)/docs/$($FunctionName).md")
         $UpdatedFile = (get-content  $FormattedOutFile -raw) -replace $CBHPattern, $NewExternalHelp
         $UpdatedFile | Out-File -FilePath $FormattedOutFile -force -Encoding $Script:BuildEnv.Encoding
     }
@@ -880,13 +882,13 @@ task Build Configure, CodeHealthReport, PrepareStage, GetPublicFunctions, Saniti
 
 }
 
-# Synopsis: Build, install and Test load the module.
-task BuildAndInstallModule Build, InstallModule, TestImportInstalledModule, BuildSessionCleanup, {
+# Synopsis: Test, Build, install and Test load the module.
+task TestBuildAndInstallModule Tests, Build, InstallModule, TestImportInstalledModule, BuildSessionCleanup, {
 
 }
 
-# Synopsis: Build, Install, Test load and Publish the module
-task BuildInstallTestAndPublishModule BuildAndInstallModule, PublishPSGallery, BuildSessionCleanup, {
+# Synopsis: Test, Build, Install, Test load and Publish the module
+task BuildInstallTestAndPublishModule TestBuildAndInstallModule, PublishPSGallery, BuildSessionCleanup, {
 
 }
 
@@ -896,5 +898,5 @@ task AddMissingCBH Configure, CleanScratchDirectory, InsertCBHInPublicFunctions,
 }
 
 # Synopsis: Default task when running Invoke-Build
-task . Tests, Build
+task . Build
 #endregion
