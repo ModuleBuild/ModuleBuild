@@ -3,18 +3,26 @@
 param (
     [parameter(Position = 0, ParameterSetName = 'Build')]
     [switch]$BuildModule,
-    [parameter(Position = 1, ParameterSetName = 'Build')]
-    [switch]$UploadPSGallery,
+    [parameter(Position = 1,ParameterSetName = 'Build')]
+    [switch]$TestBuildAndInstallModule,
     [parameter(Position = 2, ParameterSetName = 'Build')]
-    [switch]$InstallAndTestModule,
+    [switch]$UploadPSGallery,
     [parameter(Position = 3, ParameterSetName = 'Build')]
-    [version]$NewVersion,
+    [switch]$InstallAndTestModule,
     [parameter(Position = 4, ParameterSetName = 'Build')]
+    [version]$NewVersion,
+    [parameter(Position = 5, ParameterSetName = 'Build')]
     [string]$ReleaseNotes,
-    [parameter(Position = 5, ParameterSetName = 'CBH')]
+    [parameter(Position = 6, ParameterSetName = 'CBH')]
     [switch]$AddMissingCBH,
-    [parameter(Position = 6, ParameterSetName = 'Tests')]
-    [switch]$Test
+    [parameter(Position = 7, ParameterSetName = 'Tests')]
+    [switch]$Test,
+    [parameter(Position = 8,ParameterSetName = 'Tests')]
+    [switch]$TestMetaOnly,
+    [parameter(Position = 9,ParameterSetName = 'Tests')]
+    [switch]$TestUnitOnly,
+    [parameter(Position = 10,ParameterSetName = 'Tests')]
+    [switch]$TestIntergrationOnly
 )
 
 function PrerequisitesLoaded {
@@ -80,16 +88,32 @@ switch ($psCmdlet.ParameterSetName) {
                 throw
             }
         }
-    }
-    'Build' {
-        if ($NewVersion -ne $null) {
+        if ($TestMetaOnly) {
             try {
-                Invoke-Build -Task UpdateVersion -NewVersion $NewVersion -ReleaseNotes $ReleaseNotes
+                Invoke-Build -Task RunMetaTests
             }
             catch {
-                throw $_
+                throw
             }
         }
+        if ($TestUnitOnly) {
+            try {
+                Invoke-Build -Task RunUnitTests
+            }
+            catch {
+                throw
+            }
+        }
+        if ($TestIntergrationOnly) {
+            try {
+                Invoke-Build -Task RunIntergrationTests
+            }
+            catch {
+                throw
+            }
+        }
+    }
+    'Build' {
         # If no parameters were specified or the build action was manually specified then kick off a standard build
         if (($psboundparameters.count -eq 0) -or ($BuildModule)) {
             try {
@@ -101,13 +125,22 @@ switch ($psCmdlet.ParameterSetName) {
             }
         }
 
-        # Install and test the module?
-        if ($InstallAndTestModule) {
+        # Test, Build Installd and test load the module
+        if ($TestBuildAndInstallModule) {
             try {
-                Invoke-Build -Task InstallAndTestModule
+                Invoke-Build -Task TestBuildAndInstallModule
             }
             catch {
-                Write-Host 'Install and test of module failed:'
+                Write-Host 'Test, Build Installd and test load the module of the module failed:'
+                throw $_
+            }
+        }
+
+        if ($NewVersion -ne $null) {
+            try {
+                Invoke-Build -Task UpdateVersion -NewVersion $NewVersion -ReleaseNotes $ReleaseNotes
+            }
+            catch {
                 throw $_
             }
         }

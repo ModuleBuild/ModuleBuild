@@ -3,12 +3,14 @@
 os: WMF 5
 
 # Skip on updates to the readme.
-# We can force this by adding [skip ci] or [ci skip] anywhere in commit message 
+# We can force this by adding [skip ci] or [ci skip] anywhere in commit message
 skip_commits:
-  message: /updated readme.*|update readme.*s/
+  files:
+    - "**/*.md"
+  message: /updated readme.*|update readme.*s|update docs.*|update version.*|update appveyor.*/
 
 build: false
 
-#Kick off the CI/CD pipeline
+# Kick off the CI/CD pipeline
 test_script:
-  - ps: . .\Build.ps1 -BuildModule
+  - ps: . .\Build.ps1 -TestBuildAndInstallModule

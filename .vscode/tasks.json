@@ -54,37 +54,16 @@
             }
         },
         {
-            "label": "Build, Install, and Load Module",
+            "label": "Test, Build, Install, and Load Module",
             "type": "shell",
             "windows": {
-                "command": "powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File ${workspaceRoot}\\Build.ps1 -BuildModule -InstallAndTestModule"
+                "command": "powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File ${workspaceRoot}\\Build.ps1 -TestBuildAndInstallModule"
             },
             "linux": {
-                "command": "/usr/bin/powershell -NoProfile -File ${workspaceRoot}\\Build.ps1  -BuildModule -InstallAndTestModule"
+                "command": "/usr/bin/powershell -NoProfile -File ${workspaceRoot}\\Build.ps1  -TestBuildAndInstallModule"
             },
             "osx": {
-                "command": "/usr/local/bin/powershell -NoProfile -File ${workspaceRoot}\\Build.ps1  -BuildModule -InstallAndTestModule"
-            },
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "presentation": {
-                "reveal": "always",
-                "panel": "new"
-            }
-        },
-        {
-            "label": "Build, Install, Load, and Publish Module",
-            "type": "shell",
-            "windows": {
-                "command": "powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File ${workspaceRoot}\\Build.ps1 -BuildModule -InstallAndTestModule -UploadPSGallery"
-            },
-            "linux": {
-                "command": "/usr/bin/powershell -NoProfile -File ${workspaceRoot}\\Build.ps1 -BuildModule -InstallAndTestModule -UploadPSGallery"
-            },
-            "osx": {
-                "command": "/usr/local/bin/powershell -NoProfile -File ${workspaceRoot}\\Build.ps1 -BuildModule -InstallAndTestModule -UploadPSGallery"
+                "command": "/usr/local/bin/powershell -NoProfile -File ${workspaceRoot}\\Build.ps1 -TestBuildAndInstallModule"
             },
             "group": {
                 "kind": "build",
