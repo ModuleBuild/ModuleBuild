@@ -872,7 +872,7 @@ task BuildSessionCleanup CleanScratchDirectory, {
 
 #region Main tasks
 # Synopsis: Run all tests
-task Tests RunMetaTests, RunUnitTests, RunIntergrationTests {
+task Tests RunMetaTests, RunUnitTests, RunIntergrationTests, {
 
 }
 # Synopsis: Build the module
