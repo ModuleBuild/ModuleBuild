@@ -11,9 +11,8 @@ if(-not $projectRoot) {
 }
 
 Describe 'Text files formatting' -Tags @('MetaTest') {
-
-    $allTextFiles = Get-TextFilesList $projectRoot
-
+    $allTextFiles = Get-TextFilesList -root $projectRoot -Extension @('.gitignore', '.gitattributes', '.ps1', '.psm1', '.psd1', '.cmd', '.mof')
+    $allTextFiles = $allTextFiles | Where-Object {$_.FullName -notlike '*\release\*'} | where-Object {$_.FullName -notlike '*\plugins\*'}  | where-Object {$_.FullName -notlike '*\build\*'}
     Context 'Files encoding' {
         It "Doesn't use Unicode encoding" {
             $unicodeFilesCount = 0

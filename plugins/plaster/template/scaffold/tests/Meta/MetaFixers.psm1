@@ -40,9 +40,11 @@ function Get-TextFilesList {
     [OutputType([System.IO.FileInfo])]
     param(
         [Parameter(Mandatory = $true)]
-        [string]$root
+        [string]$root,
+        [Parameter(Mandatory = $False)]
+        [Array]$Extension = @('.gitignore', '.gitattributes', '.ps1', '.psm1', '.psd1', '.json', '.xml', '.cmd', '.mof')
     )
-    Get-ChildItem -File -Recurse $root | Where-Object { @('.gitignore', '.gitattributes', '.ps1', '.psm1', '.psd1', '.json', '.xml', '.cmd', '.mof') -contains $_.Extension }
+    Get-ChildItem -File -Recurse $root | Where-Object { $Extension -contains $_.Extension }
 }
 
 function Test-FileUnicode {
