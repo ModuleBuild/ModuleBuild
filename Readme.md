@@ -26,6 +26,7 @@ and import the module to your session to test, but not install this module.
 ## Features
 
 This build framework for PowerShell modules comes with several appealing baked in features which include;
+
 - Fully portable project directory structure and build process. So portable that you can copy it to another PowerShell 5.0 capable system and it should run the same.
 - Automatically combine your public and private functions into one clean psm1 file at build time.
 - Automatically update your psd1 file with public functions at build time.
@@ -37,6 +38,7 @@ This build framework for PowerShell modules comes with several appealing baked i
 - Includes ability to scan for sensitive terms (like your company domain name or other items that you may not want published)
 - Functions for importing public and private functions from other projects into a ModuleBuild project
 - Add new public functions to your project based on easy to create templates.
+
 ## Documentation
 
 Visit the [ReadTheDocs.org documentation](http://modulebuild.readthedocs.io/en/latest/) that this module created a manifest for automatically.
@@ -52,8 +54,12 @@ Studio Code and ensure that the PowerShell extension is installed.
 
 More contributing information can be found [here](https://github.com/zloeber/ModuleBuild/blob/master/docs/Contributing.md).
 
+This module is tested with the PowerShell testing framework Pester. To run all tests, just start the included build scrip with the test param `.\Build.ps1 -test`.
+
 ## Other Information
 
-**Author:** [Zachary Loeber](https://www.the-little-things.net)
+**Authors:**
+- [Zachary Loeber](https://www.the-little-things.net)
+- [Justin Perdok](https://github.com/justin-p)
 
 **Website:** https://github.com/zloeber/ModuleBuild

@@ -36,6 +36,8 @@ Studio Code and ensure that the PowerShell extension is installed.
 * [Visual Studio Code](https://code.visualstudio.com/)
 * [PowerShell Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
 
+This module is tested with the PowerShell testing framework Pester. To run all tests, just start the included build scrip with the test param `.\Build.ps1 -test`.
+
 ## Other Information
 
 **Author:** <%=$PLASTER_PARAM_ModuleAuthor%>
