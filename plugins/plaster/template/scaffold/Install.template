@@ -1,6 +1,6 @@
 ﻿# Run this in an administrative PowerShell prompt to install the <%=$PLASTER_PARAM_ModuleName%> PowerShell module:
 #
-# 	iex (New-Object Net.WebClient).DownloadString("<%=$PLASTER_PARAM_ModuleWebsite%>/raw/master/Install.ps1")
+# iex (New-Object Net.WebClient).DownloadString("<%=$PLASTER_PARAM_ModuleWebsite%>/raw/master/Install.ps1")
 
 # Some general variables
 $ModuleName = '<%=$PLASTER_PARAM_ModuleName%>'
