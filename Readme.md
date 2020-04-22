@@ -33,6 +33,7 @@ This build framework for PowerShell modules comes with several appealing baked i
 - Automatically scan your module release with PSScriptAnalyzer
 - Automatically upload your script to the PowerShell Gallery (with appropriate API key)
 - Automatically create project documentation folder structure and yml definition file for ReadTheDocs.org integration
+- Automatically start Pester tests during build process
 - Visual Studio Code integration (tasks)
 - Easy to manage build configuration with forward compatible design and easy to use commands
 - Includes ability to scan for sensitive terms (like your company domain name or other items that you may not want published)
