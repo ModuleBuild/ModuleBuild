@@ -572,7 +572,7 @@ function New-DynamicParameter {
             Where-Object { $_.Value.ParameterSets.Keys -contains $PsCmdlet.ParameterSetName } |
                 Select-Object -ExpandProperty Key |
                 # Find unbound parameters in the current parameter set
-												Where-Object { $PSBoundParameters.Keys -notcontains $_ }
+                                                Where-Object { $PSBoundParameters.Keys -notcontains $_ }
 
             # Even if parameter is not bound, corresponding variable is created with parameter's default value (if specified)
             Write-Debug 'Trying to get variables with default parameter value and create a new bound parameter''s'
