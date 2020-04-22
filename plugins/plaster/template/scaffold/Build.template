@@ -3,17 +3,17 @@
 param (
     [parameter(Position = 0, ParameterSetName = 'Build')]
     [switch]$BuildModule,
-    [parameter(Position = 2, ParameterSetName = 'Build')]
+    [parameter(Position = 1, ParameterSetName = 'Build')]
     [switch]$UploadPSGallery,
-    [parameter(Position = 3, ParameterSetName = 'Build')]
+    [parameter(Position = 2, ParameterSetName = 'Build')]
     [switch]$InstallAndTestModule,
-    [parameter(Position = 4, ParameterSetName = 'Build')]
+    [parameter(Position = 3, ParameterSetName = 'Build')]
     [version]$NewVersion,
-    [parameter(Position = 5, ParameterSetName = 'Build')]
+    [parameter(Position = 4, ParameterSetName = 'Build')]
     [string]$ReleaseNotes,
-    [parameter(Position = 6, ParameterSetName = 'CBH')]
+    [parameter(Position = 5, ParameterSetName = 'CBH')]
     [switch]$AddMissingCBH,
-    [parameter(Position = 7, ParameterSetName = 'Tests')]
+    [parameter(Position = 6, ParameterSetName = 'Tests')]
     [switch]$Test
 )
 
