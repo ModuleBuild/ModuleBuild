@@ -55,7 +55,7 @@ Studio Code and ensure that the PowerShell extension is installed.
 
 More contributing information can be found [here](https://github.com/zloeber/ModuleBuild/blob/master/docs/Contributing.md).
 
-This module is tested with the PowerShell testing framework Pester. To run all tests, just start the included build scrip with the test param `.\Build.ps1 -test`.
+This module is tested with the PowerShell testing framework Pester. To run all tests, just start the included build script with the test param `.\Build.ps1 -test`.
 
 ## Other Information
 
