@@ -11,6 +11,7 @@ You can add items directly to this file if you like and they will be loaded and 
 ## Configuration Process
 
 Whenever you kick off a process involving any of your build steps the ModuleName.buildenvironment.ps1 file is dot sourced into the session. When this file is invoked a few things happen:
+
 1. The default settings that are populated from initializing the project scaffolding are assigned to the global build environment variable that is aptly called 'BuildEnv'.
 2. We then look for ModuleName.buildenvironment.json. If it exists, we load and use any settings within the file over any of the default values previously defined in the buildenvironment.ps1 file.
 3. We then optionally update the json config file if any of the following conditions are met:
@@ -36,6 +37,7 @@ Use this against an existing module directory to load the module into memory to 
 ## Add-PublicFunction
 
 This function will parse your build environment config file for the location of your function templates directory (default = src\templates) and allow you to use one of them to create a new public function for your module. Some basic validation of the function name will be done including:
+
 - Verb-Noun format
 - Noun is singular, not plural
 - Function doesn't already exist
