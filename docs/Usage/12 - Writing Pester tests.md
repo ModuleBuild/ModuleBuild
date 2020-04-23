@@ -1,6 +1,6 @@
 # Writing Pester tests with ModuleBuild
 
-We wont go deep into how to write pester tests, just how they are integrated into ModuleBuild.
+We won't go deep into how to write pester tests, just how they are integrated into ModuleBuild.
 
 ModuleBuild sorts Pester tests in 3 flavours. Meta, Unit and Intergration tests.
 
