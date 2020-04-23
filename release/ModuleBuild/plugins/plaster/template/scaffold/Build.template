@@ -5,14 +5,14 @@ param (
     [switch]$BuildModule,
     [parameter(Position = 1,ParameterSetName = 'Build')]
     [switch]$TestBuildAndInstallModule,
-    [parameter(Position = 2, ParameterSetName = 'Build')]
-    [switch]$UploadPSGallery,
-    [parameter(Position = 3, ParameterSetName = 'Build')]
-    [switch]$InstallAndTestModule,
-    [parameter(Position = 4, ParameterSetName = 'Build')]
+    [parameter(Position = 2, ParameterSetName = 'UpdateRelease')]
+    [switch]$UpdateRelease,
+    [parameter(Position = 3, ParameterSetName = 'UpdateRelease')]
     [version]$NewVersion,
-    [parameter(Position = 5, ParameterSetName = 'Build')]
+    [parameter(Position = 4, ParameterSetName = 'UpdateRelease')]
     [string]$ReleaseNotes,
+    [parameter(Position = 5, ParameterSetName = 'UpdateRelease')]
+    [switch]$UploadPSGallery,
     [parameter(Position = 6, ParameterSetName = 'CBH')]
     [switch]$AddMissingCBH,
     [parameter(Position = 7, ParameterSetName = 'Tests')]
@@ -69,13 +69,55 @@ if (-not (PrerequisitesLoaded)) {
 }
 
 switch ($psCmdlet.ParameterSetName) {
+    'Build' {
+        # If no parameters were specified or the build action was manually specified then kick off a standard build
+        if (($psboundparameters.count -eq 0) -or ($BuildModule)) {
+            try {
+                Invoke-Build
+            }
+            catch {
+                Write-Host 'Build Failed with the following error:'
+                throw $_
+            }
+        }
+
+        # Test, Build Installd and test load the module
+        if ($TestBuildAndInstallModule) {
+            try {
+                Invoke-Build -Task TestBuildAndInstallModule
+            }
+            catch {
+                Write-Host 'Test, Build Installd and test load the module of the module failed:'
+                throw $_
+            }
+        }
+    }
     'CBH' {
         if ($AddMissingCBH) {
             try {
                 Invoke-Build -Task AddMissingCBH
             }
             catch {
-                throw
+                throw $_
+            }
+        }
+    }
+     'UpdateRelease' {
+        if ($UpdateRelease -ne $null) {
+            try {
+                Invoke-Build -Task UpdateRelease -NewVersion $NewVersion -ReleaseNotes $ReleaseNotes
+            }
+            catch {
+                throw $_
+            }
+        }
+
+        if ($UploadPSGallery) {
+            try {
+                Invoke-Build -Task PublishPSGallery
+            }
+            catch {
+                throw 'Unable to upload project to the PowerShell Gallery!'
             }
         }
     }
@@ -113,46 +155,5 @@ switch ($psCmdlet.ParameterSetName) {
             }
         }
     }
-    'Build' {
-        # If no parameters were specified or the build action was manually specified then kick off a standard build
-        if (($psboundparameters.count -eq 0) -or ($BuildModule)) {
-            try {
-                Invoke-Build
-            }
-            catch {
-                Write-Host 'Build Failed with the following error:'
-                throw $_
-            }
-        }
-
-        # Test, Build Installd and test load the module
-        if ($TestBuildAndInstallModule) {
-            try {
-                Invoke-Build -Task TestBuildAndInstallModule
-            }
-            catch {
-                Write-Host 'Test, Build Installd and test load the module of the module failed:'
-                throw $_
-            }
-        }
-
-        if ($NewVersion -ne $null) {
-            try {
-                Invoke-Build -Task UpdateVersion -NewVersion $NewVersion -ReleaseNotes $ReleaseNotes
-            }
-            catch {
-                throw $_
-            }
-        }
-
-        # Upload to gallery?
-        if ($UploadPSGallery) {
-            try {
-                Invoke-Build -Task PublishPSGallery
-            }
-            catch {
-                throw 'Unable to upload project to the PowerShell Gallery!'
-            }
-        }
-    }
 }
+

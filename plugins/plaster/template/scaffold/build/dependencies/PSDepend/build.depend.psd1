@@ -20,7 +20,7 @@
         source = 'PSGalleryModule'
     }
     ModuleBuildToolsTemp = @{
-        version = '0.0.3'
+        version = '0.0.5'
         source = 'PSGalleryModule'
     }
 }

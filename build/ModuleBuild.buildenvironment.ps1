@@ -18,7 +18,7 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         ForceInstallModule = $true
         Encoding = 'utf8'
         ModuleToBuild = 'ModuleBuild'
-        ModuleVersion = '0.2.4'
+        ModuleVersion = '0.3.0'
         ModuleWebsite = 'https://github.com/zloeber/ModuleBuild'
         ModuleCopyright = "(c) $((get-date).Year.ToString()) Zachary Loeber. All rights reserved."
         ModuleLicenseURI = 'https://github.com/zloeber/ModuleBuild/LICENSE.md'

@@ -768,7 +768,7 @@ task NewVersion LoadRequiredModules, LoadModuleManifest, {
 }
 
 # Synopsis: Update current module manifest with the version defined in the build config file (if they differ)
-task UpdateRelease LoadRequiredModules, LoadModuleManifest, {
+task UpdateRelease NewVersion, LoadRequiredModules, LoadModuleManifest, {
     Write-Description White 'Updating the release notes of this module' -accent
 
     $ModuleManifestFullPath = Join-Path $BuildRoot "$($Script:BuildEnv.ModuleToBuild).psd1"
@@ -900,3 +900,4 @@ task AddMissingCBH Configure, CleanScratchDirectory, InsertCBHInPublicFunctions,
 # Synopsis: Default task when running Invoke-Build
 task . Build
 #endregion
+
