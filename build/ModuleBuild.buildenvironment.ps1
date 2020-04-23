@@ -36,7 +36,7 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
 
         # If you want to prescan and fail a build upon finding any proprietary strings
         # enable this option and define some strings.
-        OptionSanitizeSensitiveTerms = $True
+        OptionSanitizeSensitiveTerms = $False
         OptionSensitiveTerms = @($env:username, $env:userdomain, $env:userdnsdomain) | Where {$null -ne $_}
         OptionSensitiveTermsInitialized = $false
 
