@@ -1,6 +1,6 @@
 ﻿---
 Module Name: ModuleBuild
-Module Guid: 8f6090b4-6411-4949-a717-96d64a1cc5b3
+Module Guid: 2b53a392-3b0f-4a7c-b934-7c995252070e
 Download Help Link: https://github.com/zloeber/ModuleBuild/release/ModuleBuild/docs/ModuleBuild.md
 Help Version: 0.3.0
 Locale: en-US
@@ -8,7 +8,7 @@ Locale: en-US
 
 # ModuleBuild Module
 ## Description
-A scaffolding framework which can be used to kickstart a generic PowerShell module project.
+A scaffolding framework which can be used to kickstart a generic PowerShell module project. 
 
 ## ModuleBuild Cmdlets
 ### [Initialize-ModuleBuild](Initialize-ModuleBuild.md)
@@ -19,12 +19,6 @@ Retrieves private module function definitions and recreates them in your moduleb
 
 ### [Add-PublicFunction](Add-PublicFunction.md)
 Adds a public function to your modulebuild based project based on defined templates.
-
-### [Get-MBTBuildEnvironment](Get-MBTBuildEnvironment.md)
-Retrieves all the stored settings in a buildenvironment.json file.
-
-### [Set-MBTBuildEnvironment](Set-MBTBuildEnvironment.md)
-Sets a stored setting in a buildenvironment.json file.
 
 ### [Import-ModulePublicFunction](Import-ModulePublicFunction.md)
 Retrieves public module function definitions and recreates them in your modulebuild based project.

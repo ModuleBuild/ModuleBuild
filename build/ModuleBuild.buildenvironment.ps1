@@ -3,9 +3,7 @@ param (
     [switch]$ForcePersist
 )
 <#
- Update $Script:BuildEnv to suit your PowerShell module build. These variables get dot sourced into
- the build at every run and are exported to an external xml file for persisting through possible build
- engine upgrades.
+ Update $Script:BuildEnv to suit your PowerShell module build. If you make sufficient changes to your build environment json file (via the module commands or otherwise) you should update this as well so those that inherit your project in the future are able to rebuild it from scratch.
 #>
 
 # If the variable is already defined then essentially do nothing.
@@ -15,7 +13,7 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
     $Script:BuildEnv = New-Object -TypeName PSObject -Property @{
         FirstRun = $True
         Force = $False
-        ForceInstallModule = $true
+        ForceInstallModule = $False
         Encoding = 'utf8'
         ModuleToBuild = 'ModuleBuild'
         ModuleVersion = '0.3.0'
@@ -24,12 +22,12 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         ModuleLicenseURI = 'https://github.com/zloeber/ModuleBuild/LICENSE.md'
         ModuleTags = 'scaffold, Module, Invoke-Build' -split ','
         ModuleAuthor = 'Zachary Loeber'
-        ModuleDescription = 'A scaffolding framework which can be used to kickstart a generic PowerShell module project.'
+        ModuleDescription = 'A scaffolding framework which can be used to kickstart a generic PowerShell module project. '
 
-        # Options - These affect how your eventual build will be run.
+        # Options - These affect how your build will be run.
         OptionAnalyzeCode = $True
         OptionCodeHealthReport = $True
-        OptionCombineFiles = $True
+        OptionCombineFiles = $TRUE
         OptionTranscriptEnabled = $false
         OptionTranscriptLogFile = 'BuildTranscript.Log'
 
@@ -44,10 +42,11 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
 
         # If you want to update your current module build version automatically
         # after a successful psgallery publish set this to $true
-        OptionUpdateVersionAfterPublishing = $true
+        OptionUpdateVersionAfterPublishing = $True
 
         # Additional paths in the source module which should be copied over to the final build release
-        AdditionalModulePaths = @('build\dependencies\plaster','plugins')
+        AdditionalModulePaths = @('plugins')
+
         # Generate a yml file in the root folder of this project for readthedocs.org integration
         OptionGenerateReadTheDocs = $True
         # Most of the following options you probably don't need to change
@@ -62,9 +61,9 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         FunctionTemplates = "src\templates"    # Location of function template files (*.tem)
 
         # If you will be publishing to the PowerShell Gallery you will need a Nuget API key (can get from the website)
-        # You should not actually enter this key here but should manually enter it in the ModuleBuild.buildenvironment.json file
+        # You should NOT enter this key here but rather manually enter it in the ModuleBuild.buildenvironment.json file with: Set-MBTBuildEnvironment -NugetAPIKey '<key>'
 
-        NugetAPIKey  = $null
+        NugetAPIKey  = ''
     }
 
     ########################################
