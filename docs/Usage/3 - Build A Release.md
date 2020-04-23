@@ -10,7 +10,7 @@ or
 
 or in VS Code
 
-Press 'Ctrl+Shift+B' then select 'Build'
+Press 'Ctrl+Shift+B' then select `Build Module`
 
 This is the heart of the ModuleBuild project. The build will go through the process of combining the source files into a monolithic psm1 file, populating the exportable functions of the release module manifest, creating online help files, analyze the script, scan for sensitive terms, and more. If everything builds without errors you will see the results populated in the release directory in two areas:
 
