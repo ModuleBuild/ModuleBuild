@@ -13,12 +13,11 @@ Set up the framework for a ModuleBuild project.
 ## SYNTAX
 
 ```
-Initialize-ModuleBuild [[-Path] <String>] [[-SourceModule] <String>] [<CommonParameters>]
+Initialize-ModuleBuild [[-Path] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
 Set up the framework for a ModuleBuild project.
-Optionally supply an existing module manifest path to pull in information from it to begin a migration to ModuleBuild.
 
 ## EXAMPLES
 
@@ -26,17 +25,6 @@ Optionally supply an existing module manifest path to pull in information from i
 ```
 Initialize-ModuleBuild -Path C:\Work\NewModule
 ```
-
-Prompt for all the settings required to get a new modulebuild project setup in c:\work\NewModule.
-
-### EXAMPLE 2
-```
-Initialize-ModuleBuild -Path C:\Work\NewModule -SourceModule c:\work\myoldmodule\myoldmodule.psd1
-```
-
-Pulls some information from myoldmodule.psd1 and then prompt for any remaining required information to create a modulebuild based project from it in C:\Work\NewModule
-
-Prompt for all the settings required to get a new modulebuild project setup in c:\work\NewModule.
 
 ## PARAMETERS
 
@@ -52,21 +40,6 @@ Required: False
 Position: 1
 Default value: None
 Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -SourceModule
-If specified, will import a source module manifest file for module information.
-
-```yaml
-Type: String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 2
-Default value: None
-Accept pipeline input: False
 Accept wildcard characters: False
 ```
 

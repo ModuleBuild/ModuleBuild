@@ -13,7 +13,7 @@ Retrieves private module function definitions and recreates them in your moduleb
 ## SYNTAX
 
 ```
-Import-ModulePrivateFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotInsertCBH]
+Import-ModulePrivateFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotAddCBH]
  [[-ExcludePaths] <String[]>] [[-ExcludeFiles] <String[]>] [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -82,7 +82,7 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -DoNotInsertCBH
+### -DoNotAddCBH
 Do not attempt to find and insert comment based help into the function.
 Default for private functions is to skip CBH insertion.
 
@@ -160,8 +160,7 @@ Accept wildcard characters: False
 ```
 
 ### CommonParameters
-This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable.
-For more information, see about_CommonParameters (http://go.microsoft.com/fwlink/?LinkID=113216).
+This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
 ## INPUTS
 

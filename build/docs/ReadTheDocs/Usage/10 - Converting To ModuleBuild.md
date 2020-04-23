@@ -25,6 +25,7 @@ So in order to convert an existing project to a modulebuild project you will fol
 5. Add any required preload or postload code in src\other\preload.ps1 or src\other\postload.ps1
 
 ## Very Important Notes
+
 - This will generally work well for easy projects. Modules with many dependencies or higher complexity levels will likely be more work to get converted.
 - It is very important that, when specifying your module source, that you choose the right file. There are BIG differences in behavior between importing a psm1 file and a psd1 file and whichever one you pass in will be the one that gets imported.
 - I'd only run these commands against a newly initialized project but you could theoretically use this to split up some monolithic module for development purposes. Conversely, you could also use these to merge the public/private functions of multiple disperate modules as well.

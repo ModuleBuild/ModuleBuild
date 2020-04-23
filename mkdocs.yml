@@ -1,6 +1,6 @@
 ﻿use_directory_urls: false
 site_author: Zachary Loeber
-copyright: ModuleBuild is licensed under this <a href='https://github.com/zloeber/ModuleBuild/blob/master/License.md'> license
+copyright: ModuleBuild is licensed under <a href='https://github.com/zloeber/ModuleBuild/blob/master/License.md'>this</a> license
 theme: readthedocs
 site_name: ModuleBuild Docs
 pages:
@@ -11,11 +11,9 @@ pages:
 - ToDo: ToDo.md
 - Functions:
   - Add-PublicFunction: Functions/Add-PublicFunction.md
-  - Get-BuildEnvironment: Functions/Get-BuildEnvironment.md
   - Import-ModulePrivateFunction: Functions/Import-ModulePrivateFunction.md
   - Import-ModulePublicFunction: Functions/Import-ModulePublicFunction.md
   - Initialize-ModuleBuild: Functions/Initialize-ModuleBuild.md
-  - Set-BuildEnvironment: Functions/Set-BuildEnvironment.md
 - Introduction: Introduction/Introduction.md
 - Usage:
   - 1 - Initialization: Usage/1 - Initialization.md
@@ -29,5 +27,6 @@ pages:
   - 9 - ModuleBuild Configuration: Usage/9 - ModuleBuild Configuration.md
   - 10 - Converting To ModuleBuild: Usage/10 - Converting To ModuleBuild.md
   - 11 - Module Plugins: Usage/11 - Module Plugins.md
+  - 12 - Writing Pester tests: Usage/12 - Writing Pester tests.md
 repo_url: https://github.com/zloeber/ModuleBuild
 

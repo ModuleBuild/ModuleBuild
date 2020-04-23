@@ -23,6 +23,6 @@ With your new module folder all created there are several steps still left to ta
 4. Doing ReadTheDocs integration? Cool, update .\build\docs\ReadTheDocs by creating folders representing sections and putting markdown files within them for the pages within those sections.
 5. But remember that the markdown files in .\build\docs\Additional need some love too. These get dropped into your project .\docs directory at every build (overwriting anything there in the process!)
 6. Update any bits within your *.psd1 that are appropriate to your module but don't mess with the exported function names as those get handled automatically when you do the build.
-7. If you enabled sensitive terminology scanning then review and update your terms defined in your buildenvironment.json file (using get-buildenvironment & set-buildenvironment).
+7. If you enabled sensitive terminology scanning then review and update your terms defined in your buildenvironment.json file.
 8. Build your project with by running .\Build.ps1, running the build task in VS Code, or running Invoke-Build at your project root.
 9. If you have ReadTheDocs integration enabled make sure to re-organize the generated mkdocs.yml to be ordered how you like before pushing your code to github.

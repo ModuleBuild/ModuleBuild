@@ -1,4 +1,4 @@
-function Get-FunctionParameter {
+function Get-MBTFunctionParameter {
     <#
     .SYNOPSIS
     Return all parameters for each function found in a code block.
@@ -15,7 +15,7 @@ function Get-FunctionParameter {
     .EXAMPLE
     PS > $testfile = 'C:\temp\test.ps1'
     PS > $test = Get-Content $testfile -raw
-    PS > $test | Get-FunctionParameter -ScriptParameters
+    PS > $test | Get-MBTFunctionParameter -ScriptParameters
 
     Takes C:\temp\test.ps1 as input, gathers any script's parameters and prints the output to the screen.
 
@@ -32,8 +32,8 @@ function Get-FunctionParameter {
             Added ScriptParameters parameter to include parameters for a script (not just ones associated with defined functions)
     1.0.2 - Added SuppressMessageAttribute for functionpredicate
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments","functionpredicate",Scope="Function",Target='Get-FunctionParameter',Justification="Unused AST filter")]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments","CommonParams",Scope="Function",Target='Get-FunctionParameter',Justification="")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments","functionpredicate",Scope="Function",Target='Get-MBTFunctionParameter',Justification="Unused AST filter")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments","CommonParams",Scope="Function",Target='Get-MBTFunctionParameter',Justification="")]
     [CmdletBinding()]
     param(
         [parameter(ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]

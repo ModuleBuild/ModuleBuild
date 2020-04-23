@@ -38,7 +38,7 @@ function Add-PublicFunction {
                 }
 
                 # Add new dynamic parameter to dictionary
-                New-DynamicParameter @NewParamSettings -Dictionary $DynamicParameters
+                New-MBTDynamicParameter @NewParamSettings -Dictionary $DynamicParameters
             }
             catch {
                 throw "Unable to load the build file in $BuildPath"
@@ -57,11 +57,11 @@ function Add-PublicFunction {
     }
     process {
         # Pull in the dynamic parameters first
-        New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+        New-MBTDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
         # Attempt to get the build environment data and create our template lookup table
         try {
-            $BuildEnvInfo = Get-BuildEnvironment
+            $BuildEnvInfo = Get-MBTBuildEnvironment
             $BuildEnvPath = Split-Path (Split-Path ((Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' -ErrorAction:SilentlyContinue | Select-Object -First 1).FullName))
             $PublicFunctionSrc = Join-Path $BuildEnvPath $BuildEnvInfo.PublicFunctionSource
             $TemplatePath = Join-Path $BuildEnvPath $BuildEnvInfo.FunctionTemplates

@@ -19,11 +19,11 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 - Fixed improper spelling of 'license' in license creation templating.
 
 ## Version 0.1.10
-- Fixed the -InsertCBH build task.
+- Fixed the -AddCBH build task.
 - Fixed the missing documentation platyps output to show the actual found line that indicates missing CBH.
 
 ## Version 0.1.9
-- Removed plaster option to choose to combine the module source at build time (and simply made that behavior the default that can be changed later via Set-BuildEnvironment -OptionCombineFiles $false)
+- Removed plaster option to choose to combine the module source at build time (and simply made that behavior the default that can be changed later via Set-MBTBuildEnvironment -OptionCombineFiles $false)
 - Added option to run a code health report (via PSCodeHealth) against your public and private function directories prior to starting the build
 - Added 'Module plugin' capability. This adds base functionality to the module project itself. The first included module plugin is the nlogmodule logging functionality.
 
@@ -34,7 +34,7 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 ## Version 0.1.5
 - Fixed awful .gitignore settings included in the default scaffolding
 - Fixed documentation links to be self-referencing
-- Removed AdditionalModulePaths from initial plaster manifest (can just set this with set-buildenvironment after creation)
+- Removed AdditionalModulePaths from initial plaster manifest (can just set this with Set-MBTBuildEnvironment after creation)
 
 ## Version 0.1.4
 - Fixed invalid mkdocs.yml license link reference
@@ -46,7 +46,7 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 
 ## Version 0.1.2
 - Updated vs code task names
-- Fixed an issue with a null build environment variable causing dynamic parameters in set-buildenvironment to fail
+- Fixed an issue with a null build environment variable causing dynamic parameters in Set-MBTBuildEnvironment to fail
 - Several small scaffolding clean ups.
 
 ## Version 0.1.1
