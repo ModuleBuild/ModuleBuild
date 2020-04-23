@@ -12,9 +12,7 @@ Finally, the Function documentation gets generated automatically based on the co
 ## Development Environment
 While any text editor will work well there are included task and setting json files explicitly for Visual Studio Code included with this project. The following tasks have been defined to make things a bit easier. First access the 'Pallette' (Shift+Ctrl+P or Shift+Cmd+P)  and start typing in any of the following tasks to find and run them:
 
-- Clean -> Cleans out your scratch folder
-- Build -> Runs the Build task (also can use Shift+Ctrl+B or Shift+Cmd+B)
-- Analyze -> Runs PSScriptAnalyzer against the src/public files.
-- CreateProjectHelp - Creates the project level help.
-- Test - Runs Pester tests.
-- AddMissingCBH - Analyzes the existing public functions and inserts a template CBH if no CBH already exists and saves it into your scratch folder.
+- Build Module -> Runs the Build task
+- Insert Missing Comment Based Help -> Analyzes the existing public functions and inserts a template CBH if no CBH already exists and saves it into your scratch folder.
+- Run Tests -> Run Pester tests
+- Test, Build, Install and Load Module -> Run the Test, build tasks but also install and try to load the module.

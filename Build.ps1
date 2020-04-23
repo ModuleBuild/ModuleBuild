@@ -103,7 +103,7 @@ switch ($psCmdlet.ParameterSetName) {
         }
     }
      'UpdateRelease' {
-        if ($UpdateRelease -ne $null) {
+        if ($UpdateRelease) {
             try {
                 Invoke-Build -Task UpdateRelease -NewVersion $NewVersion -ReleaseNotes $ReleaseNotes
             }
@@ -156,5 +156,3 @@ switch ($psCmdlet.ParameterSetName) {
         }
     }
 }
-
-
