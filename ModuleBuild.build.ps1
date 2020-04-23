@@ -713,8 +713,11 @@ task PublishPSGallery LoadRequiredModules, InstallModule, {
     $ReleasePath = Join-Path $BuildRoot $Script:BuildEnv.BaseReleaseFolder
     $CurrentReleasePath = Join-Path $ReleasePath $Script:BuildEnv.ModuleToBuild
     if (Get-Module $Script:BuildEnv.ModuleToBuild) {
-        # If the module is already loaded then unload it.
-        Remove-Module $Script:BuildEnv.ModuleToBuild
+        Write-Description White "This module is already installed $($Script:BuildEnv.ModuleToBuild). Removing it" -Level 2
+        Write-Verbose "$($(Get-Module $Script:BuildEnv.ModuleToBuild).Path)"
+        Get-Module $Script:BuildEnv.ModuleToBuild | ForEach-Object {
+            Remove-Module $_.Name
+        }
     }
 
     # Try to import the current module
@@ -723,7 +726,7 @@ task PublishPSGallery LoadRequiredModules, InstallModule, {
         Import-Module -Name $CurrentModule
 
         Write-Description White "Uploading project to PSGallery: $($Script:BuildEnv.ModuleToBuild)"
-        Publish-MBTProjectToPSGallery -Name $Script:BuildEnv.ModuleToBuild -NuGetApiKey $Script:BuildEnv.NuGetApiKey
+        Publish-MBTProjectToPSGallery -Name $Script:BuildEnv.ModuleToBuild -NuGetApiKey $Script:BuildEnv.NuGetApiKey -RequiredVersion $Script:BuildEnv.ModuleVersion
     }
 
     else {
