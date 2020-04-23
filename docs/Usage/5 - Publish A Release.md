@@ -3,7 +3,7 @@ If you have plans to upload your module to the PowerShell Gallery then this buil
 
 Once you have attained your API key you will need to update your build configuration file with it. From witin your project root directory do the following:
 
-`Set-BuildEnvironment -NugetAPIKey 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'`
+`Set-MBTBuildEnvironment -NugetAPIKey 'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx'`
 
 Now when you are ready to upload to the psgallery simply run the following:
 

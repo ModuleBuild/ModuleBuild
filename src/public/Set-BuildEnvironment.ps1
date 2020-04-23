@@ -1,5 +1,5 @@
 
-function Set-BuildEnvironment {
+function Set-MBTBuildEnvironment {
     <#
     .SYNOPSIS
     Sets a stored setting in a buildenvironment.json file.
@@ -14,7 +14,7 @@ function Set-BuildEnvironment {
     https://github.com/zloeber/ModuleBuild
 
     .EXAMPLE
-    Set-BuildEnvironment -OptionSensitiveTerms @('myapikey','myname','password')
+    Set-MBTBuildEnvironment -OptionSensitiveTerms @('myapikey','myname','password')
     #>
 
     [CmdletBinding(SupportsShouldProcess=$True)]
@@ -46,7 +46,7 @@ function Set-BuildEnvironment {
                     }
 
                     # Add new dynamic parameter to dictionary
-                    New-DynamicParameter @NewParamSettings -Dictionary $DynamicParameters
+                    New-MBTDynamicParameter @NewParamSettings -Dictionary $DynamicParameters
                 }
             }
             catch {
@@ -72,12 +72,12 @@ function Set-BuildEnvironment {
         Write-Verbose "Using build file: $BuildPath"
     }
     process {
-        New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+        New-MBTDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
         if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
             If ($PSCmdlet.ShouldProcess("Updating buildenvironment.json")) {
                 try {
-                    $LoadedBuildEnv = Get-BuildEnvironment -Path $BuildPath
+                    $LoadedBuildEnv = Get-MBTBuildEnvironment -Path $BuildPath
                     Foreach ($ParamKey in ($PSBoundParameters.Keys | Where-Object {$_ -ne 'Path'})) {
                         $LoadedBuildEnv.$ParamKey = $PSBoundParameters[$ParamKey]
                         Write-Output "Updating $ParamKey to be $($PSBoundParameters[$ParamKey])"

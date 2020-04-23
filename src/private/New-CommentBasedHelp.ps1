@@ -1,4 +1,4 @@
-﻿function New-CommentBasedHelp {
+﻿function New-MBTCommentBasedHelp {
     <#
     .SYNOPSIS
         Create comment based help for functions within a given scriptblock.
@@ -11,12 +11,12 @@
     .EXAMPLE
        PS > $testfile = 'C:\temp\test.ps1'
        PS > $test = Get-Content $testfile -raw
-       PS > $test | New-CommentBasedHelp | clip
+       PS > $test | New-MBTCommentBasedHelp | clip
 
        Takes C:\temp\test.ps1 as input, creates basic comment based help and puts the result in the clipboard
        to be pasted elsewhere for review.
     .EXAMPLE
-        PS > $CBH = Get-Content 'C:\EWSModule\Get-EWSContact.ps1' -Raw | New-CommentBasedHelp -Verbose
+        PS > $CBH = Get-Content 'C:\EWSModule\Get-EWSContact.ps1' -Raw | New-MBTCommentBasedHelp -Verbose
         PS > ($CBH | Where {$FunctionName -eq 'Get-EWSContact'}).CBH
 
         Consumes Get-EWSContact.ps1 and generates advanced CBH templates for all functions found within. Print out to the screen the advanced
@@ -32,8 +32,8 @@
        1.0.2 - Added SuppressMessageAttribute
        1.0.3 - Extra Verbose message to check if function had Params
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "ScriptText",Scope="Function",Target="New-CommentBasedHelp",Justification="Seems it's here since duo a copy paste from other functions (Add-MissingCBH,Get-Function,Get-FunctionParameter). Leaving it here since it doesn't do any harm.")]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions","",Scope="Function",Target="New-CommentBasedHelp",Justification="Function does not change system state. Simply outputs a obj with CommentBasedHelp.")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "ScriptText",Scope="Function",Target="New-MBTCommentBasedHelp",Justification="Seems it's here since duo a copy paste from other functions (Add-MissingCBH,Get-Function,Get-MBTFunctionParameter). Leaving it here since it doesn't do any harm.")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions","",Scope="Function",Target="New-MBTCommentBasedHelp",Justification="Function does not change system state. Simply outputs a obj with CommentBasedHelp.")]
     [CmdletBinding()]
     param(
         [parameter(Position=0, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
@@ -75,7 +75,7 @@
         if ($ScriptParameters) {
             $FuncParams.ScriptParameters = $true
         }
-        $AllParams = Get-FunctionParameter @FuncParams -Code $Codeblock | Sort-Object -Property FunctionName
+        $AllParams = Get-MBTFunctionParameter @FuncParams -Code $Codeblock | Sort-Object -Property FunctionName
         $AllFunctions = @($AllParams.FunctionName | Select-Object -unique)
         If([string]::IsNullOrEmpty($AllFunctions))
         {

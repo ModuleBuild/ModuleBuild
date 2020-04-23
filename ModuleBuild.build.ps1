@@ -228,7 +228,7 @@ task RemoveScriptSignatures {
 
     if ($Script:BuildEnv.OptionCombineFiles) {
         Write-Description White 'Remove script signatures from all files' -Level 2
-        Get-ChildItem -Path "$($ScratchPath)\$($Script:BuildEnv.BaseSourceFolder)" -Recurse -File | ForEach-Object {Remove-Signature -FilePath $_.FullName}
+        Get-ChildItem -Path "$($ScratchPath)\$($Script:BuildEnv.BaseSourceFolder)" -Recurse -File | ForEach-Object {Remove-MBTSignature -FilePath $_.FullName}
     }
 }
 
@@ -483,7 +483,7 @@ task InsertCBHInPublicFunctions {
         $FullFilePath = $_.FullName
         Write-Description White "Public function - $($FileName)" -level 2
         $currscript = Get-Content $FullFilePath -Raw
-        $CBH = $currscript | New-CommentBasedHelp
+        $CBH = $currscript | New-MBTCommentBasedHelp
         $currscriptblock = [scriptblock]::Create($currscript)
         . $currscriptblock
         if([string]::IsNullOrEmpty($CBH))
@@ -625,7 +625,7 @@ task PushVersionRelease {
     $null = Remove-Item $ThisReleasePath -Force -Recurse -ErrorAction 0
     $null = New-Item $ThisReleasePath -ItemType:Directory -Force
     Copy-Item -Path "$($StageReleasePath)\*" -Destination $ThisReleasePath -Recurse
-    #Out-Zip $StageReleasePath (Join-Path $ReleasePath "$($Script:BuildEnv.ModuleToBuild)-$($Script:BuildEnv.ModuleVersion).zip") -overwrite
+    #Out-MBTZip $StageReleasePath (Join-Path $ReleasePath "$($Script:BuildEnv.ModuleToBuild)-$($Script:BuildEnv.ModuleVersion).zip") -overwrite
 }
 # Synopsis: Create the current release directory and copy this build to it.
 task PushCurrentRelease {
@@ -648,7 +648,7 @@ task PushCurrentRelease {
         $null = Remove-Item $CurrentReleasePath -Force -Recurse -ErrorAction 0
         $null = New-Item $CurrentReleasePath -ItemType:Directory -Force
         Copy-Item -Path "$($StageReleasePath)\*" -Destination $CurrentReleasePath -Recurse -force
-        Out-Zip $StageReleasePath "$ReleasePath\$($Script:BuildEnv.ModuleToBuild)-current.zip" -overwrite
+        Out-MBTZip $StageReleasePath "$ReleasePath\$($Script:BuildEnv.ModuleToBuild)-current.zip" -overwrite
     }
     else {
         Write-Warning 'Unable to push this version as a current release as it is not the most recent version in the release directory! Re-run this task with the -Force flag to overwrite it.'
@@ -675,7 +675,7 @@ task InstallModule VersionCheck, {
     $CurrentModulePath = Join-Path $Script:BuildEnv.BaseReleaseFolder $Script:BuildEnv.ModuleVersion
     assert (Test-Path $CurrentModulePath) 'The current version module has not been built yet!'
 
-    $MyModulePath = "$((Get-SpecialPaths)['MyDocuments'])\WindowsPowerShell\Modules\"
+    $MyModulePath = "$((Get-MBTSpecialPath)['MyDocuments'])\WindowsPowerShell\Modules\"
     $ModuleInstallPath = "$($MyModulePath)$($Script:BuildEnv.ModuleToBuild)"
     if (Test-Path $ModuleInstallPath) {
         Write-Description White "Removing installed module $($Script:BuildEnv.ModuleToBuild)" -Level 2
@@ -723,7 +723,7 @@ task PublishPSGallery LoadRequiredModules, InstallModule, {
         Import-Module -Name $CurrentModule
 
         Write-Description White "Uploading project to PSGallery: $($Script:BuildEnv.ModuleToBuild)"
-        Upload-ProjectToPSGallery -Name $Script:BuildEnv.ModuleToBuild -NuGetApiKey $Script:BuildEnv.NuGetApiKey
+        Publish-MBTProjectToPSGallery -Name $Script:BuildEnv.ModuleToBuild -NuGetApiKey $Script:BuildEnv.NuGetApiKey
     }
 
     else {

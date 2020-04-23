@@ -7,7 +7,7 @@
     <meta name="description" content="PowerShell Code Health Report">
     <meta name="author" content="PSCodeHealth">
 
-    <title>PSCodeHealth Report - private</title>
+    <title>PSCodeHealth Report - public</title>
 
     <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" media="all" rel="stylesheet">
@@ -183,13 +183,13 @@
                         <a href="https://github.com/MathieuBuisson/PSCodeHealth" target="_blank">
                             <img class="logo" src= "https://github.com/MathieuBuisson/PSCodeHealth/raw/master/PSCodeHealth/Assets/PSCodeHealthLogo.png" alt="PSCodeHealth Logo"/>
                         </a>
-                        Code Health Report - <small>private</small>
+                        Code Health Report - <small>public</small>
                     </h1>
                 </div>
                 <div class="col-sm-4 col-md-5 col-lg-4 right-header">
                     <h5>
-                        Analyzed path :<span class="right-header-data"> src\private</span><br>
-                        Analysis date :<span class="right-header-data"> 2020-04-23 17:22:49Z</span>
+                        Analyzed path :<span class="right-header-data"> src\public</span><br>
+                        Analysis date :<span class="right-header-data"> 2020-04-23 17:40:50Z</span>
                     </h5>
                 </div>
             </div>
@@ -213,7 +213,7 @@
                                 <h3 class="panel-title"><i class="fa fa-file-code-o" aria-hidden="true">&nbsp;</i> Number of Files</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>13</h2>
+                                <h2>6</h2>
                             </div>
                         </div>
                     </div>
@@ -223,7 +223,7 @@
                                 <h3 class="panel-title"><i class="fa fa-code" aria-hidden="true">&nbsp;</i> Number of Functions</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>13</h2>
+                                <h2>6</h2>
                             </div>
                         </div>
                     </div>
@@ -233,7 +233,7 @@
                                 <h3 class="panel-title"><i class="fa fa-arrows-v" aria-hidden="true">&nbsp;</i> Lines of Code - Total</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>815</h2>
+                                <h2>511</h2>
                             </div>
                         </div>
                     </div>
@@ -334,7 +334,7 @@
                                 <h3 class="panel-title"><i class="fa fa-question-circle" aria-hidden="true">&nbsp;</i> Functions Without Help</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>5</h2>
+                                <h2>0</h2>
                             </div>
                         </div>
                     </div>
@@ -356,79 +356,37 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Get-Function</td>
+                                        <td>Add-PublicFunction</td>
                                         <td class="success">0</td>
                                         <td class=""></td>
                                         <td class="success">True</td>
                                     </tr>
                                     <tr>
-                                        <td>New-MBTCommentBasedHelp</td>
+                                        <td>Get-MBTBuildEnvironment</td>
                                         <td class="success">0</td>
                                         <td class=""></td>
                                         <td class="success">True</td>
                                     </tr>
                                     <tr>
-                                        <td>IsPlural</td>
-                                        <td class="success">0</td>
-                                        <td class=""></td>
-                                        <td class="danger">False</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Test-PublicFunctionName</td>
+                                        <td>Import-ModulePublicFunction</td>
                                         <td class="success">0</td>
                                         <td class=""></td>
                                         <td class="success">True</td>
                                     </tr>
                                     <tr>
-                                        <td>Get-MBTFunctionParameter</td>
+                                        <td>Set-MBTBuildEnvironment</td>
                                         <td class="success">0</td>
                                         <td class=""></td>
                                         <td class="success">True</td>
                                     </tr>
                                     <tr>
-                                        <td>Get-ParentASTType</td>
+                                        <td>Initialize-ModuleBuild</td>
                                         <td class="success">0</td>
                                         <td class=""></td>
                                         <td class="success">True</td>
                                     </tr>
                                     <tr>
-                                        <td>Get-CommonParameter</td>
-                                        <td class="success">0</td>
-                                        <td class=""></td>
-                                        <td class="danger">False</td>
-                                    </tr>
-                                    <tr>
-                                        <td>New-MBTDynamicParameter</td>
-                                        <td class="success">0</td>
-                                        <td class=""></td>
-                                        <td class="success">True</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Get-BuildFilePath</td>
-                                        <td class="success">0</td>
-                                        <td class=""></td>
-                                        <td class="danger">False</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Read-HostContinue</td>
-                                        <td class="success">0</td>
-                                        <td class=""></td>
-                                        <td class="danger">False</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Add-MissingCBH</td>
-                                        <td class="success">0</td>
-                                        <td class=""></td>
-                                        <td class="success">True</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Convert-ArrayToRegex</td>
-                                        <td class="success">0</td>
-                                        <td class=""></td>
-                                        <td class="danger">False</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Get-CallerPreference</td>
+                                        <td>Import-ModulePrivateFunction</td>
                                         <td class="success">0</td>
                                         <td class=""></td>
                                         <td class="success">True</td>
@@ -448,7 +406,7 @@
                                 <h3 class="panel-title"><i class="fa fa-arrows-v" aria-hidden="true">&nbsp;</i> Lines of Code - Total</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>815</h2>
+                                <h2>511</h2>
                             </div>
                         </div>
                     </div>
@@ -458,7 +416,7 @@
                                 <h3 class="panel-title"><i class="fa fa-arrows-alt" aria-hidden="true">&nbsp;</i> Complexity - Highest</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>22</h2>
+                                <h2>17</h2>
                             </div>
                         </div>
                     </div>
@@ -468,7 +426,7 @@
                                 <h3 class="panel-title"><i class="fa fa-object-group" aria-hidden="true">&nbsp;</i> Nesting Depth - Highest</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>6</h2>
+                                <h2>7</h2>
                             </div>
                         </div>
                     </div>
@@ -480,7 +438,7 @@
                                 <h3 class="panel-title"><i class="fa fa-arrows-v" aria-hidden="true">&nbsp;</i> Lines of Code - Average</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>62.69</h2>
+                                <h2>85.17</h2>
                             </div>
                         </div>
                     </div>
@@ -490,17 +448,17 @@
                                 <h3 class="panel-title"><i class="fa fa-arrows-alt" aria-hidden="true">&nbsp;</i> Complexity - Average</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>6.23</h2>
+                                <h2>12.33</h2>
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-3 panelContainer">
-                        <div class="panel panel-success">
+                        <div class="panel panel-warning">
                             <div class="panel-heading">
                                 <h3 class="panel-title"><i class="fa fa-object-group" aria-hidden="true">&nbsp;</i> Nesting Depth - Average</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>3.23</h2>
+                                <h2>5.17</h2>
                             </div>
                         </div>
                     </div>
@@ -522,82 +480,40 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Get-Function</td>
-                                        <td class="warning">55</td>
-                                        <td class="success">4</td>
-                                        <td class="success">3</td>
-                                    </tr>
-                                    <tr>
-                                        <td>New-MBTCommentBasedHelp</td>
-                                        <td class="danger">62</td>
-                                        <td class="success">5</td>
-                                        <td class="warning">6</td>
-                                    </tr>
-                                    <tr>
-                                        <td>IsPlural</td>
-                                        <td class="success">9</td>
-                                        <td class="success">1</td>
-                                        <td class="success">0</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Test-PublicFunctionName</td>
-                                        <td class="warning">60</td>
-                                        <td class="success">11</td>
-                                        <td class="success">3</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Get-MBTFunctionParameter</td>
-                                        <td class="danger">106</td>
-                                        <td class="success">7</td>
-                                        <td class="warning">6</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Get-ParentASTType</td>
-                                        <td class="warning">32</td>
-                                        <td class="success">5</td>
-                                        <td class="success">2</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Get-CommonParameter</td>
+                                        <td>Add-PublicFunction</td>
+                                        <td class="danger">99</td>
                                         <td class="success">10</td>
-                                        <td class="success">1</td>
-                                        <td class="success">1</td>
+                                        <td class="success">4</td>
                                     </tr>
                                     <tr>
-                                        <td>New-MBTDynamicParameter</td>
-                                        <td class="danger">263</td>
-                                        <td class="warning">22</td>
-                                        <td class="warning">6</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Get-BuildFilePath</td>
+                                        <td>Get-MBTBuildEnvironment</td>
+                                        <td class="warning">35</td>
+                                        <td class="success">6</td>
                                         <td class="success">3</td>
-                                        <td class="success">1</td>
-                                        <td class="success">0</td>
                                     </tr>
                                     <tr>
-                                        <td>Read-HostContinue</td>
-                                        <td class="warning">34</td>
-                                        <td class="success">4</td>
-                                        <td class="success">1</td>
+                                        <td>Import-ModulePublicFunction</td>
+                                        <td class="danger">90</td>
+                                        <td class="success">14</td>
+                                        <td class="warning">7</td>
                                     </tr>
                                     <tr>
-                                        <td>Add-MissingCBH</td>
-                                        <td class="warning">50</td>
-                                        <td class="success">5</td>
-                                        <td class="success">4</td>
+                                        <td>Set-MBTBuildEnvironment</td>
+                                        <td class="danger">81</td>
+                                        <td class="success">11</td>
+                                        <td class="warning">5</td>
                                     </tr>
                                     <tr>
-                                        <td>Convert-ArrayToRegex</td>
-                                        <td class="success">28</td>
-                                        <td class="success">3</td>
-                                        <td class="success">4</td>
+                                        <td>Initialize-ModuleBuild</td>
+                                        <td class="danger">97</td>
+                                        <td class="warning">16</td>
+                                        <td class="warning">5</td>
                                     </tr>
                                     <tr>
-                                        <td>Get-CallerPreference</td>
-                                        <td class="danger">103</td>
-                                        <td class="success">12</td>
-                                        <td class="warning">6</td>
+                                        <td>Import-ModulePrivateFunction</td>
+                                        <td class="danger">109</td>
+                                        <td class="warning">17</td>
+                                        <td class="warning">7</td>
                                     </tr>
 
                                 </tbody>
@@ -641,12 +557,12 @@
                 </div>
                 <div class="row col-sm-offset-3 col-md-offset-1 col-lg-offset-2">
                     <div class="col-sm-3 panelContainer">
-                        <div class="panel panel-danger">
+                        <div class="panel panel-warning">
                             <div class="panel-heading">
                                 <h3 class="panel-title"><i class="fa fa-times" aria-hidden="true">&nbsp;</i> Number of Missed Commands</h3>
                             </div>
                             <div class="panel-body">
-                                <h2>429</h2>
+                                <h2>334</h2>
                             </div>
                         </div>
                     </div>
@@ -710,69 +626,34 @@
                                 </thead>
                                 <tbody>
                                     <tr>
-                                        <td>Get-Function</td>
+                                        <td>Add-PublicFunction</td>
                                         <td class="danger">0</td>
-                                        <td class="danger">33</td>
+                                        <td class="danger">73</td>
                                     </tr>
                                     <tr>
-                                        <td>New-MBTCommentBasedHelp</td>
-                                        <td class="danger">0</td>
-                                        <td class="danger">43</td>
-                                    </tr>
-                                    <tr>
-                                        <td>IsPlural</td>
-                                        <td class="danger">0</td>
-                                        <td class="success">4</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Test-PublicFunctionName</td>
-                                        <td class="danger">0</td>
-                                        <td class="danger">31</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Get-MBTFunctionParameter</td>
-                                        <td class="danger">0</td>
-                                        <td class="danger">86</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Get-ParentASTType</td>
+                                        <td>Get-MBTBuildEnvironment</td>
                                         <td class="danger">0</td>
                                         <td class="danger">19</td>
                                     </tr>
                                     <tr>
-                                        <td>Get-CommonParameter</td>
+                                        <td>Import-ModulePublicFunction</td>
                                         <td class="danger">0</td>
-                                        <td class="success">3</td>
+                                        <td class="danger">47</td>
                                     </tr>
                                     <tr>
-                                        <td>New-MBTDynamicParameter</td>
-                                        <td class="danger">0</td>
-                                        <td class="danger">105</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Get-BuildFilePath</td>
-                                        <td class="danger">0</td>
-                                        <td class="success">4</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Read-HostContinue</td>
-                                        <td class="danger">0</td>
-                                        <td class="danger">14</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Add-MissingCBH</td>
-                                        <td class="danger">0</td>
-                                        <td class="danger">23</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Convert-ArrayToRegex</td>
-                                        <td class="danger">0</td>
-                                        <td class="warning">12</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Get-CallerPreference</td>
+                                        <td>Set-MBTBuildEnvironment</td>
                                         <td class="danger">0</td>
                                         <td class="danger">52</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Initialize-ModuleBuild</td>
+                                        <td class="danger">0</td>
+                                        <td class="danger">58</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Import-ModulePrivateFunction</td>
+                                        <td class="danger">0</td>
+                                        <td class="danger">85</td>
                                     </tr>
 
                                 </tbody>

@@ -1,5 +1,4 @@
 ## Introduction
-
 This is a scaffolding framework which can be used to kickstart a generic PowerShell module project. It includes the base files and scripts required to perform regular build releases, uploading to the powershell gallery, and other such fun. All the hard work is done with the excellent invoke-build project engine, a rather large set of build tasks for it, and a custom Plaster template.
 
 The general idea of the base module is that you will develop and test without having to worry about keeping your manifest file up to date with your public functions. When you finally build the module, then the functions are explicitly injected into the manifest file and the source files are all (optionally) combined into one psm1 for distribution.
@@ -23,9 +22,7 @@ Aside from the handful of helper functions there is an included 'plaster' folder
 The scaffolding itself is mostly a big invoke-build script and does not need the ModuleBuild loaded to perform build tasks.
 
 ## Folder Structure
-
-A default ModuleBuild project scaffold will look like the following for a project named 'ModuleName' with build version 0.0.1 successfully built.
-
+A default ModuleBuild project scaffold will look like the following for a project named 'ModuleName' with build version 0.0.1 sucessfully built.
 ```
 ProjectRootFolder
 	- .vscode
@@ -59,10 +56,9 @@ ProjectRootFolder
         ModuleName-0.0.1.zip
         ModuleName-current.zip
 	- build
-	    - cleanup
-		- dependencies
-			- PSDepend
-				build.depend.psd1
+		- startup
+		- shutdown
+        - dotsource
         - docs
 			- Additional
 				Acknowledgements.md
@@ -75,16 +71,9 @@ ProjectRootFolder
         			index.md
 			- EN-us
     			about_ModuleName.help.txt
-		- reports
-		- startup
         ModuleName.buildenvironment.json
         ModuleName.buildenvironment.ps1
 	- tests
-		- intergration
-		- Meta
-			- Meta.tests.ps1
-			- MetaFixers.psm1
-		- Unit
 .gitattributes
 .gitignore
 Build.ps1

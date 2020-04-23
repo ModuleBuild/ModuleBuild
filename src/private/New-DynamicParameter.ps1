@@ -1,4 +1,4 @@
-function New-DynamicParameter {
+function New-MBTDynamicParameter {
     <#
     .SYNOPSIS
     Helper function to simplify creating dynamic parameters
@@ -12,7 +12,7 @@ function New-DynamicParameter {
         Provide tab completion and intellisense for parameters, depending on the environment
 
     Please keep in mind that all dynamic parameters you create, will not have corresponding variables created.
-        Use New-DynamicParameter with 'CreateVariables' switch in your main code block,
+        Use New-MBTDynamicParameter with 'CreateVariables' switch in your main code block,
         ('Process' for advanced functions) to create those variables.
         Alternatively, manually reference $PSBoundParameters for the dynamic parameter value.
 
@@ -108,7 +108,7 @@ function New-DynamicParameter {
     .EXAMPLE
     Create one dynamic parameter.
 
-    This example illustrates the use of New-DynamicParameter to create a single dynamic parameter.
+    This example illustrates the use of New-MBTDynamicParameter to create a single dynamic parameter.
     The Drive's parameter ValidateSet is populated with all available volumes on the computer for handy tab completion / intellisense.
 
     Usage: Get-FreeSpace -Drive <tab>
@@ -123,14 +123,14 @@ function New-DynamicParameter {
             $DriveList = ([System.IO.DriveInfo]::GetDrives()).Name
 
             # Create new dynamic parameter
-            New-DynamicParameter -Name Drive -ValidateSet $DriveList -Type ([array]) -Position 0 -Mandatory
+            New-MBTDynamicParameter -Name Drive -ValidateSet $DriveList -Type ([array]) -Position 0 -Mandatory
         }
 
         Process
         {
             # Dynamic parameters don't have corresponding variables created,
-            # you need to call New-DynamicParameter with CreateVariables switch to fix that.
-            New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+            # you need to call New-MBTDynamicParameter with CreateVariables switch to fix that.
+            New-MBTDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
             $DriveInfo = [System.IO.DriveInfo]::GetDrives() | Where-Object {$Drive -contains $_.Name}
             $DriveInfo |
@@ -164,8 +164,8 @@ function New-DynamicParameter {
         or
     Usage: Get-FreeSpace -DriveType <tab>
 
-    Parameters are defined in the array of hashtables, which is then piped through the New-Object to create PSObject and pass it to the New-DynamicParameter function.
-    Because of piping, New-DynamicParameter function is able to create all parameters at once, thus eliminating need for you to create and pass external RuntimeDefinedParameterDictionary to it.
+    Parameters are defined in the array of hashtables, which is then piped through the New-Object to create PSObject and pass it to the New-MBTDynamicParameter function.
+    Because of piping, New-MBTDynamicParameter function is able to create all parameters at once, thus eliminating need for you to create and pass external RuntimeDefinedParameterDictionary to it.
 
     function Get-FreeSpace
     {
@@ -193,15 +193,15 @@ function New-DynamicParameter {
                 }
             )
 
-            # Convert hashtables to PSObjects and pipe them to the New-DynamicParameter,
+            # Convert hashtables to PSObjects and pipe them to the New-MBTDynamicParameter,
             # to create all dynamic paramters in one function call.
-            $DynamicParameters | ForEach-Object {New-Object PSObject -Property $_} | New-DynamicParameter
+            $DynamicParameters | ForEach-Object {New-Object PSObject -Property $_} | New-MBTDynamicParameter
         }
         Process
         {
             # Dynamic parameters don't have corresponding variables created,
-            # you need to call New-DynamicParameter with CreateVariables switch to fix that.
-            New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+            # you need to call New-MBTDynamicParameter with CreateVariables switch to fix that.
+            New-MBTDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
             if($Drive)
             {
@@ -247,9 +247,9 @@ function New-DynamicParameter {
         or
     Usage: Get-FreeSpace -DriveType <tab> -Precision 2
 
-    Parameters are defined in the array of hashtables, which is then piped through the New-Object to create PSObject and pass it to the New-DynamicParameter function.
+    Parameters are defined in the array of hashtables, which is then piped through the New-Object to create PSObject and pass it to the New-MBTDynamicParameter function.
     If parameter with the same name already exist in the RuntimeDefinedParameterDictionary, a new Parameter Set is added to it.
-    Because of piping, New-DynamicParameter function is able to create all parameters at once, thus eliminating need for you to create and pass external RuntimeDefinedParameterDictionary to it.
+    Because of piping, New-MBTDynamicParameter function is able to create all parameters at once, thus eliminating need for you to create and pass external RuntimeDefinedParameterDictionary to it.
 
     function Get-FreeSpace
     {
@@ -291,15 +291,15 @@ function New-DynamicParameter {
                 }
             )
 
-            # Convert hashtables to PSObjects and pipe them to the New-DynamicParameter,
+            # Convert hashtables to PSObjects and pipe them to the New-MBTDynamicParameter,
             # to create all dynamic paramters in one function call.
-            $DynamicParameters | ForEach-Object {New-Object PSObject -Property $_} | New-DynamicParameter
+            $DynamicParameters | ForEach-Object {New-Object PSObject -Property $_} | New-MBTDynamicParameter
         }
         Process
         {
             # Dynamic parameters don't have corresponding variables created,
-            # you need to call New-DynamicParameter with CreateVariables switch to fix that.
-            New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+            # you need to call New-MBTDynamicParameter with CreateVariables switch to fix that.
+            New-MBTDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
             if($Drive)
             {
@@ -369,12 +369,12 @@ function New-DynamicParameter {
             $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
 
             # Add new dynamic parameter to dictionary
-            New-DynamicParameter @Drive -Dictionary $DynamicParameters
+            New-MBTDynamicParameter @Drive -Dictionary $DynamicParameters
 
             # Add another dynamic parameter to dictionary, only if today is not a Friday
             if((Get-Date).DayOfWeek -ne [DayOfWeek]::Friday)
             {
-                New-DynamicParameter @DriveType -Dictionary $DynamicParameters
+                New-MBTDynamicParameter @DriveType -Dictionary $DynamicParameters
             }
 
             # Return dictionary with dynamic parameters
@@ -383,8 +383,8 @@ function New-DynamicParameter {
         Process
         {
             # Dynamic parameters don't have corresponding variables created,
-            # you need to call New-DynamicParameter with CreateVariables switch to fix that.
-            New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+            # you need to call New-MBTDynamicParameter with CreateVariables switch to fix that.
+            New-MBTDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
             if($Drive)
             {
@@ -415,7 +415,7 @@ function New-DynamicParameter {
         }
     }
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions","",Scope="Function",Target="New-DynamicParameter",Justification="Function does not change system state.")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions","",Scope="Function",Target="New-MBTDynamicParameter",Justification="Function does not change system state.")]
     [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = 'DynamicParameter')]
     Param
     (

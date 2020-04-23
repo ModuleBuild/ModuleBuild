@@ -11,11 +11,11 @@ pages:
 - ToDo: ToDo.md
 - Functions:
   - Add-PublicFunction: Functions/Add-PublicFunction.md
-  - Get-BuildEnvironment: Functions/Get-BuildEnvironment.md
+  - Get-MBTBuildEnvironment: Functions/Get-MBTBuildEnvironment.md
   - Import-ModulePrivateFunction: Functions/Import-ModulePrivateFunction.md
   - Import-ModulePublicFunction: Functions/Import-ModulePublicFunction.md
   - Initialize-ModuleBuild: Functions/Initialize-ModuleBuild.md
-  - Set-BuildEnvironment: Functions/Set-BuildEnvironment.md
+  - Set-MBTBuildEnvironment: Functions/Set-MBTBuildEnvironment.md
 - Introduction: Introduction/Introduction.md
 - Usage:
   - 1 - Initialization: Usage/1 - Initialization.md

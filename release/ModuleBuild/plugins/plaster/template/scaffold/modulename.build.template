@@ -45,6 +45,7 @@ if ($Script:BuildEnv.OptionTranscriptEnabled) {
     Start-Transcript -Path $TranscriptLog -Append -WarningAction:SilentlyContinue
 }
 
+#$Script:BuildRoot = $BuildRoot
 #region Configure
 #Synopsis: Validate system requirements are met
 task ValidateRequirements {
@@ -141,8 +142,9 @@ task CodeHealthReport -if {$Script:BuildEnv.OptionCodeHealthReport} ValidateRequ
 
     Write-Description White 'Creating a code health report of your public functions' -level 2
     $CodeHealthScanPathPublic = Join-Path $BuildRoot $Script:BuildEnv.PublicFunctionSource
+    $CodeHealthScanTestPathPublic = $CodeHealthScanPathPublic -replace  'src', 'tests\\unit'
     $CodeHealthReportPublic = Join-Path $BuildReportsFolder 'CodeHealthReport-Public.html'
-    Invoke-PSCodeHealth -Path $CodeHealthScanPathPublic -HtmlReportPath $CodeHealthReportPublic
+    Invoke-PSCodeHealth -Path $CodeHealthScanPathPublic -HtmlReportPath $CodeHealthReportPublic -TestsPath $CodeHealthScanTestPathPublic
 
     if (Test-Path $CodeHealthReportPublic) {
         (Get-Content -Path $CodeHealthReportPublic -raw) -replace [regex]::escape((Resolve-Path $CodeHealthScanPathPublic)), $Script:BuildEnv.PublicFunctionSource | Out-File -FilePath $CodeHealthReportPublic -Encoding $Script:BuildEnv.Encoding -Force
@@ -150,8 +152,9 @@ task CodeHealthReport -if {$Script:BuildEnv.OptionCodeHealthReport} ValidateRequ
 
     Write-Description White 'Creating a code health report of your private functions' -level 2
     $CodeHealthScanPathPrivate = Join-Path $BuildRoot $Script:BuildEnv.PrivateFunctionSource
+    $CodeHealthScanTestPathPrivate = $CodeHealthScanPathPrivate -replace  'src', 'tests\\unit'
     $CodeHealthReportPrivate = Join-Path $BuildReportsFolder 'CodeHealthReport-Private.html'
-    Invoke-PSCodeHealth -Path $CodeHealthScanPathPrivate -HtmlReportPath $CodeHealthReportPrivate
+    Invoke-PSCodeHealth -Path $CodeHealthScanPathPrivate -HtmlReportPath $CodeHealthReportPrivate -TestsPath $CodeHealthScanTestPathPrivate
 
     if (Test-Path $CodeHealthReportPrivate) {
         (Get-Content -Path $CodeHealthReportPrivate -raw) -replace [regex]::escape((Resolve-Path $CodeHealthScanPathPrivate)), $Script:BuildEnv.PrivateFunctionSource | Out-File -FilePath $CodeHealthReportPrivate -Encoding $Script:BuildEnv.Encoding -Force
@@ -225,7 +228,7 @@ task RemoveScriptSignatures {
 
     if ($Script:BuildEnv.OptionCombineFiles) {
         Write-Description White 'Remove script signatures from all files' -Level 2
-        Get-ChildItem -Path "$($ScratchPath)\$($Script:BuildEnv.BaseSourceFolder)" -Recurse -File | ForEach-Object {Remove-Signature -FilePath $_.FullName}
+        Get-ChildItem -Path "$($ScratchPath)\$($Script:BuildEnv.BaseSourceFolder)" -Recurse -File | ForEach-Object {Remove-MBTSignature -FilePath $_.FullName}
     }
 }
 
@@ -238,6 +241,50 @@ task RunPSScriptAnalyzeOnPublicSrcFunctions {
         Write-Description Red "$($Analysis.Count) linting errors or warnings were found:" -level 2
         $Analysis | Format-Table -AutoSize
     }
+}
+#endregion
+
+#region Tests
+task RunMetaTests LoadRequiredModules, {
+    Write-Description White 'Running meta tests with Pester' -accent
+    $ENV:BuildRoot = $BuildRoot
+    $invokePesterParams = @{
+        Strict = $true
+        PassThru = $true
+        Verbose = $false
+        EnableExit = $false
+    }
+    $testResults = Invoke-Pester -Tag 'MetaTest' $(Join-Path $BuildRoot 'Tests') @invokePesterParams
+    $numberFails = $testResults.FailedCount
+    assert($numberFails -eq 0) ('Failed "{0}" meta tests.' -f $numberFails)
+}
+
+task RunUnitTests LoadRequiredModules, {
+    Write-Description White 'Running Unit tests with Pester' -accent
+    $ENV:BuildRoot = $BuildRoot
+    $invokePesterParams = @{
+        Strict = $true
+        PassThru = $true
+        Verbose = $false
+        EnableExit = $false
+    }
+    $testResults = Invoke-Pester -tag 'UnitTest' $(Join-Path $BuildRoot 'Tests') @invokePesterParams
+    $numberFails = $testResults.FailedCount
+    assert($numberFails -eq 0) ('Failed "{0}" unit tests.' -f $numberFails)
+}
+
+task RunIntergrationTests LoadRequiredModules, {
+    Write-Description White 'Running Intergration tests with Pester' -accent
+    $ENV:BuildRoot = $BuildRoot
+    $invokePesterParams = @{
+        Strict = $true
+        PassThru = $true
+        Verbose = $false
+        EnableExit = $false
+    }
+    $testResults = Invoke-Pester -tag 'IntergrationTest' $(Join-Path $BuildRoot 'Tests') @invokePesterParams
+    $numberFails = $testResults.FailedCount
+    assert($numberFails -eq 0) ('Failed "{0}" unit tests.' -f $numberFails)
 }
 #endregion
 
@@ -414,7 +461,7 @@ task UpdateCBH {
         $FileName = $_.Name
         Write-Description White "Replacing CBH in file: $($FileName)" -level 2
         $FunctionName = $FileName -replace '.ps1', ''
-        $NewExternalHelp = $ExternalHelp -replace '{{LINK}}', ($Script:BuildEnv.ModuleWebsite + "/tree/master/$($Script:BuildEnv.BaseReleaseFolder)/$($Script:BuildEnv.ModuleVersion)/docs/Functions/$($FunctionName).md")
+        $NewExternalHelp = $ExternalHelp -replace '{{LINK}}', ($Script:BuildEnv.ModuleWebsite + "/tree/master/$($Script:BuildEnv.BaseReleaseFolder)/$($Script:BuildEnv.ModuleVersion)/docs/$($FunctionName).md")
         $UpdatedFile = (get-content  $FormattedOutFile -raw) -replace $CBHPattern, $NewExternalHelp
         $UpdatedFile | Out-File -FilePath $FormattedOutFile -force -Encoding $Script:BuildEnv.Encoding
     }
@@ -436,7 +483,7 @@ task InsertCBHInPublicFunctions {
         $FullFilePath = $_.FullName
         Write-Description White "Public function - $($FileName)" -level 2
         $currscript = Get-Content $FullFilePath -Raw
-        $CBH = $currscript | New-CommentBasedHelp
+        $CBH = $currscript | New-MBTCommentBasedHelp
         $currscriptblock = [scriptblock]::Create($currscript)
         . $currscriptblock
         if([string]::IsNullOrEmpty($CBH))
@@ -578,7 +625,7 @@ task PushVersionRelease {
     $null = Remove-Item $ThisReleasePath -Force -Recurse -ErrorAction 0
     $null = New-Item $ThisReleasePath -ItemType:Directory -Force
     Copy-Item -Path "$($StageReleasePath)\*" -Destination $ThisReleasePath -Recurse
-    #Out-Zip $StageReleasePath (Join-Path $ReleasePath "$($Script:BuildEnv.ModuleToBuild)-$($Script:BuildEnv.ModuleVersion).zip") -overwrite
+    #Out-MBTZip $StageReleasePath (Join-Path $ReleasePath "$($Script:BuildEnv.ModuleToBuild)-$($Script:BuildEnv.ModuleVersion).zip") -overwrite
 }
 # Synopsis: Create the current release directory and copy this build to it.
 task PushCurrentRelease {
@@ -601,7 +648,7 @@ task PushCurrentRelease {
         $null = Remove-Item $CurrentReleasePath -Force -Recurse -ErrorAction 0
         $null = New-Item $CurrentReleasePath -ItemType:Directory -Force
         Copy-Item -Path "$($StageReleasePath)\*" -Destination $CurrentReleasePath -Recurse -force
-        Out-Zip $StageReleasePath "$ReleasePath\$($Script:BuildEnv.ModuleToBuild)-current.zip" -overwrite
+        Out-MBTZip $StageReleasePath "$ReleasePath\$($Script:BuildEnv.ModuleToBuild)-current.zip" -overwrite
     }
     else {
         Write-Warning 'Unable to push this version as a current release as it is not the most recent version in the release directory! Re-run this task with the -Force flag to overwrite it.'
@@ -628,7 +675,7 @@ task InstallModule VersionCheck, {
     $CurrentModulePath = Join-Path $Script:BuildEnv.BaseReleaseFolder $Script:BuildEnv.ModuleVersion
     assert (Test-Path $CurrentModulePath) 'The current version module has not been built yet!'
 
-    $MyModulePath = "$((Get-SpecialPaths)['MyDocuments'])\WindowsPowerShell\Modules\"
+    $MyModulePath = "$((Get-MBTSpecialPath)['MyDocuments'])\WindowsPowerShell\Modules\"
     $ModuleInstallPath = "$($MyModulePath)$($Script:BuildEnv.ModuleToBuild)"
     if (Test-Path $ModuleInstallPath) {
         Write-Description White "Removing installed module $($Script:BuildEnv.ModuleToBuild)" -Level 2
@@ -676,7 +723,7 @@ task PublishPSGallery LoadRequiredModules, InstallModule, {
         Import-Module -Name $CurrentModule
 
         Write-Description White "Uploading project to PSGallery: $($Script:BuildEnv.ModuleToBuild)"
-        Upload-ProjectToPSGallery -Name $Script:BuildEnv.ModuleToBuild -NuGetApiKey $Script:BuildEnv.NuGetApiKey
+        Publish-MBTProjectToPSGallery -Name $Script:BuildEnv.ModuleToBuild -NuGetApiKey $Script:BuildEnv.NuGetApiKey
     }
 
     else {
@@ -826,18 +873,22 @@ task BuildSessionCleanup CleanScratchDirectory, {
 #endregion
 
 #region Main tasks
+# Synopsis: Run all tests
+task Tests RunMetaTests, RunUnitTests, RunIntergrationTests, {
+
+}
 # Synopsis: Build the module
 task Build Configure, CodeHealthReport, PrepareStage, GetPublicFunctions, SanitizeCode, CreateHelp, CreateModulePSM1, CreateModuleManifest, AnalyzeModuleRelease, PushVersionRelease, PushCurrentRelease, CreateProjectHelp, PostBuildTasks, BuildSessionCleanup, {
 
 }
 
-# Synopsis: Build, install and Test load the module.
-task BuildAndInstallModule Build, InstallModule, TestImportInstalledModule, BuildSessionCleanup, {
+# Synopsis: Test, Build, install and Test load the module.
+task TestBuildAndInstallModule Tests, Build, InstallModule, TestImportInstalledModule, BuildSessionCleanup, {
 
 }
 
-# Synopsis: Build, Install, Test load and Publish the module
-task BuildInstallTestAndPublishModule BuildAndInstallModule, PublishPSGallery, BuildSessionCleanup, {
+# Synopsis: Test, Build, Install, Test load and Publish the module
+task BuildInstallTestAndPublishModule TestBuildAndInstallModule, PublishPSGallery, BuildSessionCleanup, {
 
 }
 

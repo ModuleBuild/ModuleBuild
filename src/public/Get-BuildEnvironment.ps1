@@ -1,4 +1,4 @@
-function Get-BuildEnvironment {
+function Get-MBTBuildEnvironment {
     <#
     .SYNOPSIS
     Retrieves all the stored settings in a buildenvironment.json file.
@@ -13,7 +13,7 @@ function Get-BuildEnvironment {
     https://github.com/zloeber/ModuleBuild
 
     .EXAMPLE
-    Get-buildenvironment
+    Get-MBTBuildEnvironment
 
     If a buildenvironment.json file exists in .\build then the settings within it will be displayed on the screen. Otherwise nothing happens.
     #>

@@ -39,7 +39,7 @@ Function Add-MissingCBH {
         $ScriptText = ($Codeblock | Out-String).trim("`r`n")
         # If no sign of CBH exists then try to generate and insert it
         if ($ScriptText -notmatch $CBHPattern) {
-            $CBH = @($ScriptText | New-CommentBasedHelp)
+            $CBH = @($ScriptText | New-MBTCommentBasedHelp)
 
             if ($CBH.Count -gt 1) {
                 throw 'Too many functions are defined in the input string!'
