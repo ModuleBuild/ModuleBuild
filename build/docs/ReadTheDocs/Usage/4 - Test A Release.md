@@ -19,4 +19,4 @@ or
 
 or in VS Code
 
-`Ctrl+Shift+B (then select "Test, Build, Install, and Load Module")`
+`Ctrl+Shift+B (then select "Test, Build, Install and Load Module")`

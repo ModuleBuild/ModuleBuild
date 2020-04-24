@@ -54,7 +54,7 @@
             }
         },
         {
-            "label": "Test, Build, Install, and Load Module",
+            "label": "Test, Build, Install and Load Module",
             "type": "shell",
             "windows": {
                 "command": "powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File ${workspaceRoot}\\Build.ps1 -TestBuildAndInstallModule"

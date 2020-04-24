@@ -19,7 +19,6 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 - Updated ModuleBuild/.vscode/settings.json to include default indent size, set indent to space and use the project specific PSScriptAnalyzerSettings.psd1 file.
 - Build reports are now saved on the following path `build\reports\$ModuleVersion\`.
 - Included functions that are used during the build process are moved to its own repository.
-- Included functions that are used during the build process are renamed to avoid conflicts with other modules.
 - ModuleBuild now uses PSDepend to manage Build dependencies.
 - ModuleBuild now uses PSDepend to manage Plugins.
 - Revamped included tests.
@@ -27,6 +26,7 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 - Updated the build scripts to better support CI/CD.
 - The included version of Plater is moved to the Plugin folder.
 - Added a AppVeyor.yml template to the scaffold.
+- All functions are renamed to avoid conflicts with other modules.
 - Cleaned up repo. Deleted unused code. Renamed/Moved existing files.
 - Updated documentation to reflect above changes.
 

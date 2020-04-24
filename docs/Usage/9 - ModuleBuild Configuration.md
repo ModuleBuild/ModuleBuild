@@ -26,6 +26,14 @@ What this means is that effectively the base settings defined in modulename.buil
 
 There are a few functions you can use to update or view the configuration.
 
+## Get-MBBuildEnvironment
+
+Use this against a .buildenvironment.json file to pull in and display all the settings within as a psobject. If you don't specify a json file then it will attempt to guess the correct one to use based on the current directory.
+
+## Set-MBBuildEnvironment
+
+Use this against a .buildenvironment.json file to set any of the settings within. Dynamic parameters are used to ensure that this function is effectively forward compatible with any new settings/features/changes to the buildenvironment definitions. If you don't specify a json file then it will attempt to guess the correct one to use based on the current directory.
+
 ## Import-MBModulePublicFunction
 
 Use this against an existing module directory to load the module into memory and attempt to extract any defined script functions that have been exported into the public source directory of your ModuleBuild project. No existing file will be overwritten.
