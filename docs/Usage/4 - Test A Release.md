@@ -1,4 +1,5 @@
 # Step 4 - Test a Release
+
 You may get a build to complete without errors but that doesn't mean that the module will behave as expected. You can do a quick module install and load test if you like:
 
 `.\Build.ps1 -InstallAndTestModule`
@@ -10,7 +11,7 @@ If the module path already exists, the build script will ask for confirmation be
 
 You can combine the build with the install and test of the module if you so desire:
 
-`.\Build.ps1 -BuildModule -InstallAndTestModule`
+`.\Build.ps1 -TestBuildAndInstallModule`
 
 or
 
@@ -18,4 +19,4 @@ or
 
 or in VS Code
 
-`Ctrl+Shift+B (then select "Build, Install, and Test Module")`
+`Ctrl+Shift+B (then select "Test, Build, Install and Load Module")`

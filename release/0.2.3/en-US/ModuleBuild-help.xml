@@ -603,7 +603,7 @@
       </maml:description>
     </command:details>
     <maml:description>
-      <maml:para>Set up the framework for a ModuleBuild project. Optionally supply an existing module manifest path to pull in information from it to begin a migration to ModuleBuild.</maml:para>
+      <maml:para>Set up the framework for a ModuleBuild project.</maml:para>
     </maml:description>
     <command:syntax>
       <command:syntaxItem>
@@ -612,18 +612,6 @@
           <maml:name>Path</maml:name>
           <maml:Description>
             <maml:para>Specifies the path to create the project.</maml:para>
-          </maml:Description>
-          <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-          <dev:type>
-            <maml:name>String</maml:name>
-            <maml:uri />
-          </dev:type>
-          <dev:defaultValue>None</dev:defaultValue>
-        </command:parameter>
-        <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-          <maml:name>SourceModule</maml:name>
-          <maml:Description>
-            <maml:para>If specified, will import a source module manifest file for module information.</maml:para>
           </maml:Description>
           <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
           <dev:type>
@@ -647,18 +635,6 @@
         </dev:type>
         <dev:defaultValue>None</dev:defaultValue>
       </command:parameter>
-      <command:parameter required="false" variableLength="true" globbing="false" pipelineInput="False" position="2" aliases="none">
-        <maml:name>SourceModule</maml:name>
-        <maml:Description>
-          <maml:para>If specified, will import a source module manifest file for module information.</maml:para>
-        </maml:Description>
-        <command:parameterValue required="true" variableLength="false">String</command:parameterValue>
-        <dev:type>
-          <maml:name>String</maml:name>
-          <maml:uri />
-        </dev:type>
-        <dev:defaultValue>None</dev:defaultValue>
-      </command:parameter>
     </command:parameters>
     <command:inputTypes />
     <command:returnValues />
@@ -672,15 +648,7 @@
         <maml:title>-------------------------- EXAMPLE 1 --------------------------</maml:title>
         <dev:code>Initialize-ModuleBuild -Path C:\Work\NewModule</dev:code>
         <dev:remarks>
-          <maml:para>Prompt for all the settings required to get a new modulebuild project setup in c:\work\NewModule.</maml:para>
-        </dev:remarks>
-      </command:example>
-      <command:example>
-        <maml:title>-------------------------- EXAMPLE 2 --------------------------</maml:title>
-        <dev:code>Initialize-ModuleBuild -Path C:\Work\NewModule -SourceModule c:\work\myoldmodule\myoldmodule.psd1</dev:code>
-        <dev:remarks>
-          <maml:para>Pulls some information from myoldmodule.psd1 and then prompt for any remaining required information to create a modulebuild based project from it in C:\Work\NewModule</maml:para>
-          <maml:para>Prompt for all the settings required to get a new modulebuild project setup in c:\work\NewModule.</maml:para>
+          <maml:para></maml:para>
         </dev:remarks>
       </command:example>
     </command:examples>

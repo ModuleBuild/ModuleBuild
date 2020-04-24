@@ -5,6 +5,7 @@ As of version 0.1.7 template module plugins are supported. These are optional pl
 Currently the following plugins are available:
 
 ## NLog
+
 This includes all the code needed to automatically log all of the following commands within your module:
 
 - Write-Host

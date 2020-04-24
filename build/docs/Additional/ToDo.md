@@ -13,7 +13,6 @@ There are many items which are possible and should probably be added to this pro
 - Automatic clean up of additional loaded modules when uploading to the gallery
 - Powershell Core compatibility
 - Automatic updates of the ReleaseNotes.md file
-- Appveyor integration?
 - PSDeploy integration?
 - Github releases integration?
 - Smoother path to upgrade ModuleBuild for existing projects

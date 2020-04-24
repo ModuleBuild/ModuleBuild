@@ -1,6 +1,7 @@
 # Special ModuleBuild Files
 
 ## src\other
+
 There are two special files in the src\other directory:
 
 **src\other\PreLoad.ps1** - dot sourced at the beginning of the module (and in the build it is the first file to populate the final combined psm1 file).
@@ -13,4 +14,6 @@ This is meant to help a little with some difference scenarios and could easily b
 
 - A default skeleton for the module about help txt file is created in a default en-US directory. This file should be updated with a real life example of how to use the module.
 
-- I include a set of scripts in the build\dotsource directory that get used in various build tasks. If you want to add another script and task just beware that the scope of the functions are manually defined at the script level so that they remain available to other tasks after the task that dot sources them is completed. It's weird but, hey... at least I'm not using global scoping anywhere right?
+## build\dependencies\PSDepend
+
+**build\dependencies\PSDepend\build.depend.psd1** ModuleBuild uses PSDepend to install version tagged modules for its build process. We do this to avoid breaking changes from upstream modules. If you update your build scripts and require other external functions you can add them to this file.

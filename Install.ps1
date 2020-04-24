@@ -1,6 +1,6 @@
 # Run this in an administrative PowerShell prompt to install the ModuleBuild PowerShell module:
 #
-# 	iex (New-Object Net.WebClient).DownloadString("https://github.com/zloeber/ModuleBuild/raw/master/Install.ps1")
+# iex (New-Object Net.WebClient).DownloadString("https://github.com/zloeber/ModuleBuild/raw/master/Install.ps1")
 
 # Some general variables
 $ModuleName = 'ModuleBuild'
