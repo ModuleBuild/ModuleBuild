@@ -5,7 +5,7 @@ online version: https://github.com/zloeber/ModuleBuild
 schema: 2.0.0
 ---
 
-# Import-ModulePublicFunction
+# Import-MBModulePublicFunction
 
 ## SYNOPSIS
 Retrieves public module function definitions and recreates them in your modulebuild based project.
@@ -13,7 +13,7 @@ Retrieves public module function definitions and recreates them in your modulebu
 ## SYNTAX
 
 ```
-Import-ModulePublicFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotAddCBH]
+Import-MBModulePublicFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotAddCBH]
  [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
@@ -26,7 +26,7 @@ This function will load and then unload the module to work its magic.
 
 ### EXAMPLE 1
 ```
-Import-ModulePrivateFunction -ModulePath 'C:\Temp\PSCloudFlare\release\PSCloudFlare\PSCloudFlare.psd1' -force
+Import-MBModulePrivateFunction -ModulePath 'C:\Temp\PSCloudFlare\release\PSCloudFlare\PSCloudFlare.psd1' -force
 ```
 
 Finds any non-exported and unembedded functions and automatically creates them in the current modulebuild project private source directory if they don't already exist.

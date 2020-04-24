@@ -5,33 +5,31 @@ online version: https://github.com/zloeber/ModuleBuild
 schema: 2.0.0
 ---
 
-# Import-ModulePrivateFunction
+# Import-MBModulePublicFunction
 
 ## SYNOPSIS
-Retrieves private module function definitions and recreates them in your modulebuild based project.
+Retrieves public module function definitions and recreates them in your modulebuild based project.
 
 ## SYNTAX
 
 ```
-Import-ModulePrivateFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotAddCBH]
- [[-ExcludePaths] <String[]>] [[-ExcludeFiles] <String[]>] [-WhatIf] [-Confirm] [<CommonParameters>]
+Import-MBModulePublicFunction [[-Path] <String>] [-ModulePath] <String> [[-Name] <String>] [-DoNotAddCBH]
+ [-WhatIf] [-Confirm] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Retrieves private module function definitions and recreates them in your modulebuild based project.
+Retrieves module function definitions and recreates them in your modulebuild based project.
 This can be used to either upgrade modulebuild for a project or convert an existing module to start using modulebuild.
 This function will load and then unload the module to work its magic.
-'Private' functions are determined by excluding exported functions and using AST to filter out all function definitions in files within the module folder that are not embedded in other functions.
-This function will not overwrite any existing private function file of the same name.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Import-ModulePrivateFunction -ModulePath 'C:\Temp\PSCloudFlare\PSCloudFlare.psd1'
+Import-MBModulePrivateFunction -ModulePath 'C:\Temp\PSCloudFlare\release\PSCloudFlare\PSCloudFlare.psd1' -force
 ```
 
-Finds all the functions that are in the module source but not exported and prompts for each of them to recreate them as individual ps1 files within your ModuleBuild src\private directory.
+Finds any non-exported and unembedded functions and automatically creates them in the current modulebuild project private source directory if they don't already exist.
 
 ## PARAMETERS
 
@@ -52,7 +50,7 @@ Accept wildcard characters: False
 
 ### -ModulePath
 An existing module path to target.
-Must be a psd1 or psm1 file.
+Must be a psm1 or psd1 file.
 
 ```yaml
 Type: String
@@ -84,7 +82,6 @@ Accept wildcard characters: False
 
 ### -DoNotAddCBH
 Do not attempt to find and insert comment based help into the function.
-Default for private functions is to skip CBH insertion.
 
 ```yaml
 Type: SwitchParameter
@@ -93,37 +90,7 @@ Aliases:
 
 Required: False
 Position: 4
-Default value: True
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ExcludePaths
-Paths within the root of your module source which will be ignored in this import.
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 5
-Default value: @('temp','build','.git','.vscode','docs','release','plaster')
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ExcludeFiles
-Files, in regex pattern format, that will be ignored in this import.
-
-```yaml
-Type: String[]
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: 6
-Default value: @('.*\.buildenvironment.ps1','.*\.build.ps1','Build\.ps1','Install\.ps1','PreLoad\.ps1','PostLoad\.ps1','.*\.tests\.ps1','.*\.test\.ps1')
+Default value: False
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -167,8 +134,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 ## OUTPUTS
 
 ## NOTES
-This only applies to modules of the type 'Script'.
-Be very careful before importing everything as any wayward functions might get imported and bloat your resulting module needlessly.
+This only applies to modules of the type 'Script' and commands of the type 'Function'.
 
 ## RELATED LINKS
 

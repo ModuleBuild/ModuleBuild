@@ -1,4 +1,4 @@
-function Import-ModulePrivateFunction {
+function Import-MBModulePrivateFunction {
     <#
     .SYNOPSIS
     Retrieves private module function definitions and recreates them in your modulebuild based project.
@@ -28,14 +28,14 @@ function Import-ModulePrivateFunction {
     https://github.com/zloeber/ModuleBuild
 
     .EXAMPLE
-    Import-ModulePrivateFunction -ModulePath 'C:\Temp\PSCloudFlare\PSCloudFlare.psd1'
+    Import-MBModulePrivateFunction -ModulePath 'C:\Temp\PSCloudFlare\PSCloudFlare.psd1'
 
     Finds all the functions that are in the module source but not exported and prompts for each of them to recreate them as individual ps1 files within your ModuleBuild src\private directory.
 
     .NOTES
     This only applies to modules of the type 'Script'. Be very careful before importing everything as any wayward functions might get imported and bloat your resulting module needlessly.
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidDefaultValueSwitchParameter", "",Scope="function",Target="Import-ModulePrivateFunction",Justification="Not adding CBH by default is actually useful.")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidDefaultValueSwitchParameter", "",Scope="function",Target="Import-MBModulePrivateFunction",Justification="Not adding CBH by default is actually useful.")]
     [CmdletBinding( SupportsShouldProcess = $True, ConfirmImpact = 'High' )]
     param(
         [parameter(Position = 0, ValueFromPipeline = $TRUE)]
@@ -59,7 +59,7 @@ function Import-ModulePrivateFunction {
             throw 'Please provide the full path to a psm1 or psd1 file to process'
         }
 
-        $ExFiles = $ExcludeFiles | Convert-ArrayToRegex -DoNotEscape
+        $ExFiles = $ExcludeFiles | Convert-MBArrayToRegex -DoNotEscape
 
         try {
             $LoadedModule = Import-Module -Name $ModulePath -Force -PassThru
@@ -109,7 +109,7 @@ function Import-ModulePrivateFunction {
         Foreach ($SourceFile in $AllSourceFiles) {
             Write-Verbose "Processing $($SourceFile.FullName)"
             try {
-                Get-Content -Path $SourceFile.FullName | Get-Function | ForEach-Object {
+                Get-Content -Path $SourceFile.FullName | Get-MBFunction | ForEach-Object {
                     if ((-not $_.IsEmbedded) -and ($PublicFunctions -notcontains $_.Name) -and ($_.Name -like $Name)) {
                         Write-Verbose "Adding private function definition for $($_.Name)"
                         $PrivateFunctions += $_ | Select-Object Name,Definition,@{n='SourcePath';e={$SourceFile.FullName}}
@@ -133,7 +133,7 @@ function Import-ModulePrivateFunction {
                     }
                     else {
                         # inserting comment based help if it doesn't already exist.
-                        $PrivFunc.definition | Add-MissingCBH | Out-File -FilePath $DestPath -Encoding:utf8 -Confirm:$false
+                        $PrivFunc.definition | Add-MBMissingCBH | Out-File -FilePath $DestPath -Encoding:utf8 -Confirm:$false
                     }
                 }
             }

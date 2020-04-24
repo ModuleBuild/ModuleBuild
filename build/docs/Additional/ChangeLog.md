@@ -8,7 +8,7 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 - Fixed issue with Make.ps1 By adding --tags --always
 - Fixed issue with Make.ps1. Write-Description -level 3 should be used instead of Write-Output
 - Fixed issue with Get-SpecialPaths function by adding LoadBuildTools on InstallAndTestModule
-- Fixed issue with -SourceModule parameter on Initialize-ModuleBuild
+- Fixed issue with -SourceModule parameter on Initialize-MBModuleBuild
 - Fixed issue with the -AddCBH when there are no Params.
 - Fixed issue with URLS in README.md. It was missing links to VSCode and the PS Extension.
 - Fixed issue with the link to ChangeLog. ChangeLog in index.md was plural.
@@ -32,7 +32,7 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 
 ## Version 0.2.3
 
-- Added ability to pull in some basic information about an existing module manifest files when running initialize-modulebuild.
+- Added ability to pull in some basic information about an existing module manifest files when running Initialize-MBModuleBuild.
 - Fixed ReadTheDocs generation issues by updating the template to include build\docs\ReadTheDocs in the initialization process.
 - Eliminated any customization requirements within the modulename.build.ps1 script to help pave the way for easier modulebuild upgrades to projects.
 - Removed some superfluous code in the base build environment script around the RequiredModules variable.
@@ -40,7 +40,7 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 ## Version 0.2.2
 
 - Updated vscode tasks.json to fix depreciated syntax.
-- Fixed `-Force` switch processing on Add-PublicFunction to still create the function if the provided name is detected as plural.
+- Fixed `-Force` switch processing on Add-MBPublicFunction to still create the function if the provided name is detected as plural.
 - Fixed [cleanup script modulebuild execution issue](https://github.com/zloeber/ModuleBuild/issues/5) by separating out the postbuildtask into its own Invoke-Build code block (I had done this a while ago and never rolled up the changes into the Plaster template).
 - Fixed a glaring issue with the PlatyPS output where any Guids were 00000000-0000-0000-0000-000000000000 instead of the actual module manifest Guid [reported via issue #6](https://github.com/zloeber/ModuleBuild/issues/6). This happens because we build the module help from the psm1 load of the module in memory, not the psd1 file as that psd1 manifest gets recreated at build time with the appropriate exported functions and such. Basically a chicken/egg scenario. For now we just manually replace the output markdown files with the correct Guid before moving on to the help file packaging.
 
@@ -57,7 +57,7 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 
 ## Version 0.1.9
 
-- Removed plaster option to choose to combine the module source at build time (and simply made that behavior the default that can be changed later via Set-MBTBuildEnvironment -OptionCombineFiles $false)
+- Removed plaster option to choose to combine the module source at build time (and simply made that behavior the default that can be changed later via Set-MBBuildEnvironment -OptionCombineFiles $false)
 - Added option to run a code health report (via PSCodeHealth) against your public and private function directories prior to starting the build
 - Added 'Module plugin' capability. This adds base functionality to the module project itself. The first included module plugin is the nlogmodule logging functionality.
 
@@ -70,7 +70,7 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 
 - Fixed awful .gitignore settings included in the default scaffolding
 - Fixed documentation links to be self-referencing
-- Removed AdditionalModulePaths from initial plaster manifest (can just set this with Set-MBTBuildEnvironment after creation)
+- Removed AdditionalModulePaths from initial plaster manifest (can just set this with Set-MBBuildEnvironment after creation)
 
 ## Version 0.1.4
 
@@ -85,13 +85,13 @@ Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloebe
 ## Version 0.1.2
 
 - Updated vs code task names
-- Fixed an issue with a null build environment variable causing dynamic parameters in Set-MBTBuildEnvironment to fail
+- Fixed an issue with a null build environment variable causing dynamic parameters in Set-MBBuildEnvironment to fail
 - Several small scaffolding clean ups.
 
 ## Version 0.1.1
 
-- Removed prompts for the nuget api key when running initialize-modulebuild.
-- Initialize-ModuleBuild now automatically runs the build environment powershell script for the first time to create the modulebuild json settings file.
+- Removed prompts for the nuget api key when running Initialize-MBModuleBuild.
+- Initialize-MBModuleBuild now automatically runs the build environment powershell script for the first time to create the modulebuild json settings file.
 - More documentation.
 - Fixed some minor scaffolding creation issues.
 - Added a 'ForceInstallModule' setting to eliminate build prompt when running the install and test module build tasks when the module is already installed.

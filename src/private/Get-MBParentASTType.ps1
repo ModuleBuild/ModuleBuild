@@ -1,4 +1,4 @@
-﻿function Get-ParentASTType {
+﻿function Get-MBParentASTType {
     <#
     .SYNOPSIS
         Retrieves all parent types of a given AST element.

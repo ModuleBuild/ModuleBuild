@@ -5,7 +5,7 @@ online version: https://github.com/zloeber/ModuleBuild
 schema: 2.0.0
 ---
 
-# Add-PublicFunction
+# Add-MBPublicFunction
 
 ## SYNOPSIS
 Adds a public function to your modulebuild based project based on defined templates.
@@ -13,7 +13,7 @@ Adds a public function to your modulebuild based project based on defined templa
 ## SYNTAX
 
 ```
-Add-PublicFunction [[-Name] <String>] [-Force] [-TemplateName <String>] [<CommonParameters>]
+Add-MBPublicFunction [[-Name] <String>] [-Force] [-TemplateName <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -23,7 +23,7 @@ Adds a public function to your modulebuild based project.
 
 ### EXAMPLE 1
 ```
-Add-PublicFunction -Name 'New-AwesomeFunction' -TemplateName:PlainPublicFunction
+Add-MBPublicFunction -Name 'New-AwesomeFunction' -TemplateName:PlainPublicFunction
 ```
 
 ## PARAMETERS

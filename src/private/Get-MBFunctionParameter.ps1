@@ -65,7 +65,7 @@ function Get-MBTFunctionParameter {
     }
     process {
         $Codeblock += $Code
-        $CommonParams = Get-CommonParameter
+        $CommonParams = Get-MBCommonParameter
     }
     end {
         $ScriptText = ($Codeblock | Out-String).trim("`r`n")
@@ -78,7 +78,7 @@ function Get-MBTFunctionParameter {
         }
 
         if (-not $ScriptParameters) {
-            $functions = $CodeBlock | Get-Function -Name $Name
+            $functions = $CodeBlock | Get-MBFunction -Name $Name
             if (-not $IncludeEmbedded) {
                 Write-Verbose "$($FunctionName): Not including embedded functions."
                 $functions = $functions | Where-Object {-not $_.IsEmbedded}

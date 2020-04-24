@@ -1,4 +1,4 @@
-function Get-Function {
+function Get-MBFunction {
     <#
     .SYNOPSIS
         Enumerates all functions within lines of code.
@@ -64,7 +64,7 @@ function Get-Function {
                 AST = $Block
             }
 
-            if (@(Get-ParentASTType $Block) -contains 'FunctionDefinitionAst') {
+            if (@(Get-MBParentASTType $Block) -contains 'FunctionDefinitionAst') {
                 $FunctionProps.IsEmbedded = $true
             }
 

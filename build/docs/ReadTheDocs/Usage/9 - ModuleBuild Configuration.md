@@ -4,7 +4,7 @@ Each project has a ModuleBuild configuration file that will get dot sourced into
 
 **build\ModuleName.buildenvironment.ps1** - The initial dot sourced configuration script for your project. This file gets pulled into the build session at each invocation. You **MUST** update this file if you want to share any build settings with the community at large.
 
-**build\ModuleName.buildenvironment.json** - This gets automatically updated after a first run of the build and will forever after be the single source of truth moving forward for your build settings (unless you run the prior buildenvironment.ps1 script with the -ForcePersist option or update the 'FirstRun' option to be $true). This file is setup to be ignored in the git config file that the project includes so it should be considered a generally safe place to keep things like your Nuget API key or other local settings. There is little preventing you from adding additional settings here manually. When added they will automatically be available within the Set-MBTBuildEnvironment and Get-MBTBuildEnvironment commands included with this module.
+**build\ModuleName.buildenvironment.json** - This gets automatically updated after a first run of the build and will forever after be the single source of truth moving forward for your build settings (unless you run the prior buildenvironment.ps1 script with the -ForcePersist option or update the 'FirstRun' option to be $true). This file is setup to be ignored in the git config file that the project includes so it should be considered a generally safe place to keep things like your Nuget API key or other local settings. There is little preventing you from adding additional settings here manually. When added they will automatically be available within the Set-MBBuildEnvironment and Get-MBBuildEnvironment commands included with this module.
 
 You can add items directly to this file if you like and they will be loaded and are able the be read and set with the modulebuild module. Additionally, if there are new settings in the buildenvironment.ps1 BuildEnv definitions then those settings will automatically be saved to this file when detected (so when the next build runs). This is further described in the next section.
 
@@ -26,15 +26,15 @@ What this means is that effectively the base settings defined in modulename.buil
 
 There are a few functions you can use to update or view the configuration.
 
-## Import-ModulePublicFunction
+## Import-MBModulePublicFunction
 
 Use this against an existing module directory to load the module into memory and attempt to extract any defined script functions that have been exported into the public source directory of your ModuleBuild project. No existing file will be overwritten.
 
-## Import-ModulePrivateFunction
+## Import-MBModulePrivateFunction
 
 Use this against an existing module directory to load the module into memory to determine the exported functions. Then the whole module folder will then be crawled for any non-embedded function definitions that do not exist in the exported function list. Finally, you will be prompted to import each of the found candidate private functions into the modulebuild defined private folder for your project. No files will be overwritten.
 
-## Add-PublicFunction
+## Add-MBPublicFunction
 
 This function will parse your build environment config file for the location of your function templates directory (default = src\templates) and allow you to use one of them to create a new public function for your module. Some basic validation of the function name will be done including:
 

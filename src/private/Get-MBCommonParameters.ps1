@@ -1,4 +1,4 @@
-function Get-CommonParameter {
+function Get-MBCommonParameter {
     # Helper function to get all the automatically added parameters in an
     # advanced function
     function somefunct {

@@ -1,4 +1,4 @@
-function IsPlural {
+function TestMBPlural {
     [cmdletbinding()]
     Param (
         [String]$Noun
@@ -6,5 +6,5 @@ function IsPlural {
     $null = [reflection.assembly]::LoadWithPartialName('System.Data.Entity.Design')
     $ci = [cultureinfo]::CurrentCulture
     $pluralservice = [System.Data.Entity.Design.PluralizationServices.PluralizationService]::CreateService($ci)
-    $pluralservice.IsPlural($Noun)
+    $pluralservice.TestMBPlural($Noun)
 }

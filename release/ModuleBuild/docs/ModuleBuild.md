@@ -11,16 +11,22 @@ Locale: en-US
 A scaffolding framework which can be used to kickstart a generic PowerShell module project. 
 
 ## ModuleBuild Cmdlets
-### [Initialize-ModuleBuild](Initialize-ModuleBuild.md)
-Set up the framework for a ModuleBuild project.
-
-### [Import-ModulePrivateFunction](Import-ModulePrivateFunction.md)
-Retrieves private module function definitions and recreates them in your modulebuild based project.
-
-### [Add-PublicFunction](Add-PublicFunction.md)
+### [Add-MBPublicFunction](Add-MBPublicFunction.md)
 Adds a public function to your modulebuild based project based on defined templates.
 
-### [Import-ModulePublicFunction](Import-ModulePublicFunction.md)
+### [Import-MBModulePublicFunction](Import-MBModulePublicFunction.md)
 Retrieves public module function definitions and recreates them in your modulebuild based project.
+
+### [Initialize-MBModuleBuild](Initialize-MBModuleBuild.md)
+Set up the framework for a ModuleBuild project.
+
+### [Import-MBModulePrivateFunction](Import-MBModulePrivateFunction.md)
+Retrieves private module function definitions and recreates them in your modulebuild based project.
+
+### [Set-MBBuildEnvironment](Set-MBBuildEnvironment.md)
+Sets a stored setting in a buildenvironment.json file.
+
+### [Get-MBBuildEnvironment](Get-MBBuildEnvironment.md)
+Retrieves all the stored settings in a buildenvironment.json file.
 
 

@@ -1,4 +1,4 @@
-function Test-PublicFunctionName {
+function Test-MBPublicFunctionName {
     <#
     .SYNOPSIS
     Tests validity of a function name and path.
@@ -62,7 +62,7 @@ function Test-PublicFunctionName {
             $FunctionOk = $FALSE
         }
 
-        if (IsPlural $Noun) {
+        if (TestMBPlural $Noun) {
             if ($ShowIssues) {
                 Write-Warning "Function noun is plural and should be singular: $Name"
             }

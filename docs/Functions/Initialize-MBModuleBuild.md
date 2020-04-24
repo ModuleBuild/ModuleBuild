@@ -5,7 +5,7 @@ online version: https://github.com/zloeber/ModuleBuild
 schema: 2.0.0
 ---
 
-# Initialize-ModuleBuild
+# Initialize-MBModuleBuild
 
 ## SYNOPSIS
 Set up the framework for a ModuleBuild project.
@@ -13,7 +13,7 @@ Set up the framework for a ModuleBuild project.
 ## SYNTAX
 
 ```
-Initialize-ModuleBuild [[-Path] <String>] [[-SourceModule] <String>] [<CommonParameters>]
+Initialize-MBModuleBuild [[-Path] <String>] [[-SourceModule] <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -24,14 +24,14 @@ Optionally supply an existing module manifest path to pull in information from i
 
 ### EXAMPLE 1
 ```
-Initialize-ModuleBuild -Path C:\Work\NewModule
+Initialize-MBModuleBuild -Path C:\Work\NewModule
 ```
 
 Prompt for all the settings required to get a new modulebuild project setup in c:\work\NewModule.
 
 ### EXAMPLE 2
 ```
-Initialize-ModuleBuild -Path C:\Work\NewModule -SourceModule c:\work\myoldmodule\myoldmodule.psd1
+Initialize-MBModuleBuild -Path C:\Work\NewModule -SourceModule c:\work\myoldmodule\myoldmodule.psd1
 ```
 
 Pulls some information from myoldmodule.psd1 and then prompt for any remaining required information to create a modulebuild based project from it in C:\Work\NewModule

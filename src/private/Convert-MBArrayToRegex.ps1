@@ -1,4 +1,4 @@
-function Convert-ArrayToRegex {
+function Convert-MBArrayToRegex {
     # Takes an array of strings and turns it into a regex matchable string
     [CmdletBinding()]
     param(

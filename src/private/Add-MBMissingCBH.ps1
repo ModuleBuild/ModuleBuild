@@ -1,4 +1,4 @@
-Function Add-MissingCBH {
+Function Add-MBMissingCBH {
     <#
     .SYNOPSIS
         Create comment based help for a function.
@@ -8,7 +8,7 @@ Function Add-MissingCBH {
         Multi-line or piped lines of code to process.
     .EXAMPLE
        PS > $test = Get-Content 'C:\temp\test.ps1' -raw
-       PS > $test | Add-MissingCBH | clip
+       PS > $test | Add-MBMissingCBH | clip
 
        Takes C:\temp\test.ps1 as input, creates basic comment based help and puts the result in the clipboard
        to be pasted elsewhere for review.
@@ -39,7 +39,7 @@ Function Add-MissingCBH {
         $ScriptText = ($Codeblock | Out-String).trim("`r`n")
         # If no sign of CBH exists then try to generate and insert it
         if ($ScriptText -notmatch $CBHPattern) {
-            $CBH = @($ScriptText | New-MBTCommentBasedHelp)
+            $CBH = @($ScriptText | New-MBCommentBasedHelp)
 
             if ($CBH.Count -gt 1) {
                 throw 'Too many functions are defined in the input string!'

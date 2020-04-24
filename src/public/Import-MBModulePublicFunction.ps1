@@ -1,4 +1,4 @@
-function Import-ModulePublicFunction {
+function Import-MBModulePublicFunction {
     <#
     .SYNOPSIS
     Retrieves public module function definitions and recreates them in your modulebuild based project.
@@ -22,7 +22,7 @@ function Import-ModulePublicFunction {
     https://github.com/zloeber/ModuleBuild
 
     .EXAMPLE
-    Import-ModulePrivateFunction -ModulePath 'C:\Temp\PSCloudFlare\release\PSCloudFlare\PSCloudFlare.psd1' -force
+    Import-MBModulePrivateFunction -ModulePath 'C:\Temp\PSCloudFlare\release\PSCloudFlare\PSCloudFlare.psd1' -force
 
     Finds any non-exported and unembedded functions and automatically creates them in the current modulebuild project private source directory if they don't already exist.
 
@@ -100,7 +100,7 @@ function Import-ModulePublicFunction {
                         }
                         else {
                             try {
-                                $NewScript | Add-MissingCBH | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
+                                $NewScript | Add-MBMissingCBH | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
                             }
                             catch {
                                 throw $_

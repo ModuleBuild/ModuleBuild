@@ -1,4 +1,4 @@
-function Initialize-ModuleBuild {
+function Initialize-MBModuleBuild {
     <#
     .SYNOPSIS
     Set up the framework for a ModuleBuild project.
@@ -16,12 +16,12 @@ function Initialize-ModuleBuild {
     https://github.com/zloeber/ModuleBuild
 
     .EXAMPLE
-    PS> Initialize-ModuleBuild -Path C:\Work\NewModule
+    PS> Initialize-MBModuleBuild -Path C:\Work\NewModule
 
     Prompt for all the settings required to get a new modulebuild project setup in c:\work\NewModule.
 
     .EXAMPLE
-    PS> Initialize-ModuleBuild -Path C:\Work\NewModule -SourceModule c:\work\myoldmodule\myoldmodule.psd1
+    PS> Initialize-MBModuleBuild -Path C:\Work\NewModule -SourceModule c:\work\myoldmodule\myoldmodule.psd1
 
     Pulls some information from myoldmodule.psd1 and then prompt for any remaining required information to create a modulebuild based project from it in C:\Work\NewModule
 
@@ -52,16 +52,16 @@ function Initialize-ModuleBuild {
             $PostInitMessage = @'
 A few items to consider doing next:
 
-1. Add public functions, one per file, to .\src\public
+1. Add public functions, one per file, to '.\src\public'
 2. Update your default readme.md file at the root project directory
-3. Update the about_ModuleName.help.txt file within .\build\docs\en-US
-4. Doing ReadTheDocs integration? Cool, update .\build\docs\ReadTheDocs by creating folders representing sections and putting markdown files within them for the pages within those sections.
-5. But remember that the markdown files in .\build\docs\Additional need some love too. These get dropped into your project .\docs directory at build time (overwriting anything there in the process!)
+3. Update the about_ModuleName.help.txt file within '.\build\docs\en-US'
+4. Doing ReadTheDocs integration? Cool, update '.\build\docs\ReadTheDocs' by creating folders representing sections and putting markdown files within them for the pages within those sections.
+5. But remember that the markdown files in '.\build\docs\Additional' need some love too. These get dropped into your project '.\docs' directory at build time (overwriting anything there in the process!)
 6. Update any bits within your *.psd1 that are appropriate to your module but don't mess with the exported function names as those get handled automatically when you do the build.
-7. If you enabled sensitive terminology scanning then review and update your terms defined in your buildenvironment.json file (using Get-MBTBuildEnvironment & Set-MBTBuildEnvironment).
-8. Change your project logo at src\other\powershell-project.png
-9. Build your project with .\Build.ps1
-10. Enter a PowerShell Gallery (aka Nuget) API key using Set-MBTBuildEnvironment -NugetAPIKey. Without this you will not be able to upload your module to the Gallery
+7. If you enabled sensitive terminology scanning then review and update your terms defined in your '.\build\YourModule.buildenvironment.json' file.
+8. Change your project logo at '.\src\other\powershell-project.png'
+9. Build your project with '.\Build.ps1'
+10. Enter a PowerShell Gallery (aka Nuget) API key to the '.\build\YourModule.buildenvironment.json' file. Without this you will not be able to upload your module to the PSGallery.
 
 Run Update-Module ModuleBuild every so often to get more recent releases of this project.
 

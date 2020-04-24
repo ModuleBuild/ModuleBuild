@@ -9,84 +9,112 @@ $ModuleBuildLoggingEnabled = $false     # Set to true to enable nlog-based loggi
 
 ## PRIVATE MODULE FUNCTIONS AND DATA ##
 
-function Get-Function {
-    <#
-    .SYNOPSIS
-        Enumerates all functions within lines of code.
-    .DESCRIPTION
-        Enumerates all functions within lines of code.
-    .PARAMETER Code
-        Multiline or piped lines of code to process.
-    .PARAMETER Name
-        Name of a function to return. Default is all functions.
-    .EXAMPLE
-        TBD
-    .NOTES
-       Author: Zachary Loeber
-       Site: http://www.the-little-things.net/
-       Requires: Powershell 3.0
-
-       Version History
-       1.0.0 - Initial release
-    .LINK
-        http://www.the-little-things.net
-    #>
+function Convert-MBArrayToRegex {
+    # Takes an array of strings and turns it into a regex matchable string
     [CmdletBinding()]
     param(
-        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
-        [AllowEmptyString()]
-        [string[]]$Code,
-        [parameter(Position=1, HelpMessage='Name of function to process.')]
-        [string]$Name = '*'
+        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
+        [String[]]$Item,
+        [parameter(Position = 1)]
+        [Switch]$DoNotEscape
     )
     begin {
-        $ThisFunc = $MyInvocation.MyCommand.Name
-        Write-Verbose "$($ThisFunc): Begin."
-
-        $Codeblock = @()
-        $ParseError = $null
-        $Tokens = $null
-
-        $predicate = {
-            ($args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst]) -and
-            ($args[0].Name -like $name)
-        }
+        $Items = @()
     }
     process {
-        $Codeblock += $Code
+        $Items += $Item
     }
     end {
-        $ScriptText = ($Codeblock | Out-String).trim("`r`n")
-        Write-Verbose "$($ThisFunc): Attempting to parse AST."
-        $AST = [System.Management.Automation.Language.Parser]::ParseInput($ScriptText, [ref]$Tokens, [ref]$ParseError)
-
-        if($ParseError) {
-            throw "$($ThisFunc): Will not work properly with errors in the script, please modify based on the above errors and retry."
-        }
-
-        # First get all blocks
-        $Blocks = $AST.FindAll($predicate, $true)
-
-        Foreach ($Block in $Blocks) {
-            $FunctionProps = @{
-                Name = $Block.Name
-                Definition = $Block.Extent.Text
-                IsEmbedded = $false
-                AST = $Block
+        if ($Items.Count -gt 0) {
+            if ($DoNotEscape) {
+                '^(' + ($Items -join '|') + ')$'
             }
-
-            if (@(Get-ParentASTType $Block) -contains 'FunctionDefinitionAst') {
-                $FunctionProps.IsEmbedded = $true
+            else {
+                '^(' + (($Items | ForEach-Object{[regex]::Escape($_)}) -join '|') + ')$'
             }
-
-            New-Object -TypeName psobject -Property $FunctionProps
         }
-
-        Write-Verbose "$($ThisFunc): End."
+        else {
+            '^()$'
+        }
     }
 }
 
-function New-MBTCommentBasedHelp {
+function Test-MBPublicFunctionName {
+    <#
+    .SYNOPSIS
+    Tests validity of a function name and path.
+    .DESCRIPTION
+    Tests validity of a function name and path.
+    .PARAMETER Name
+    Name of the function to add. Must use a valid PowerShell verb-action format and be singular.
+    .PARAMETER ShowIssues
+    Displays possible issues with function
+    .LINK
+    https://github.com/zloeber/ModuleBuild
+    .EXAMPLE
+    TBD
+    #>
+
+    [CmdletBinding()]
+    param(
+        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
+        [String]$Name,
+        [parameter(Position = 1)]
+        [switch]$ShowIssues
+    )
+
+    $FunctionOk = $TRUE
+
+    try {
+        $FunctionPath = Split-Path $Name
+        $FunctionFileName = Split-Path $Name -Leaf
+        $FunctionName = ($FunctionFileName -split '\.')[0]
+        Write-Verbose "Function Path: $FunctionPath"
+        Write-Verbose "Function FileName: $FunctionFileName"
+        Write-Verbose "Function Name: $FunctionName"
+    }
+    catch {
+        if ($ShowIssues) {
+            Write-Warning "Function path does not appear to include a path or filename: $Name"
+        }
+        $FunctionOk = $FALSE
+    }
+
+    if ($FunctionName -match '[^a-zA-Z\-]') {
+        if ($ShowIssues) {
+            Write-Warning "Function name has special characters: $Name"
+        }
+        $FunctionOk = $FALSE
+    }
+
+    if (-not $FunctionName.contains('-')) {
+        if ($ShowIssues) {
+            Write-Warning "Function name must be in a verb-noun format: $Name"
+        }
+        $FunctionOk = $FALSE
+    }
+    else {
+        $Verb,$Noun = $FunctionName -split '-'
+        $ValidVerbs = (Get-Verb).verb
+        if ($ValidVerbs -notcontains $Verb) {
+            if ($ShowIssues) {
+                Write-Warning "Function verb is not valid, use 'get-verb' for a list of valid verbs: $Name"
+            }
+            $FunctionOk = $FALSE
+        }
+
+        if (TestMBPlural $Noun) {
+            if ($ShowIssues) {
+                Write-Warning "Function noun is plural and should be singular: $Name"
+            }
+            $FunctionOk = $FALSE
+        }
+    }
+
+    return $FunctionOk
+}
+
+function New-MBCommentBasedHelp {
     <#
     .SYNOPSIS
         Create comment based help for functions within a given scriptblock.
@@ -99,12 +127,12 @@ function New-MBTCommentBasedHelp {
     .EXAMPLE
        PS > $testfile = 'C:\temp\test.ps1'
        PS > $test = Get-Content $testfile -raw
-       PS > $test | New-MBTCommentBasedHelp | clip
+       PS > $test | New-MBCommentBasedHelp | clip
 
        Takes C:\temp\test.ps1 as input, creates basic comment based help and puts the result in the clipboard
        to be pasted elsewhere for review.
     .EXAMPLE
-        PS > $CBH = Get-Content 'C:\EWSModule\Get-EWSContact.ps1' -Raw | New-MBTCommentBasedHelp -Verbose
+        PS > $CBH = Get-Content 'C:\EWSModule\Get-EWSContact.ps1' -Raw | New-MBTommentBasedHelp -Verbose
         PS > ($CBH | Where {$FunctionName -eq 'Get-EWSContact'}).CBH
 
         Consumes Get-EWSContact.ps1 and generates advanced CBH templates for all functions found within. Print out to the screen the advanced
@@ -120,8 +148,8 @@ function New-MBTCommentBasedHelp {
        1.0.2 - Added SuppressMessageAttribute
        1.0.3 - Extra Verbose message to check if function had Params
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "ScriptText",Scope="Function",Target="New-MBTCommentBasedHelp",Justification="Seems it's here since duo a copy paste from other functions (Add-MissingCBH,Get-Function,Get-MBTFunctionParameter). Leaving it here since it doesn't do any harm.")]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions","",Scope="Function",Target="New-MBTCommentBasedHelp",Justification="Function does not change system state. Simply outputs a obj with CommentBasedHelp.")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "ScriptText",Scope="Function",Target="New-MBCommentBasedHelp",Justification="Seems it's here since duo a copy paste from other functions (Add-MBMissingCBH,Get-MBFunction,Get-MBTFunctionParameter). Leaving it here since it doesn't do any harm.")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions","",Scope="Function",Target="New-MBCommentBasedHelp",Justification="Function does not change system state. Simply outputs a obj with CommentBasedHelp.")]
     [CmdletBinding()]
     param(
         [parameter(Position=0, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
@@ -196,90 +224,16 @@ function New-MBTCommentBasedHelp {
     }
 }
 
-function IsPlural {
-    [cmdletbinding()]
-    Param (
-        [String]$Noun
-    )
-    $null = [reflection.assembly]::LoadWithPartialName('System.Data.Entity.Design')
-    $ci = [cultureinfo]::CurrentCulture
-    $pluralservice = [System.Data.Entity.Design.PluralizationServices.PluralizationService]::CreateService($ci)
-    $pluralservice.IsPlural($Noun)
-}
-
-function Test-PublicFunctionName {
-    <#
-    .SYNOPSIS
-    Tests validity of a function name and path.
-    .DESCRIPTION
-    Tests validity of a function name and path.
-    .PARAMETER Name
-    Name of the function to add. Must use a valid PowerShell verb-action format and be singular.
-    .PARAMETER ShowIssues
-    Displays possible issues with function
-    .LINK
-    https://github.com/zloeber/ModuleBuild
-    .EXAMPLE
-    TBD
-    #>
-
-    [CmdletBinding()]
-    param(
-        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
-        [String]$Name,
-        [parameter(Position = 1)]
-        [switch]$ShowIssues
-    )
-
-    $FunctionOk = $TRUE
-
-    try {
-        $FunctionPath = Split-Path $Name
-        $FunctionFileName = Split-Path $Name -Leaf
-        $FunctionName = ($FunctionFileName -split '\.')[0]
-        Write-Verbose "Function Path: $FunctionPath"
-        Write-Verbose "Function FileName: $FunctionFileName"
-        Write-Verbose "Function Name: $FunctionName"
-    }
-    catch {
-        if ($ShowIssues) {
-            Write-Warning "Function path does not appear to include a path or filename: $Name"
-        }
-        $FunctionOk = $FALSE
+function Get-MBCommonParameter {
+    # Helper function to get all the automatically added parameters in an
+    # advanced function
+    function somefunct {
+        [CmdletBinding(SupportsShouldProcess = $true, SupportsPaging = $true, SupportsTransactions = $true)]
+        [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSShouldProcess", "", Scope="Function", Target="somefunct",Justification="This is a dummy function in order to get all CommonParameters without hardcoding them. There is no reason for it to actually use SupportsShouldProcess.")]
+        param()
     }
 
-    if ($FunctionName -match '[^a-zA-Z\-]') {
-        if ($ShowIssues) {
-            Write-Warning "Function name has special characters: $Name"
-        }
-        $FunctionOk = $FALSE
-    }
-
-    if (-not $FunctionName.contains('-')) {
-        if ($ShowIssues) {
-            Write-Warning "Function name must be in a verb-noun format: $Name"
-        }
-        $FunctionOk = $FALSE
-    }
-    else {
-        $Verb,$Noun = $FunctionName -split '-'
-        $ValidVerbs = (Get-Verb).verb
-        if ($ValidVerbs -notcontains $Verb) {
-            if ($ShowIssues) {
-                Write-Warning "Function verb is not valid, use 'get-verb' for a list of valid verbs: $Name"
-            }
-            $FunctionOk = $FALSE
-        }
-
-        if (IsPlural $Noun) {
-            if ($ShowIssues) {
-                Write-Warning "Function noun is plural and should be singular: $Name"
-            }
-            $FunctionOk = $FALSE
-        }
-    }
-
-    return $FunctionOk
+    ((Get-Command somefunct).Parameters).Keys
 }
 
 function Get-MBTFunctionParameter {
@@ -349,7 +303,7 @@ function Get-MBTFunctionParameter {
     }
     process {
         $Codeblock += $Code
-        $CommonParams = Get-CommonParameter
+        $CommonParams = Get-MBCommonParameter
     }
     end {
         $ScriptText = ($Codeblock | Out-String).trim("`r`n")
@@ -362,7 +316,7 @@ function Get-MBTFunctionParameter {
         }
 
         if (-not $ScriptParameters) {
-            $functions = $CodeBlock | Get-Function -Name $Name
+            $functions = $CodeBlock | Get-MBFunction -Name $Name
             if (-not $IncludeEmbedded) {
                 Write-Verbose "$($FunctionName): Not including embedded functions."
                 $functions = $functions | Where-Object {-not $_.IsEmbedded}
@@ -422,7 +376,7 @@ function Get-MBTFunctionParameter {
     }
 }
 
-function Get-ParentASTType {
+function Get-MBParentASTType {
     <#
     .SYNOPSIS
         Retrieves all parent types of a given AST element.
@@ -475,19 +429,7 @@ function Get-ParentASTType {
     Write-Verbose "$($FunctionName): End."
 }
 
-function Get-CommonParameter {
-    # Helper function to get all the automatically added parameters in an
-    # advanced function
-    function somefunct {
-        [CmdletBinding(SupportsShouldProcess = $true, SupportsPaging = $true, SupportsTransactions = $true)]
-        [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSShouldProcess", "", Scope="Function", Target="somefunct",Justification="This is a dummy function in order to get all CommonParameters without hardcoding them. There is no reason for it to actually use SupportsShouldProcess.")]
-        param()
-    }
-
-    ((Get-Command somefunct).Parameters).Keys
-}
-
-function New-MBTDynamicParameter {
+function New-MBDynamicParameter {
     <#
     .SYNOPSIS
     Helper function to simplify creating dynamic parameters
@@ -501,7 +443,7 @@ function New-MBTDynamicParameter {
         Provide tab completion and intellisense for parameters, depending on the environment
 
     Please keep in mind that all dynamic parameters you create, will not have corresponding variables created.
-        Use New-MBTDynamicParameter with 'CreateVariables' switch in your main code block,
+        Use New-DynamicParameter with 'CreateVariables' switch in your main code block,
         ('Process' for advanced functions) to create those variables.
         Alternatively, manually reference $PSBoundParameters for the dynamic parameter value.
 
@@ -572,6 +514,9 @@ function New-MBTDynamicParameter {
     .PARAMETER ValidateNotNullOrEmpty
     If specified, set the ValidateNotNullOrEmpty attribute of this dynamic parameter
 
+    .PARAMETER ValidateCount
+    If specified, set the ValidateCount attribute of this dynamic parameter
+
     .PARAMETER ValidateRange
     If specified, set the ValidateRange attribute of this dynamic parameter
 
@@ -594,10 +539,13 @@ function New-MBTDynamicParameter {
     If not specified, create and return a RuntimeDefinedParameterDictionary
     Aappropriate for a simple dynamic parameter creation.
 
+    .PARAMETER CreateVariables
+    Dynamic parameters don't have corresponding variables created, you need to call New-DynamicParameter with CreateVariables switch to fix that.
+
     .EXAMPLE
     Create one dynamic parameter.
 
-    This example illustrates the use of New-MBTDynamicParameter to create a single dynamic parameter.
+    This example illustrates the use of New-DynamicParameter to create a single dynamic parameter.
     The Drive's parameter ValidateSet is populated with all available volumes on the computer for handy tab completion / intellisense.
 
     Usage: Get-FreeSpace -Drive <tab>
@@ -612,14 +560,14 @@ function New-MBTDynamicParameter {
             $DriveList = ([System.IO.DriveInfo]::GetDrives()).Name
 
             # Create new dynamic parameter
-            New-MBTDynamicParameter -Name Drive -ValidateSet $DriveList -Type ([array]) -Position 0 -Mandatory
+            New-DynamicParameter -Name Drive -ValidateSet $DriveList -Type ([array]) -Position 0 -Mandatory
         }
 
         Process
         {
             # Dynamic parameters don't have corresponding variables created,
-            # you need to call New-MBTDynamicParameter with CreateVariables switch to fix that.
-            New-MBTDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+            # you need to call New-DynamicParameter with CreateVariables switch to fix that.
+            New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
             $DriveInfo = [System.IO.DriveInfo]::GetDrives() | Where-Object {$Drive -contains $_.Name}
             $DriveInfo |
@@ -653,8 +601,8 @@ function New-MBTDynamicParameter {
         or
     Usage: Get-FreeSpace -DriveType <tab>
 
-    Parameters are defined in the array of hashtables, which is then piped through the New-Object to create PSObject and pass it to the New-MBTDynamicParameter function.
-    Because of piping, New-MBTDynamicParameter function is able to create all parameters at once, thus eliminating need for you to create and pass external RuntimeDefinedParameterDictionary to it.
+    Parameters are defined in the array of hashtables, which is then piped through the New-Object to create PSObject and pass it to the New-DynamicParameter function.
+    Because of piping, New-DynamicParameter function is able to create all parameters at once, thus eliminating need for you to create and pass external RuntimeDefinedParameterDictionary to it.
 
     function Get-FreeSpace
     {
@@ -682,15 +630,15 @@ function New-MBTDynamicParameter {
                 }
             )
 
-            # Convert hashtables to PSObjects and pipe them to the New-MBTDynamicParameter,
+            # Convert hashtables to PSObjects and pipe them to the New-DynamicParameter,
             # to create all dynamic paramters in one function call.
-            $DynamicParameters | ForEach-Object {New-Object PSObject -Property $_} | New-MBTDynamicParameter
+            $DynamicParameters | ForEach-Object {New-Object PSObject -Property $_} | New-DynamicParameter
         }
         Process
         {
             # Dynamic parameters don't have corresponding variables created,
-            # you need to call New-MBTDynamicParameter with CreateVariables switch to fix that.
-            New-MBTDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+            # you need to call New-DynamicParameter with CreateVariables switch to fix that.
+            New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
             if($Drive)
             {
@@ -736,9 +684,9 @@ function New-MBTDynamicParameter {
         or
     Usage: Get-FreeSpace -DriveType <tab> -Precision 2
 
-    Parameters are defined in the array of hashtables, which is then piped through the New-Object to create PSObject and pass it to the New-MBTDynamicParameter function.
+    Parameters are defined in the array of hashtables, which is then piped through the New-Object to create PSObject and pass it to the New-DynamicParameter function.
     If parameter with the same name already exist in the RuntimeDefinedParameterDictionary, a new Parameter Set is added to it.
-    Because of piping, New-MBTDynamicParameter function is able to create all parameters at once, thus eliminating need for you to create and pass external RuntimeDefinedParameterDictionary to it.
+    Because of piping, New-DynamicParameter function is able to create all parameters at once, thus eliminating need for you to create and pass external RuntimeDefinedParameterDictionary to it.
 
     function Get-FreeSpace
     {
@@ -780,15 +728,15 @@ function New-MBTDynamicParameter {
                 }
             )
 
-            # Convert hashtables to PSObjects and pipe them to the New-MBTDynamicParameter,
+            # Convert hashtables to PSObjects and pipe them to the New-DynamicParameter,
             # to create all dynamic paramters in one function call.
-            $DynamicParameters | ForEach-Object {New-Object PSObject -Property $_} | New-MBTDynamicParameter
+            $DynamicParameters | ForEach-Object {New-Object PSObject -Property $_} | New-DynamicParameter
         }
         Process
         {
             # Dynamic parameters don't have corresponding variables created,
-            # you need to call New-MBTDynamicParameter with CreateVariables switch to fix that.
-            New-MBTDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+            # you need to call New-DynamicParameter with CreateVariables switch to fix that.
+            New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
             if($Drive)
             {
@@ -858,12 +806,12 @@ function New-MBTDynamicParameter {
             $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
 
             # Add new dynamic parameter to dictionary
-            New-MBTDynamicParameter @Drive -Dictionary $DynamicParameters
+            New-DynamicParameter @Drive -Dictionary $DynamicParameters
 
             # Add another dynamic parameter to dictionary, only if today is not a Friday
             if((Get-Date).DayOfWeek -ne [DayOfWeek]::Friday)
             {
-                New-MBTDynamicParameter @DriveType -Dictionary $DynamicParameters
+                New-DynamicParameter @DriveType -Dictionary $DynamicParameters
             }
 
             # Return dictionary with dynamic parameters
@@ -872,8 +820,8 @@ function New-MBTDynamicParameter {
         Process
         {
             # Dynamic parameters don't have corresponding variables created,
-            # you need to call New-MBTDynamicParameter with CreateVariables switch to fix that.
-            New-MBTDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+            # you need to call New-DynamicParameter with CreateVariables switch to fix that.
+            New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
             if($Drive)
             {
@@ -904,8 +852,8 @@ function New-MBTDynamicParameter {
         }
     }
     #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions","",Scope="Function",Target="New-MBTDynamicParameter",Justification="Function does not change system state.")]
     [CmdletBinding(PositionalBinding = $false, DefaultParameterSetName = 'DynamicParameter')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "",Scope="function",Justification="")]
     Param
     (
         [Parameter(Mandatory = $true, ValueFromPipeline = $true, ValueFromPipelineByPropertyName = $true, ParameterSetName = 'DynamicParameter')]
@@ -1167,48 +1115,18 @@ function New-MBTDynamicParameter {
     }
 }
 
-function Get-BuildFilePath {
-    $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' -ErrorAction:SilentlyContinue | Select-Object -First 1).FullName
-    Return $BuildPath
-}
-
-function Read-HostContinue {
-    param (
-        [Parameter(Position=0,HelpMessage='Title for your read prompt.')]
-        [String]$PromptTitle = '',
-        [Parameter(Position=1,HelpMessage='Question to display at the prompt.')]
-        [string]$PromptQuestion = 'Continue?',
-        [Parameter(Position=2)]
-        [string]$YesDescription = 'Do this.',
-        [Parameter(Position=3)]
-        [string]$NoDescription = 'Do not do this.',
-        [Parameter(Position=4)]
-        [switch]$DefaultToNo,
-        [Parameter(Position=5)]
-        [switch]$Force
+function TestMBPlural {
+    [cmdletbinding()]
+    Param (
+        [String]$Noun
     )
-    if ($Force) {
-        (-not $DefaultToNo)
-        return
-    }
-    $yes = New-Object System.Management.Automation.Host.ChoiceDescription "&Yes", $YesDescription
-    $no = New-Object System.Management.Automation.Host.ChoiceDescription "&No", $NoDescription
-
-    if ($DefaultToNo) {
-        $ConsolePrompt = [System.Management.Automation.Host.ChoiceDescription[]]($no,$yes)
-    }
-    else {
-        $ConsolePrompt = [System.Management.Automation.Host.ChoiceDescription[]]($yes, $no)
-    }
-    if (($host.ui.PromptForChoice($PromptTitle, $PromptQuestion , $ConsolePrompt, 0)) -eq 0) {
-        $true
-    }
-    else {
-        $false
-    }
+    $null = [reflection.assembly]::LoadWithPartialName('System.Data.Entity.Design')
+    $ci = [cultureinfo]::CurrentCulture
+    $pluralservice = [System.Data.Entity.Design.PluralizationServices.PluralizationService]::CreateService($ci)
+    $pluralservice.TestMBPlural($Noun)
 }
 
-Function Add-MissingCBH {
+Function Add-MBMissingCBH {
     <#
     .SYNOPSIS
         Create comment based help for a function.
@@ -1218,7 +1136,7 @@ Function Add-MissingCBH {
         Multi-line or piped lines of code to process.
     .EXAMPLE
        PS > $test = Get-Content 'C:\temp\test.ps1' -raw
-       PS > $test | Add-MissingCBH | clip
+       PS > $test | Add-MBMissingCBH | clip
 
        Takes C:\temp\test.ps1 as input, creates basic comment based help and puts the result in the clipboard
        to be pasted elsewhere for review.
@@ -1249,7 +1167,7 @@ Function Add-MissingCBH {
         $ScriptText = ($Codeblock | Out-String).trim("`r`n")
         # If no sign of CBH exists then try to generate and insert it
         if ($ScriptText -notmatch $CBHPattern) {
-            $CBH = @($ScriptText | New-MBTCommentBasedHelp)
+            $CBH = @($ScriptText | New-MBCommentBasedHelp)
 
             if ($CBH.Count -gt 1) {
                 throw 'Too many functions are defined in the input string!'
@@ -1277,36 +1195,6 @@ Function Add-MissingCBH {
         else {
             Write-Verbose "Comment based help already exists - skipping CBH insertion and returning original script."
             $ScriptText
-        }
-    }
-}
-
-function Convert-ArrayToRegex {
-    # Takes an array of strings and turns it into a regex matchable string
-    [CmdletBinding()]
-    param(
-        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
-        [String[]]$Item,
-        [parameter(Position = 1)]
-        [Switch]$DoNotEscape
-    )
-    begin {
-        $Items = @()
-    }
-    process {
-        $Items += $Item
-    }
-    end {
-        if ($Items.Count -gt 0) {
-            if ($DoNotEscape) {
-                '^(' + ($Items -join '|') + ')$'
-            }
-            else {
-                '^(' + (($Items | ForEach-Object{[regex]::Escape($_)}) -join '|') + ')$'
-            }
-        }
-        else {
-            '^()$'
         }
     }
 }
@@ -1453,13 +1341,206 @@ function Get-CallerPreference {
     }
 }
 
+function Get-MBFunction {
+    <#
+    .SYNOPSIS
+        Enumerates all functions within lines of code.
+    .DESCRIPTION
+        Enumerates all functions within lines of code.
+    .PARAMETER Code
+        Multiline or piped lines of code to process.
+    .PARAMETER Name
+        Name of a function to return. Default is all functions.
+    .EXAMPLE
+        TBD
+    .NOTES
+       Author: Zachary Loeber
+       Site: http://www.the-little-things.net/
+       Requires: Powershell 3.0
+
+       Version History
+       1.0.0 - Initial release
+    .LINK
+        http://www.the-little-things.net
+    #>
+    [CmdletBinding()]
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
+        [AllowEmptyString()]
+        [string[]]$Code,
+        [parameter(Position=1, HelpMessage='Name of function to process.')]
+        [string]$Name = '*'
+    )
+    begin {
+        $ThisFunc = $MyInvocation.MyCommand.Name
+        Write-Verbose "$($ThisFunc): Begin."
+
+        $Codeblock = @()
+        $ParseError = $null
+        $Tokens = $null
+
+        $predicate = {
+            ($args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst]) -and
+            ($args[0].Name -like $name)
+        }
+    }
+    process {
+        $Codeblock += $Code
+    }
+    end {
+        $ScriptText = ($Codeblock | Out-String).trim("`r`n")
+        Write-Verbose "$($ThisFunc): Attempting to parse AST."
+        $AST = [System.Management.Automation.Language.Parser]::ParseInput($ScriptText, [ref]$Tokens, [ref]$ParseError)
+
+        if($ParseError) {
+            throw "$($ThisFunc): Will not work properly with errors in the script, please modify based on the above errors and retry."
+        }
+
+        # First get all blocks
+        $Blocks = $AST.FindAll($predicate, $true)
+
+        Foreach ($Block in $Blocks) {
+            $FunctionProps = @{
+                Name = $Block.Name
+                Definition = $Block.Extent.Text
+                IsEmbedded = $false
+                AST = $Block
+            }
+
+            if (@(Get-MBParentASTType $Block) -contains 'FunctionDefinitionAst') {
+                $FunctionProps.IsEmbedded = $true
+            }
+
+            New-Object -TypeName psobject -Property $FunctionProps
+        }
+
+        Write-Verbose "$($ThisFunc): End."
+    }
+}
+
 ## PUBLIC MODULE FUNCTIONS AND DATA ##
 
-function Add-PublicFunction {
+function Import-MBModulePrivateFunction {
     <#
         .EXTERNALHELP ModuleBuild-help.xml
         .LINK
-            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Add-PublicFunction.md
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Import-MBModulePrivateFunction.md
+        #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidDefaultValueSwitchParameter", "",Scope="function",Target="Import-MBModulePrivateFunction",Justification="Not adding CBH by default is actually useful.")]
+    [CmdletBinding( SupportsShouldProcess = $True, ConfirmImpact = 'High' )]
+    param(
+        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
+        [String]$Path,
+        [parameter(Position = 1, ValueFromPipeline = $TRUE, Mandatory = $TRUE)]
+        [String]$ModulePath,
+        [parameter(Position = 2)]
+        [String]$Name = '*',
+        [parameter(Position = 3)]
+        [Switch]$DoNotAddCBH = $true,
+        [parameter(Position = 4)]
+        [string[]]$ExcludePaths = @('temp','build','.git','.vscode','docs','release','plaster'),
+        [parameter(Position = 5)]
+        [string[]]$ExcludeFiles = @('.*\.buildenvironment.ps1','.*\.build.ps1','Build\.ps1','Install\.ps1','PreLoad\.ps1','PostLoad\.ps1','.*\.tests\.ps1','.*\.test\.ps1')
+    )
+    begin {
+        if ($script:ThisModuleLoaded -eq $true) {
+            Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+        }
+        if ($ModulePath -notmatch '.*\.[psm1|psd1]') {
+            throw 'Please provide the full path to a psm1 or psd1 file to process'
+        }
+
+        $ExFiles = $ExcludeFiles | Convert-MBArrayToRegex -DoNotEscape
+
+        try {
+            $LoadedModule = Import-Module -Name $ModulePath -Force -PassThru
+            $PublicFunctions =  $LoadedModule.ExportedCommands.Keys
+            $SourceModuleBasePath = Resolve-Path -Path (Split-path $ModulePath)
+            Remove-Module -Name $LoadedModule.Name -Force
+            Write-Verbose "Exported Functions for module = $PublicFunctions"
+        }
+        catch {
+            throw "Unable to import $ModulePath"
+        }
+
+        Write-Verbose "Source Module Base Path = $SourceModuleBasePath"
+        $AllSourcefiles = @(Get-ChildItem -Path $SourceModuleBasePath -Directory -Exclude $ExcludePaths | Get-ChildItem -File -Recurse) | Where-Object {($_.Name -notmatch $ExFiles) -and (@('.ps1','.psm1') -contains $_.extension)}
+
+        $AllSourcefiles += @(Get-ChildItem -Path $SourceModuleBasePath -File | Where-Object {(@('.ps1','.psm1') -contains $_.extension) -and ($_.Name -notmatch $ExFiles)})
+
+        $PSBoundParameters.Confirm = $true
+
+        $PrivateFunctions = @()
+    }
+    process {
+        # If no build file path was specified take a few guesses
+        if ([string]::IsNullOrEmpty($Path)) {
+            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
+
+            if ([string]::IsNullOrEmpty($Path)) {
+                throw 'Unable to locate a *.buildenvironment.json file to parse!'
+            }
+        }
+        if (-not (Test-Path $Path)) {
+            throw "Unable to find the file: $Path"
+        }
+
+        try {
+            $LoadedBuildEnv = Get-Content $Path | ConvertFrom-Json
+            $ProjectPath = Split-Path (Split-Path $Path)
+            $PrivateSrcPath = Join-Path $ProjectPath $LoadedBuildEnv.PrivateFunctionSource
+            Write-Verbose "Destination Private Function Base Path = $PrivateSrcPath"
+
+        }
+        catch {
+            throw "Unable to load the build file in $Path"
+        }
+
+        # Gather all the nonembedded function definitions that are not defined as public functions
+        Foreach ($SourceFile in $AllSourceFiles) {
+            Write-Verbose "Processing $($SourceFile.FullName)"
+            try {
+                Get-Content -Path $SourceFile.FullName | Get-MBFunction | ForEach-Object {
+                    if ((-not $_.IsEmbedded) -and ($PublicFunctions -notcontains $_.Name) -and ($_.Name -like $Name)) {
+                        Write-Verbose "Adding private function definition for $($_.Name)"
+                        $PrivateFunctions += $_ | Select-Object Name,Definition,@{n='SourcePath';e={$SourceFile.FullName}}
+                    }
+                }
+            }
+            catch {
+                Write-Warning "Unable to process $($SourceFile.FullName), there may be errors in this script."
+            }
+        }
+
+        # Process our candidate private functions
+        Foreach ($PrivFunc in $PrivateFunctions) {
+            $DestPath = Join-Path $PrivateSrcPath "$($PrivFunc.Name).ps1"
+            # Only attempt to copy over new function files, skip if the name already exists in the destination path
+            if (-not (Test-Path $DestPath)) {
+                if ($pscmdlet.ShouldProcess("$($PrivFunc.Name) from file $($PrivFunc.SourcePath)", "Import private function $($PrivFunc.Name) to the project $($LoadedBuildEnv.ModuleToBuild)?")) {
+                    if ($DoNotAddCBH) {
+                        # Skipping comment based help insertion
+                        $PrivFunc.definition | Out-File -FilePath $DestPath -Encoding:utf8 -Confirm:$false
+                    }
+                    else {
+                        # inserting comment based help if it doesn't already exist.
+                        $PrivFunc.definition | Add-MBMissingCBH | Out-File -FilePath $DestPath -Encoding:utf8 -Confirm:$false
+                    }
+                }
+            }
+            else {
+                Write-Warning "The following private function already exists: $DestPath"
+            }
+        }
+    }
+}
+
+
+function Add-MBPublicFunction {
+    <#
+        .EXTERNALHELP ModuleBuild-help.xml
+        .LINK
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Add-MBPublicFunction.md
         #>
 
     [CmdletBinding()]
@@ -1486,7 +1567,7 @@ function Add-PublicFunction {
                 }
 
                 # Add new dynamic parameter to dictionary
-                New-MBTDynamicParameter @NewParamSettings -Dictionary $DynamicParameters
+                New-MBDynamicParameter @NewParamSettings -Dictionary $DynamicParameters
             }
             catch {
                 throw "Unable to load the build file in $BuildPath"
@@ -1505,11 +1586,11 @@ function Add-PublicFunction {
     }
     process {
         # Pull in the dynamic parameters first
-        New-MBTDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+        New-MBDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
         # Attempt to get the build environment data and create our template lookup table
         try {
-            $BuildEnvInfo = Get-MBTBuildEnvironment
+            $BuildEnvInfo = Get-MBBuildEnvironment
             $BuildEnvPath = Split-Path (Split-Path ((Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' -ErrorAction:SilentlyContinue | Select-Object -First 1).FullName))
             $PublicFunctionSrc = Join-Path $BuildEnvPath $BuildEnvInfo.PublicFunctionSource
             $TemplatePath = Join-Path $BuildEnvPath $BuildEnvInfo.FunctionTemplates
@@ -1528,7 +1609,7 @@ function Add-PublicFunction {
 
         $TemplateData = Get-Content -Path $TemplateLookup[$TemplateName]
         $FunctionFullPath = (Join-Path $PublicFunctionSrc $Name) + ".ps1"
-        if ((Test-PublicFunctionName $Name -ShowIssues) -or $Force) {
+        if ((Test-MBPublicFunctionName $Name -ShowIssues) -or $Force) {
             Write-Verbose "Adding function to be created: $FunctionFullPath"
             $FunctionsToCreate += $FunctionFullPath
         }
@@ -1561,108 +1642,11 @@ function Add-PublicFunction {
 }
 
 
-function Import-ModulePublicFunction {
+function Initialize-MBModuleBuild {
     <#
         .EXTERNALHELP ModuleBuild-help.xml
         .LINK
-            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Import-ModulePublicFunction.md
-        #>
-
-    [CmdletBinding( SupportsShouldProcess = $True, ConfirmImpact = 'High' )]
-    param(
-        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
-        [String]$Path,
-        [parameter(Position = 1, ValueFromPipeline = $TRUE, Mandatory = $TRUE)]
-        [String]$ModulePath,
-        [parameter(Position = 2)]
-        [String]$Name = '*',
-        [parameter(Position = 3)]
-        [Switch]$DoNotAddCBH
-    )
-    begin {
-        if ($script:ThisModuleLoaded -eq $true) {
-            Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
-        }
-        if ($ModulePath -notmatch '.*\.[psm1|psd1]') {
-            throw 'Please provide the full path to a psm1 or psd1 file to process'
-        }
-        else {
-            try {
-                $LoadedModule = Import-Module -Name $ModulePath -Force -PassThru
-                $LoadedFunctions = Get-Command -Module $LoadedModule.Name -CommandType:Function
-            }
-            catch {
-                throw "Unable to import $ModulePath"
-            }
-        }
-    }
-    process {
-        # If no path was specified take a few guesses
-        if ([string]::IsNullOrEmpty($Path)) {
-            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
-
-            if ([string]::IsNullOrEmpty($Path)) {
-                throw 'Unable to locate a *.buildenvironment.json file to parse!'
-            }
-        }
-        if (-not (Test-Path $Path)) {
-            throw "Unable to find the file: $Path"
-        }
-
-        try {
-            $LoadedBuildEnv = Get-Content $Path | ConvertFrom-Json
-            $ProjectPath = Split-Path (Split-Path $Path)
-            $PublicSrcPath = Join-Path $ProjectPath $LoadedBuildEnv.PublicFunctionSource
-        }
-        catch {
-            throw "Unable to load the build file in $Path"
-        }
-
-        Foreach ($LoadedFunction in $LoadedFunctions) {
-            if ($LoadedFunction.Name -like $Name) {
-                $NewScriptFile = Join-Path $PublicSrcPath "$($LoadedFunction.Name).ps1"
-                if (-not (Test-Path $NewScriptFile)) {
-                    $NewScript = "function $($LoadedFunction.Name) {"
-                    $NewScript += $LoadedFunction.Definition
-                    $NewScript += '}'
-
-                    if ($pscmdlet.ShouldProcess("$($LoadedFunction.Name)", "Import public function $($LoadedFunction.Name) to the project $($LoadedBuildEnv.ModuleToBuild)?")) {
-                        if ($DoNotAddCBH) {
-                            try {
-                                Write-Verbose "Writing public script file to $NewScriptFile"
-                                $NewScript | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
-                            }
-                            catch {
-                                throw "Unable to save file $NewScriptFile"
-                            }
-                        }
-                        else {
-                            try {
-                                $NewScript | Add-MissingCBH | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
-                            }
-                            catch {
-                                throw $_
-                            }
-                        }
-                    }
-                }
-                else {
-                    Write-Warning "Skipping the following file as it already exists: $NewScriptFile"
-                }
-            }
-        }
-    }
-    end {
-        Remove-Module -Name $LoadedModule.Name
-    }
-}
-
-
-function Initialize-ModuleBuild {
-    <#
-        .EXTERNALHELP ModuleBuild-help.xml
-        .LINK
-            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Initialize-ModuleBuild.md
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Initialize-MBModuleBuild.md
         #>
 
     [CmdletBinding()]
@@ -1688,16 +1672,16 @@ function Initialize-ModuleBuild {
             $PostInitMessage = @'
 A few items to consider doing next:
 
-1. Add public functions, one per file, to .\src\public
+1. Add public functions, one per file, to '.\src\public'
 2. Update your default readme.md file at the root project directory
-3. Update the about_ModuleName.help.txt file within .\build\docs\en-US
-4. Doing ReadTheDocs integration? Cool, update .\build\docs\ReadTheDocs by creating folders representing sections and putting markdown files within them for the pages within those sections.
-5. But remember that the markdown files in .\build\docs\Additional need some love too. These get dropped into your project .\docs directory at build time (overwriting anything there in the process!)
+3. Update the about_ModuleName.help.txt file within '.\build\docs\en-US'
+4. Doing ReadTheDocs integration? Cool, update '.\build\docs\ReadTheDocs' by creating folders representing sections and putting markdown files within them for the pages within those sections.
+5. But remember that the markdown files in '.\build\docs\Additional' need some love too. These get dropped into your project '.\docs' directory at build time (overwriting anything there in the process!)
 6. Update any bits within your *.psd1 that are appropriate to your module but don't mess with the exported function names as those get handled automatically when you do the build.
-7. If you enabled sensitive terminology scanning then review and update your terms defined in your buildenvironment.json file (using Get-MBTBuildEnvironment & Set-MBTBuildEnvironment).
-8. Change your project logo at src\other\powershell-project.png
-9. Build your project with .\Build.ps1
-10. Enter a PowerShell Gallery (aka Nuget) API key using Set-MBTBuildEnvironment -NugetAPIKey. Without this you will not be able to upload your module to the Gallery
+7. If you enabled sensitive terminology scanning then review and update your terms defined in your '.\build\YourModule.buildenvironment.json' file.
+8. Change your project logo at '.\src\other\powershell-project.png'
+9. Build your project with '.\Build.ps1'
+10. Enter a PowerShell Gallery (aka Nuget) API key to the '.\build\YourModule.buildenvironment.json' file. Without this you will not be able to upload your module to the PSGallery.
 
 Run Update-Module ModuleBuild every so often to get more recent releases of this project.
 
@@ -1781,13 +1765,13 @@ Enjoy!
 }
 
 
-function Import-ModulePrivateFunction {
+function Import-MBModulePublicFunction {
     <#
         .EXTERNALHELP ModuleBuild-help.xml
         .LINK
-            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Import-ModulePrivateFunction.md
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Import-MBModulePublicFunction.md
         #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSAvoidDefaultValueSwitchParameter", "",Scope="function",Target="Import-ModulePrivateFunction",Justification="Not adding CBH by default is actually useful.")]
+
     [CmdletBinding( SupportsShouldProcess = $True, ConfirmImpact = 'High' )]
     param(
         [parameter(Position = 0, ValueFromPipeline = $TRUE)]
@@ -1797,11 +1781,7 @@ function Import-ModulePrivateFunction {
         [parameter(Position = 2)]
         [String]$Name = '*',
         [parameter(Position = 3)]
-        [Switch]$DoNotAddCBH = $true,
-        [parameter(Position = 4)]
-        [string[]]$ExcludePaths = @('temp','build','.git','.vscode','docs','release','plaster'),
-        [parameter(Position = 5)]
-        [string[]]$ExcludeFiles = @('.*\.buildenvironment.ps1','.*\.build.ps1','Build\.ps1','Install\.ps1','PreLoad\.ps1','PostLoad\.ps1','.*\.tests\.ps1','.*\.test\.ps1')
+        [Switch]$DoNotAddCBH
     )
     begin {
         if ($script:ThisModuleLoaded -eq $true) {
@@ -1810,31 +1790,18 @@ function Import-ModulePrivateFunction {
         if ($ModulePath -notmatch '.*\.[psm1|psd1]') {
             throw 'Please provide the full path to a psm1 or psd1 file to process'
         }
-
-        $ExFiles = $ExcludeFiles | Convert-ArrayToRegex -DoNotEscape
-
-        try {
-            $LoadedModule = Import-Module -Name $ModulePath -Force -PassThru
-            $PublicFunctions =  $LoadedModule.ExportedCommands.Keys
-            $SourceModuleBasePath = Resolve-Path -Path (Split-path $ModulePath)
-            Remove-Module -Name $LoadedModule.Name -Force
-            Write-Verbose "Exported Functions for module = $PublicFunctions"
+        else {
+            try {
+                $LoadedModule = Import-Module -Name $ModulePath -Force -PassThru
+                $LoadedFunctions = Get-Command -Module $LoadedModule.Name -CommandType:Function
+            }
+            catch {
+                throw "Unable to import $ModulePath"
+            }
         }
-        catch {
-            throw "Unable to import $ModulePath"
-        }
-
-        Write-Verbose "Source Module Base Path = $SourceModuleBasePath"
-        $AllSourcefiles = @(Get-ChildItem -Path $SourceModuleBasePath -Directory -Exclude $ExcludePaths | Get-ChildItem -File -Recurse) | Where-Object {($_.Name -notmatch $ExFiles) -and (@('.ps1','.psm1') -contains $_.extension)}
-
-        $AllSourcefiles += @(Get-ChildItem -Path $SourceModuleBasePath -File | Where-Object {(@('.ps1','.psm1') -contains $_.extension) -and ($_.Name -notmatch $ExFiles)})
-
-        $PSBoundParameters.Confirm = $true
-
-        $PrivateFunctions = @()
     }
     process {
-        # If no build file path was specified take a few guesses
+        # If no path was specified take a few guesses
         if ([string]::IsNullOrEmpty($Path)) {
             $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
 
@@ -1849,49 +1816,175 @@ function Import-ModulePrivateFunction {
         try {
             $LoadedBuildEnv = Get-Content $Path | ConvertFrom-Json
             $ProjectPath = Split-Path (Split-Path $Path)
-            $PrivateSrcPath = Join-Path $ProjectPath $LoadedBuildEnv.PrivateFunctionSource
-            Write-Verbose "Destination Private Function Base Path = $PrivateSrcPath"
-
+            $PublicSrcPath = Join-Path $ProjectPath $LoadedBuildEnv.PublicFunctionSource
         }
         catch {
             throw "Unable to load the build file in $Path"
         }
 
-        # Gather all the nonembedded function definitions that are not defined as public functions
-        Foreach ($SourceFile in $AllSourceFiles) {
-            Write-Verbose "Processing $($SourceFile.FullName)"
-            try {
-                Get-Content -Path $SourceFile.FullName | Get-Function | ForEach-Object {
-                    if ((-not $_.IsEmbedded) -and ($PublicFunctions -notcontains $_.Name) -and ($_.Name -like $Name)) {
-                        Write-Verbose "Adding private function definition for $($_.Name)"
-                        $PrivateFunctions += $_ | Select-Object Name,Definition,@{n='SourcePath';e={$SourceFile.FullName}}
+        Foreach ($LoadedFunction in $LoadedFunctions) {
+            if ($LoadedFunction.Name -like $Name) {
+                $NewScriptFile = Join-Path $PublicSrcPath "$($LoadedFunction.Name).ps1"
+                if (-not (Test-Path $NewScriptFile)) {
+                    $NewScript = "function $($LoadedFunction.Name) {"
+                    $NewScript += $LoadedFunction.Definition
+                    $NewScript += '}'
+
+                    if ($pscmdlet.ShouldProcess("$($LoadedFunction.Name)", "Import public function $($LoadedFunction.Name) to the project $($LoadedBuildEnv.ModuleToBuild)?")) {
+                        if ($DoNotAddCBH) {
+                            try {
+                                Write-Verbose "Writing public script file to $NewScriptFile"
+                                $NewScript | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
+                            }
+                            catch {
+                                throw "Unable to save file $NewScriptFile"
+                            }
+                        }
+                        else {
+                            try {
+                                $NewScript | Add-MBMissingCBH | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
+                            }
+                            catch {
+                                throw $_
+                            }
+                        }
                     }
+                }
+                else {
+                    Write-Warning "Skipping the following file as it already exists: $NewScriptFile"
+                }
+            }
+        }
+    }
+    end {
+        Remove-Module -Name $LoadedModule.Name
+    }
+}
+
+
+function Get-MBBuildEnvironment {
+    <#
+        .EXTERNALHELP ModuleBuild-help.xml
+        .LINK
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Get-MBBuildEnvironment.md
+        #>
+    [CmdletBinding()]
+    param(
+        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
+        [String]$Path
+    )
+    begin {
+        if ($script:ThisModuleLoaded -eq $true) {
+            Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+        }
+    }
+    process {
+        # If no path was specified take a few guesses
+        if ([string]::IsNullOrEmpty($Path)) {
+            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
+
+            if ([string]::IsNullOrEmpty($Path)) {
+                throw 'Unable to locate a *.buildenvironment.json file to parse!'
+            }
+        }
+        if (-not (Test-Path $Path)) {
+            throw "Unable to find the file: $Path"
+        }
+
+        try {
+            $LoadedEnv = Get-Content $Path | ConvertFrom-Json
+            $LoadedEnv | Add-Member -Name 'Path' -Value ((Resolve-Path $Path).ToString()) -MemberType 'NoteProperty'
+            $LoadedEnv
+        }
+        catch {
+            throw "Unable to load the build file in $Path"
+        }
+    }
+}
+
+
+Function Set-MBBuildEnvironment {
+    <#
+        .EXTERNALHELP ModuleBuild-help.xml
+        .LINK
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Set-MBBuildEnvironment.md
+        #>
+
+    [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions", "",Scope="function",Justification="")]
+    param(
+        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
+        [String]$Path
+    )
+    DynamicParam {
+        # Create dictionary
+        $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+        if ([String]::isnullorempty($Path)) {
+            $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
+        }
+        else {
+            $BuildPath = $Path
+        }
+
+        if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
+            try {
+                $LoadedBuildEnv = Get-Content $BuildPath | ConvertFrom-Json
+                $NewParams = (Get-Member -Type 'NoteProperty' -InputObject $LoadedBuildEnv).Name
+                $NewParams | ForEach-Object {
+
+                    $NewParamSettings = @{
+                        Name = $_
+                        Type = $LoadedBuildEnv.$_.gettype().Name.toString()
+                        ValueFromPipeline = $TRUE
+                        HelpMessage = "Update the setting for $($_)"
+                    }
+
+                    # Add new dynamic parameter to dictionary
+                    New-MBDynamicParameter @NewParamSettings -Dictionary $DynamicParameters
                 }
             }
             catch {
-                Write-Warning "Unable to process $($SourceFile.FullName), there may be errors in this script."
+                throw "Unable to load the build file in $BuildPath"
             }
         }
 
-        # Process our candidate private functions
-        Foreach ($PrivFunc in $PrivateFunctions) {
-            $DestPath = Join-Path $PrivateSrcPath "$($PrivFunc.Name).ps1"
-            # Only attempt to copy over new function files, skip if the name already exists in the destination path
-            if (-not (Test-Path $DestPath)) {
-                if ($pscmdlet.ShouldProcess("$($PrivFunc.Name) from file $($PrivFunc.SourcePath)", "Import private function $($PrivFunc.Name) to the project $($LoadedBuildEnv.ModuleToBuild)?")) {
-                    if ($DoNotAddCBH) {
-                        # Skipping comment based help insertion
-                        $PrivFunc.definition | Out-File -FilePath $DestPath -Encoding:utf8 -Confirm:$false
-                    }
-                    else {
-                        # inserting comment based help if it doesn't already exist.
-                        $PrivFunc.definition | Add-MissingCBH | Out-File -FilePath $DestPath -Encoding:utf8 -Confirm:$false
-                    }
+        # Return dictionary with dynamic parameters
+        $DynamicParameters
+    }
+
+    begin {
+        if ($script:ThisModuleLoaded -eq $true) {
+            Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+        }
+        if ([String]::isnullorempty($Path)) {
+            $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
+        }
+        else {
+            $BuildPath = $Path
+        }
+
+        Write-Verbose "Using build file: $BuildPath"
+    }
+    process {
+        New-DynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+
+        if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
+            try {
+                $LoadedBuildEnv = Get-BuildEnvironment -Path $BuildPath
+                Foreach ($ParamKey in ($PSBoundParameters.Keys | Where-Object {$_ -ne 'Path'})) {
+                    $LoadedBuildEnv.$ParamKey = $PSBoundParameters[$ParamKey]
+                    Write-Output "Updating $ParamKey to be $($PSBoundParameters[$ParamKey])"
                 }
+                $LoadedBuildEnv.PSObject.Properties.remove('Path')
+                $LoadedBuildEnv | ConvertTo-Json | Out-File -FilePath $BuildPath -Encoding:utf8 -Force
+                Write-Output "Saved configuration file - $BuildPath"
             }
-            else {
-                Write-Warning "The following private function already exists: $DestPath"
+            catch {
+                throw "Unable to load the build file in $BuildPath"
             }
+        }
+        else {
+            Write-Error "Unable to find or process a buildenvironment.json file!"
         }
     }
 }

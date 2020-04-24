@@ -5,43 +5,32 @@ online version: https://github.com/zloeber/ModuleBuild
 schema: 2.0.0
 ---
 
-# Initialize-ModuleBuild
+# Add-MBPublicFunction
 
 ## SYNOPSIS
-Set up the framework for a ModuleBuild project.
+Adds a public function to your modulebuild based project based on defined templates.
 
 ## SYNTAX
 
 ```
-Initialize-ModuleBuild [[-Path] <String>] [[-SourceModule] <String>] [<CommonParameters>]
+Add-MBPublicFunction [[-Name] <String>] [-Force] [-TemplateName <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Set up the framework for a ModuleBuild project.
-Optionally supply an existing module manifest path to pull in information from it to begin a migration to ModuleBuild.
+Adds a public function to your modulebuild based project.
 
 ## EXAMPLES
 
 ### EXAMPLE 1
 ```
-Initialize-ModuleBuild -Path C:\Work\NewModule
+Add-MBPublicFunction -Name 'New-AwesomeFunction' -TemplateName:PlainPublicFunction
 ```
-
-Prompt for all the settings required to get a new modulebuild project setup in c:\work\NewModule.
-
-### EXAMPLE 2
-```
-Initialize-ModuleBuild -Path C:\Work\NewModule -SourceModule c:\work\myoldmodule\myoldmodule.psd1
-```
-
-Pulls some information from myoldmodule.psd1 and then prompt for any remaining required information to create a modulebuild based project from it in C:\Work\NewModule
-
-Prompt for all the settings required to get a new modulebuild project setup in c:\work\NewModule.
 
 ## PARAMETERS
 
-### -Path
-Specifies the path to create the project.
+### -Name
+Name of the function to add.
+Must use a valid PowerShell verb-action format and be singular.
 
 ```yaml
 Type: String
@@ -55,8 +44,23 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -SourceModule
-If specified, will import a source module manifest file for module information.
+### -Force
+Ignore function name best practices warnings.
+
+```yaml
+Type: SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: False
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -TemplateName
+Use this template file for the new function
 
 ```yaml
 Type: String
@@ -64,7 +68,7 @@ Parameter Sets: (All)
 Aliases:
 
 Required: False
-Position: 2
+Position: Named
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False

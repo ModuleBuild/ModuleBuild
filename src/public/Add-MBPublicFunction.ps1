@@ -1,4 +1,4 @@
-function Add-PublicFunction {
+function Add-MBPublicFunction {
     <#
     .SYNOPSIS
     Adds a public function to your modulebuild based project based on defined templates.
@@ -11,7 +11,7 @@ function Add-PublicFunction {
     .LINK
     https://github.com/zloeber/ModuleBuild
     .EXAMPLE
-    Add-PublicFunction -Name 'New-AwesomeFunction' -TemplateName:PlainPublicFunction
+    Add-MBPublicFunction -Name 'New-AwesomeFunction' -TemplateName:PlainPublicFunction
     #>
 
     [CmdletBinding()]
@@ -38,7 +38,7 @@ function Add-PublicFunction {
                 }
 
                 # Add new dynamic parameter to dictionary
-                New-MBTDynamicParameter @NewParamSettings -Dictionary $DynamicParameters
+                New-MBDynamicParameter @NewParamSettings -Dictionary $DynamicParameters
             }
             catch {
                 throw "Unable to load the build file in $BuildPath"
@@ -57,11 +57,11 @@ function Add-PublicFunction {
     }
     process {
         # Pull in the dynamic parameters first
-        New-MBTDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+        New-MBDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
 
         # Attempt to get the build environment data and create our template lookup table
         try {
-            $BuildEnvInfo = Get-MBTBuildEnvironment
+            $BuildEnvInfo = Get-MBBuildEnvironment
             $BuildEnvPath = Split-Path (Split-Path ((Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' -ErrorAction:SilentlyContinue | Select-Object -First 1).FullName))
             $PublicFunctionSrc = Join-Path $BuildEnvPath $BuildEnvInfo.PublicFunctionSource
             $TemplatePath = Join-Path $BuildEnvPath $BuildEnvInfo.FunctionTemplates
@@ -80,7 +80,7 @@ function Add-PublicFunction {
 
         $TemplateData = Get-Content -Path $TemplateLookup[$TemplateName]
         $FunctionFullPath = (Join-Path $PublicFunctionSrc $Name) + ".ps1"
-        if ((Test-PublicFunctionName $Name -ShowIssues) -or $Force) {
+        if ((Test-MBPublicFunctionName $Name -ShowIssues) -or $Force) {
             Write-Verbose "Adding function to be created: $FunctionFullPath"
             $FunctionsToCreate += $FunctionFullPath
         }

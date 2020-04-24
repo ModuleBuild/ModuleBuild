@@ -1,13 +1,13 @@
 # Step 1 - Initialization
-Simply download this project and run the Initialize-ModuleBuild exported function. You will be prompted for a destination folder and the rest of the project settings. The destination folder will be the home of your future project but is completely portable. This is simply a wrapper for a custom version of Plaster that calls a template file I created for the project. It is fairly simple to deconstruct and use plaster directly via invoke-plaster and pass all the parameters via command line if desired.
+Simply download this project and run the Initialize-MBModuleBuild exported function. You will be prompted for a destination folder and the rest of the project settings. The destination folder will be the home of your future project but is completely portable. This is simply a wrapper for a custom version of Plaster that calls a template file I created for the project. It is fairly simple to deconstruct and use plaster directly via invoke-plaster and pass all the parameters via command line if desired.
 
 `Import-Module ModuleBuild`
 
-`Initialize-ModuleBuild`
+`Initialize-MBModuleBuild`
 
 or
 
-`Initialize-ModuleBuild -Path 'c:\temp\mymodule'`
+`Initialize-MBModuleBuild -Path 'c:\temp\mymodule'`
 
 
 Once this has been kicked off and all answers have been entered, the initialization of your new project directory will start. Several template files are copied out to appropriate locations. Additionally, the default module manifest file gets created.
@@ -17,7 +17,7 @@ Once this has been kicked off and all answers have been entered, the initializat
 ## Quick Start
 With your new module folder all created there are several steps still left to take in order to make your new project more world class. There are several sections of the following documentation that go over fleshing out the module with public functions, building a release, testing things, out and starting another release. Here are some quick next step tips if you aren't feeling like reading all of that.
 
-1. Add public functions, one per file, to .\src\public (You can use the ModuleBuild function 'Add-PublicFunction' for this task)
+1. Add public functions, one per file, to .\src\public (You can use the ModuleBuild function 'Add-MBPublicFunction' for this task)
 2. Update your default readme.md file at the root project directory
 3. Update the about_ModuleName.help.txt file within .\build\docs\en-US
 4. Doing ReadTheDocs integration? Cool, update .\build\docs\ReadTheDocs by creating folders representing sections and putting markdown files within them for the pages within those sections.

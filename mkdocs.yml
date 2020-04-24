@@ -10,10 +10,10 @@ pages:
 - index: index.md
 - ToDo: ToDo.md
 - Functions:
-  - Add-PublicFunction: Functions/Add-PublicFunction.md
-  - Import-ModulePrivateFunction: Functions/Import-ModulePrivateFunction.md
-  - Import-ModulePublicFunction: Functions/Import-ModulePublicFunction.md
-  - Initialize-ModuleBuild: Functions/Initialize-ModuleBuild.md
+  - Add-MBPublicFunction: Functions/Add-MBPublicFunction.md
+  - Import-MBModulePrivateFunction: Functions/Import-MBModulePrivateFunction.md
+  - Import-MBModulePublicFunction: Functions/Import-MBModulePublicFunction.md
+  - Initialize-MBModuleBuild: Functions/Initialize-MBModuleBuild.md
 - Introduction: Introduction/Introduction.md
 - Usage:
   - 1 - Initialization: Usage/1 - Initialization.md

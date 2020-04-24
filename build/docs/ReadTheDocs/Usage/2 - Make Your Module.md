@@ -6,9 +6,9 @@ After the initialization has completed this directory should be all setup and 'b
 
 Any exportable/public functions for your module should be dropped into the .\src\public folder. Ideally each function will be self contained with a file name that matches the function name. Any other private functions can be dropped into .\src\private.
 
-You can easily add a new public function using templates of your own devising with the `Add-PublicFunction` command. To add a new public function with a rather bare template function run the following:
+You can easily add a new public function using templates of your own devising with the `Add-MBPublicFunction` command. To add a new public function with a rather bare template function run the following:
 
-`Add-PublicFunction -Name 'New-TestFunction' -TemplateName:PlainPublicFunction`
+`Add-MBPublicFunction -Name 'New-TestFunction' -TemplateName:PlainPublicFunction`
 
 The allowed template names are dynamically pulled directly from the module src\templates directory. Look in this folder for an example template and feel free to add more of your own to suit your project needs.
 

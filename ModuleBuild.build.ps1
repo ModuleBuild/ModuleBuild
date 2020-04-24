@@ -293,12 +293,35 @@ task RunIntergrationTests LoadRequiredModules, {
 task CreateMarkdownHelp GetPublicFunctions, {
     Write-Description White 'Creating markdown documentation with PlatyPS' -accent
 
+    $BuildToolPath = Join-Path $BuildRoot $Script:BuildEnv.BuildToolFolder
     $ScratchPath = Join-Path $BuildRoot $Script:BuildEnv.ScratchFolder
     $StageReleasePath = Join-Path $ScratchPath $Script:BuildEnv.BaseReleaseFolder
     Copy-Item -Path (Join-Path $ScratchPath "en-US") -Recurse -Destination $StageReleasePath -Force
     $OnlineModuleLocation = "$($Script:BuildEnv.ModuleWebsite)/$($Script:BuildEnv.BaseReleaseFolder)"
     $FwLink = "$($OnlineModuleLocation)/$($Script:BuildEnv.ModuleToBuild)/docs/$($Script:BuildEnv.ModuleToBuild).md"
     $ModulePage = "$($StageReleasePath)\docs\$($Script:BuildEnv.ModuleToBuild).md"
+
+    # If the current module we are building is also loaded as a dependency with PSDepend,
+    # Unload it temporally and reload it from the scratchpath to build markdown files from.
+    if (Get-Module $Script:BuildEnv.ModuleToBuild  | Where-Object {$_.Path -like "*PSDepend\$($Script:BuildEnv.ModuleToBuild)*"}) {
+        $TempDeload = $true
+        #Write-Verbose "$($(Get-Module $Script:BuildEnv.ModuleToBuild).Path)"
+        #Get-Command | Where-Object { $_.source -eq 'ModuleBuildToolsTemp'} | ForEach-Object {
+        #    Remove-Item -Path Function:\$($_.Name)
+        #}
+        #while ($(Get-Module $Script:BuildEnv.ModuleToBuild)) {
+        Get-Module $Script:BuildEnv.ModuleToBuild | Remove-Module
+        #}
+        $TempModule = Join-Path $ScratchPath "$($Script:BuildEnv.ModuleToBuild).psd1"
+        try {
+            [void](Import-Module $TempModule -Force)
+        }
+        catch {
+            throw "Unable to load the project module: $($TempModule)"
+        }
+        Write-Verbose $($(Get-Module $Script:BuildEnv.ModuleToBuild).Path)
+
+    }
 
     # Create the function .md files and the generic module page md as well for the distributable module
     $null = New-MarkdownHelp -module $Script:BuildEnv.ModuleToBuild -OutputFolder "$($StageReleasePath)\docs\" -Force -WithModulePage -Locale 'en-US' -FwLink $FwLink -HelpVersion $Script:BuildEnv.ModuleVersion -Encoding ([System.Text.Encoding]::($Script:BuildEnv.Encoding))
@@ -326,6 +349,13 @@ task CreateMarkdownHelp GetPublicFunctions, {
         pause
 
         throw 'Missing documentation. Please review and rebuild.'
+    }
+    # If modules where unloaded, reload them with PSDepend
+    if ($TempDeload) {
+        while ($(Get-Module $Script:BuildEnv.ModuleToBuild)) {
+            Get-Module $Script:BuildEnv.ModuleToBuild | Remove-Module
+        }
+        Invoke-PSDepend -Path $(Join-Path $BuildToolPath 'dependencies\PSDepend\build.depend.psd1') -Import -Force
     }
 }
 
@@ -360,11 +390,42 @@ task CreateUpdateableHelpCAB {
 # Synopsis: Build the markdown help for the functions using PlatyPS for the core project docs.
 task BuildProjectHelpFiles {
     Write-Description White 'Creating markdown documentation with PlatyPS for the core project' -accent
+    $BuildToolPath = Join-Path $BuildRoot $Script:BuildEnv.BuildToolFolder
+    $ScratchPath = Join-Path $BuildRoot $Script:BuildEnv.ScratchFolder
+
     $OnlineModuleLocation = "$($Script:BuildEnv.ModuleWebsite)/$($Script:BuildEnv.BaseReleaseFolder)"
     $FwLink = "$($OnlineModuleLocation)/docs/Functions/$($Script:BuildEnv.ModuleToBuild).md"
 
+    # If the current module we are building is also loaded as a dependency with PSDepend,
+    # Unload it temporally and reload it from the scratchpath to build markdown files from.
+    if (Get-Module $Script:BuildEnv.ModuleToBuild  | Where-Object {$_.Path -like "*PSDepend\$($Script:BuildEnv.ModuleToBuild)*"}) {
+        $TempDeload = $true
+        #Write-Verbose "$($(Get-Module $Script:BuildEnv.ModuleToBuild).Path)"
+        #Get-Command | Where-Object { $_.source -eq 'ModuleBuildToolsTemp'} | ForEach-Object {
+        #    Remove-Item -Path Function:\$($_.Name)
+        #}
+        #while ($(Get-Module $Script:BuildEnv.ModuleToBuild)) {
+        Get-Module $Script:BuildEnv.ModuleToBuild | Remove-Module
+        #}
+        $TempModule = Join-Path $ScratchPath "$($Script:BuildEnv.ModuleToBuild).psd1"
+        try {
+            [void](Import-Module $TempModule -Force)
+        }
+        catch {
+            throw "Unable to load the project module: $($TempModule)"
+        }
+    }
+
     # Create the function .md files for the core project documentation
     $null = New-MarkdownHelp -module $Script:BuildEnv.ModuleToBuild -OutputFolder "$($BuildRoot)\docs\Functions\" -Force -Locale 'en-US' -FwLink $FwLink -HelpVersion $Script:BuildEnv.ModuleVersion -Encoding ([System.Text.Encoding]::($Script:BuildEnv.Encoding)) #-OnlineVersionUrl "$($Script:BuildEnv.ModuleWebsite)/docs/Functions"
+
+    # If modules where unloaded, reload them with PSDepend
+    if ($TempDeload) {
+        while ($(Get-Module $Script:BuildEnv.ModuleToBuild)) {
+            Get-Module $Script:BuildEnv.ModuleToBuild | Remove-Module
+        }
+        Invoke-PSDepend -Path $(Join-Path $BuildToolPath 'dependencies\PSDepend\build.depend.psd1') -Import -Force
+    }
 }
 
 # Synopsis: Add additional doc files to the final project document folder

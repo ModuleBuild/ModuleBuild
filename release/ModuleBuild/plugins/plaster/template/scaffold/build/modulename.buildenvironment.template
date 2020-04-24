@@ -61,7 +61,7 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         FunctionTemplates = "src\templates"    # Location of function template files (*.tem)
 
         # If you will be publishing to the PowerShell Gallery you will need a Nuget API key (can get from the website)
-        # You should NOT enter this key here but rather manually enter it in the <%=$PLASTER_PARAM_ModuleName%>.buildenvironment.json file with: Set-MBTBuildEnvironment -NugetAPIKey '<key>'
+        # You should NOT enter this key here but rather manually enter it in the <%=$PLASTER_PARAM_ModuleName%>.buildenvironment.json file with: Set-MBBuildEnvironment -NugetAPIKey '<key>'
 
         NugetAPIKey  = ''
     }
