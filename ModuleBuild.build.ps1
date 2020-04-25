@@ -306,7 +306,7 @@ task CreateMarkdownHelp GetPublicFunctions, {
     if (Get-Module $Script:BuildEnv.ModuleToBuild  | Where-Object {$_.Path -like "*PSDepend\$($Script:BuildEnv.ModuleToBuild)*"}) {
         $TempDeload = $true
         #Write-Verbose "$($(Get-Module $Script:BuildEnv.ModuleToBuild).Path)"
-        #Get-Command | Where-Object { $_.source -eq 'ModuleBuildToolsTemp'} | ForEach-Object {
+        #Get-Command | Where-Object { $_.source -eq 'ModuleBuildTools'} | ForEach-Object {
         #    Remove-Item -Path Function:\$($_.Name)
         #}
         #while ($(Get-Module $Script:BuildEnv.ModuleToBuild)) {

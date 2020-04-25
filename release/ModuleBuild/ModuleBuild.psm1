@@ -9,6 +9,79 @@ $ModuleBuildLoggingEnabled = $false     # Set to true to enable nlog-based loggi
 
 ## PRIVATE MODULE FUNCTIONS AND DATA ##
 
+Function Add-MBMissingCBH {
+    <#
+    .SYNOPSIS
+        Create comment based help for a function.
+    .DESCRIPTION
+        Create comment based help for a function.
+    .PARAMETER Code
+        Multi-line or piped lines of code to process.
+    .EXAMPLE
+       PS > $test = Get-Content 'C:\temp\test.ps1' -raw
+       PS > $test | Add-MBMissingCBH | clip
+
+       Takes C:\temp\test.ps1 as input, creates basic comment based help and puts the result in the clipboard
+       to be pasted elsewhere for review.
+    .NOTES
+       Author: Zachary Loeber
+       Site: http://www.the-little-things.net/
+       Requires: Powershell 3.0
+
+       Version History
+       1.0.0 - Initial release
+       1.0.1 - Updated for ModuleBuild
+    #>
+    [CmdletBinding()]
+    param(
+        [parameter(Position=0, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
+        [string[]]$Code
+    )
+
+    begin {
+        # CBH pattern that tells us CBH likely already exists
+        $CBHPattern = "(?ms)(^\s*\<#.*[\.SYNOPSIS|\.DESCRIPTION|\.PARAMETER|\.EXAMPLE|\.NOTES|\.LINK].*?#>)"
+        $Codeblock = @()
+    }
+    process {
+        $Codeblock += $Code
+    }
+    end {
+        $ScriptText = ($Codeblock | Out-String).trim("`r`n")
+        # If no sign of CBH exists then try to generate and insert it
+        if ($ScriptText -notmatch $CBHPattern) {
+            $CBH = @($ScriptText | New-MBCommentBasedHelp)
+
+            if ($CBH.Count -gt 1) {
+                throw 'Too many functions are defined in the input string!'
+            }
+
+            if ($CBH.Count -ne 0) {
+                try {
+                    $currscriptblock = [scriptblock]::Create($ScriptText)
+                    . $currscriptblock
+                    $currfunct = get-command $CBH.FunctionName
+                }
+                catch {
+                    throw $_
+                }
+
+                $UpdatedFunct = 'Function ' + $currfunct.Name + ' {' + "`r`n" + $CBH.CBH + "`r`n" + $currfunct.definition + "`r`n" + '}'
+
+                $UpdatedFunct
+            }
+            else {
+                Write-Warning 'Unable to generate CBH for the script text!'
+                $ScriptText
+            }
+        }
+        else {
+            Write-Verbose "Comment based help already exists - skipping CBH insertion and returning original script."
+            $ScriptText
+        }
+    }
+}
+
 function Convert-MBArrayToRegex {
     # Takes an array of strings and turns it into a regex matchable string
     [CmdletBinding()]
@@ -39,188 +112,145 @@ function Convert-MBArrayToRegex {
     }
 }
 
-function Test-MBPublicFunctionName {
+function Get-CallerPreference {
     <#
-    .SYNOPSIS
-    Tests validity of a function name and path.
+    .Synopsis
+       Fetches "Preference" variable values from the caller's scope.
     .DESCRIPTION
-    Tests validity of a function name and path.
+       Script module functions do not automatically inherit their caller's variables, but they can be
+       obtained through the $PSCmdlet variable in Advanced Functions.  This function is a helper function
+       for any script module Advanced Function; by passing in the values of $ExecutionContext.SessionState
+       and $PSCmdlet, Get-CallerPreference will set the caller's preference variables locally.
+    .PARAMETER Cmdlet
+       The $PSCmdlet object from a script module Advanced Function.
+    .PARAMETER SessionState
+       The $ExecutionContext.SessionState object from a script module Advanced Function.  This is how the
+       Get-CallerPreference function sets variables in its callers' scope, even if that caller is in a different
+       script module.
     .PARAMETER Name
-    Name of the function to add. Must use a valid PowerShell verb-action format and be singular.
-    .PARAMETER ShowIssues
-    Displays possible issues with function
+       Optional array of parameter names to retrieve from the caller's scope.  Default is to retrieve all
+       Preference variables as defined in the about_Preference_Variables help file (as of PowerShell 4.0)
+       This parameter may also specify names of variables that are not in the about_Preference_Variables
+       help file, and the function will retrieve and set those as well.
+    .EXAMPLE
+       Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+
+       Imports the default PowerShell preference variables from the caller into the local scope.
+    .EXAMPLE
+       Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState -Name 'ErrorActionPreference','SomeOtherVariable'
+
+       Imports only the ErrorActionPreference and SomeOtherVariable variables into the local scope.
+    .EXAMPLE
+       'ErrorActionPreference','SomeOtherVariable' | Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+
+       Same as Example 2, but sends variable names to the Name parameter via pipeline input.
+    .INPUTS
+       String
+    .OUTPUTS
+       None.  This function does not produce pipeline output.
     .LINK
-    https://github.com/zloeber/ModuleBuild
-    .EXAMPLE
-    TBD
+       about_Preference_Variables
     #>
 
-    [CmdletBinding()]
-    param(
-        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
-        [String]$Name,
-        [parameter(Position = 1)]
-        [switch]$ShowIssues
+    [CmdletBinding(DefaultParameterSetName = 'AllVariables')]
+    param (
+        [Parameter(Mandatory = $true)]
+        [ValidateScript({ $_.GetType().FullName -eq 'System.Management.Automation.PSScriptCmdlet' })]
+        $Cmdlet,
+
+        [Parameter(Mandatory = $true)]
+        [System.Management.Automation.SessionState]$SessionState,
+
+        [Parameter(ParameterSetName = 'Filtered', ValueFromPipeline = $true)]
+        [string[]]$Name
     )
 
-    $FunctionOk = $TRUE
-
-    try {
-        $FunctionPath = Split-Path $Name
-        $FunctionFileName = Split-Path $Name -Leaf
-        $FunctionName = ($FunctionFileName -split '\.')[0]
-        Write-Verbose "Function Path: $FunctionPath"
-        Write-Verbose "Function FileName: $FunctionFileName"
-        Write-Verbose "Function Name: $FunctionName"
-    }
-    catch {
-        if ($ShowIssues) {
-            Write-Warning "Function path does not appear to include a path or filename: $Name"
-        }
-        $FunctionOk = $FALSE
-    }
-
-    if ($FunctionName -match '[^a-zA-Z\-]') {
-        if ($ShowIssues) {
-            Write-Warning "Function name has special characters: $Name"
-        }
-        $FunctionOk = $FALSE
-    }
-
-    if (-not $FunctionName.contains('-')) {
-        if ($ShowIssues) {
-            Write-Warning "Function name must be in a verb-noun format: $Name"
-        }
-        $FunctionOk = $FALSE
-    }
-    else {
-        $Verb,$Noun = $FunctionName -split '-'
-        $ValidVerbs = (Get-Verb).verb
-        if ($ValidVerbs -notcontains $Verb) {
-            if ($ShowIssues) {
-                Write-Warning "Function verb is not valid, use 'get-verb' for a list of valid verbs: $Name"
-            }
-            $FunctionOk = $FALSE
-        }
-
-        if (TestMBPlural $Noun) {
-            if ($ShowIssues) {
-                Write-Warning "Function noun is plural and should be singular: $Name"
-            }
-            $FunctionOk = $FALSE
-        }
-    }
-
-    return $FunctionOk
-}
-
-function New-MBCommentBasedHelp {
-    <#
-    .SYNOPSIS
-        Create comment based help for functions within a given scriptblock.
-    .DESCRIPTION
-        Create comment based help for functions within a given scriptblock.
-    .PARAMETER Code
-        Multi-line or piped lines of code to process.
-    .PARAMETER ScriptParameters
-        Process the script parameters as the source of the comment based help.
-    .EXAMPLE
-       PS > $testfile = 'C:\temp\test.ps1'
-       PS > $test = Get-Content $testfile -raw
-       PS > $test | New-MBCommentBasedHelp | clip
-
-       Takes C:\temp\test.ps1 as input, creates basic comment based help and puts the result in the clipboard
-       to be pasted elsewhere for review.
-    .EXAMPLE
-        PS > $CBH = Get-Content 'C:\EWSModule\Get-EWSContact.ps1' -Raw | New-MBTommentBasedHelp -Verbose
-        PS > ($CBH | Where {$FunctionName -eq 'Get-EWSContact'}).CBH
-
-        Consumes Get-EWSContact.ps1 and generates advanced CBH templates for all functions found within. Print out to the screen the advanced
-        CBH for just the Get-EWSContact function.
-    .NOTES
-       Author: Zachary Loeber
-       Site: http://www.the-little-things.net/
-       Requires: Powershell 3.0
-
-       Version History
-       1.0.0 - Initial release
-       1.0.1 - Updated for ModuleBuild
-       1.0.2 - Added SuppressMessageAttribute
-       1.0.3 - Extra Verbose message to check if function had Params
-    #>
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "ScriptText",Scope="Function",Target="New-MBCommentBasedHelp",Justification="Seems it's here since duo a copy paste from other functions (Add-MBMissingCBH,Get-MBFunction,Get-MBTFunctionParameter). Leaving it here since it doesn't do any harm.")]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions","",Scope="Function",Target="New-MBCommentBasedHelp",Justification="Function does not change system state. Simply outputs a obj with CommentBasedHelp.")]
-    [CmdletBinding()]
-    param(
-        [parameter(Position=0, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
-        [string[]]$Code,
-        [parameter(Position=1, HelpMessage='Process the script parameters as the source of the comment based help.')]
-        [switch]$ScriptParameters
-    )
     begin {
-        $FunctionName = $MyInvocation.MyCommand.Name
-        Write-Verbose "$($FunctionName): Begin."
-
-        $CBH_PARAM = @'
-    .PARAMETER %%PARAM%%
-    %%PARAMHELP%%
-'@
-
-        $Codeblock = @()
-
-        $CBHTemplate = @'
-    <#
-    .SYNOPSIS
-    TBD
-
-    .DESCRIPTION
-    TBD
-
-%%PARAMETER%%    .EXAMPLE
-    TBD
-    #>
-'@
+        $filterHash = @{}
     }
+    
     process {
-        $Codeblock += $Code
-    }
-    end {
-        $ScriptText = ($Codeblock | Out-String).trim("`r`n")
-        Write-Verbose "$($FunctionName): Attempting to parse parameters."
-        $FuncParams = @{}
-        if ($ScriptParameters) {
-            $FuncParams.ScriptParameters = $true
+        if ($null -ne $Name)
+        {
+            foreach ($string in $Name)
+            {
+                $filterHash[$string] = $true
+            }
         }
-        $AllParams = Get-MBTFunctionParameter @FuncParams -Code $Codeblock | Sort-Object -Property FunctionName
-        $AllFunctions = @($AllParams.FunctionName | Select-Object -unique)
-        If([string]::IsNullOrEmpty($AllFunctions))
-        {
-            Write-Verbose "$($FunctionName): Found no Params in function."
-        } else
-        {
-            foreach ($f in $AllFunctions) {
-                $OutCBH = @{}
-                $OutCBH.FunctionName = $f
-                [string]$OutParams = ''
-                $fparams = @($AllParams | Where-Object {$_.FunctionName -eq $f} | Sort-Object -Property Position)
-                if ($fparams.count -gt 0) {
-                    $fparams | ForEach-Object {
-                        $ParamHelpMessage = if ([string]::IsNullOrEmpty($_.HelpMessage)) { $_.ParameterName + " explanation`n`r`n`r"} else {$_.HelpMessage + "`n`r`n`r"}
+    }
 
-                        $OutParams += $CBH_PARAM -replace '%%PARAM%%',$_.ParameterName -replace '%%PARAMHELP%%',$ParamHelpMessage
+    end {
+        # List of preference variables taken from the about_Preference_Variables help file in PowerShell version 4.0
+
+        $vars = @{
+            'ErrorView' = $null
+            'FormatEnumerationLimit' = $null
+            'LogCommandHealthEvent' = $null
+            'LogCommandLifecycleEvent' = $null
+            'LogEngineHealthEvent' = $null
+            'LogEngineLifecycleEvent' = $null
+            'LogProviderHealthEvent' = $null
+            'LogProviderLifecycleEvent' = $null
+            'MaximumAliasCount' = $null
+            'MaximumDriveCount' = $null
+            'MaximumErrorCount' = $null
+            'MaximumFunctionCount' = $null
+            'MaximumHistoryCount' = $null
+            'MaximumVariableCount' = $null
+            'OFS' = $null
+            'OutputEncoding' = $null
+            'ProgressPreference' = $null
+            'PSDefaultParameterValues' = $null
+            'PSEmailServer' = $null
+            'PSModuleAutoLoadingPreference' = $null
+            'PSSessionApplicationName' = $null
+            'PSSessionConfigurationName' = $null
+            'PSSessionOption' = $null
+
+            'ErrorActionPreference' = 'ErrorAction'
+            'DebugPreference' = 'Debug'
+            'ConfirmPreference' = 'Confirm'
+            'WhatIfPreference' = 'WhatIf'
+            'VerbosePreference' = 'Verbose'
+            'WarningPreference' = 'WarningAction'
+        }
+
+        foreach ($entry in $vars.GetEnumerator()) {
+            if (([string]::IsNullOrEmpty($entry.Value) -or -not $Cmdlet.MyInvocation.BoundParameters.ContainsKey($entry.Value)) -and
+                ($PSCmdlet.ParameterSetName -eq 'AllVariables' -or $filterHash.ContainsKey($entry.Name))) {
+                
+                $variable = $Cmdlet.SessionState.PSVariable.Get($entry.Key)
+                
+                if ($null -ne $variable) {
+                    if ($SessionState -eq $ExecutionContext.SessionState) {
+                        Set-Variable -Scope 1 -Name $variable.Name -Value $variable.Value -Force -Confirm:$false -WhatIf:$false
+                    }
+                    else {
+                        $SessionState.PSVariable.Set($variable.Name, $variable.Value)
                     }
                 }
-                else {
-
-                }
-
-                $OutCBH.'CBH' = $CBHTemplate -replace '%%PARAMETER%%',$OutParams
-
-                New-Object PSObject -Property $OutCBH
             }
         }
 
-        Write-Verbose "$($FunctionName): End."
+        if ($PSCmdlet.ParameterSetName -eq 'Filtered') {
+            foreach ($varName in $filterHash.Keys) {
+                if (-not $vars.ContainsKey($varName)) {
+                    $variable = $Cmdlet.SessionState.PSVariable.Get($varName)
+                
+                    if ($null -ne $variable)
+                    {
+                        if ($SessionState -eq $ExecutionContext.SessionState)
+                        {
+                            Set-Variable -Scope 1 -Name $variable.Name -Value $variable.Value -Force -Confirm:$false -WhatIf:$false
+                        }
+                        else
+                        {
+                            $SessionState.PSVariable.Set($variable.Name, $variable.Value)
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
@@ -234,6 +264,83 @@ function Get-MBCommonParameter {
     }
 
     ((Get-Command somefunct).Parameters).Keys
+}
+
+function Get-MBFunction {
+    <#
+    .SYNOPSIS
+        Enumerates all functions within lines of code.
+    .DESCRIPTION
+        Enumerates all functions within lines of code.
+    .PARAMETER Code
+        Multiline or piped lines of code to process.
+    .PARAMETER Name
+        Name of a function to return. Default is all functions.
+    .EXAMPLE
+        TBD
+    .NOTES
+       Author: Zachary Loeber
+       Site: http://www.the-little-things.net/
+       Requires: Powershell 3.0
+
+       Version History
+       1.0.0 - Initial release
+    .LINK
+        http://www.the-little-things.net
+    #>
+    [CmdletBinding()]
+    param(
+        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
+        [AllowEmptyString()]
+        [string[]]$Code,
+        [parameter(Position=1, HelpMessage='Name of function to process.')]
+        [string]$Name = '*'
+    )
+    begin {
+        $ThisFunc = $MyInvocation.MyCommand.Name
+        Write-Verbose "$($ThisFunc): Begin."
+
+        $Codeblock = @()
+        $ParseError = $null
+        $Tokens = $null
+
+        $predicate = {
+            ($args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst]) -and
+            ($args[0].Name -like $name)
+        }
+    }
+    process {
+        $Codeblock += $Code
+    }
+    end {
+        $ScriptText = ($Codeblock | Out-String).trim("`r`n")
+        Write-Verbose "$($ThisFunc): Attempting to parse AST."
+        $AST = [System.Management.Automation.Language.Parser]::ParseInput($ScriptText, [ref]$Tokens, [ref]$ParseError)
+
+        if($ParseError) {
+            throw "$($ThisFunc): Will not work properly with errors in the script, please modify based on the above errors and retry."
+        }
+
+        # First get all blocks
+        $Blocks = $AST.FindAll($predicate, $true)
+
+        Foreach ($Block in $Blocks) {
+            $FunctionProps = @{
+                Name = $Block.Name
+                Definition = $Block.Extent.Text
+                IsEmbedded = $false
+                AST = $Block
+            }
+
+            if (@(Get-MBParentASTType $Block) -contains 'FunctionDefinitionAst') {
+                $FunctionProps.IsEmbedded = $true
+            }
+
+            New-Object -TypeName psobject -Property $FunctionProps
+        }
+
+        Write-Verbose "$($ThisFunc): End."
+    }
 }
 
 function Get-MBTFunctionParameter {
@@ -427,6 +534,116 @@ function Get-MBParentASTType {
 
     $ASTParents
     Write-Verbose "$($FunctionName): End."
+}
+
+function New-MBCommentBasedHelp {
+    <#
+    .SYNOPSIS
+        Create comment based help for functions within a given scriptblock.
+    .DESCRIPTION
+        Create comment based help for functions within a given scriptblock.
+    .PARAMETER Code
+        Multi-line or piped lines of code to process.
+    .PARAMETER ScriptParameters
+        Process the script parameters as the source of the comment based help.
+    .EXAMPLE
+       PS > $testfile = 'C:\temp\test.ps1'
+       PS > $test = Get-Content $testfile -raw
+       PS > $test | New-MBCommentBasedHelp | clip
+
+       Takes C:\temp\test.ps1 as input, creates basic comment based help and puts the result in the clipboard
+       to be pasted elsewhere for review.
+    .EXAMPLE
+        PS > $CBH = Get-Content 'C:\EWSModule\Get-EWSContact.ps1' -Raw | New-MBTommentBasedHelp -Verbose
+        PS > ($CBH | Where {$FunctionName -eq 'Get-EWSContact'}).CBH
+
+        Consumes Get-EWSContact.ps1 and generates advanced CBH templates for all functions found within. Print out to the screen the advanced
+        CBH for just the Get-EWSContact function.
+    .NOTES
+       Author: Zachary Loeber
+       Site: http://www.the-little-things.net/
+       Requires: Powershell 3.0
+
+       Version History
+       1.0.0 - Initial release
+       1.0.1 - Updated for ModuleBuild
+       1.0.2 - Added SuppressMessageAttribute
+       1.0.3 - Extra Verbose message to check if function had Params
+    #>
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseDeclaredVarsMoreThanAssignments", "ScriptText",Scope="Function",Target="New-MBCommentBasedHelp",Justification="Seems it's here since duo a copy paste from other functions (Add-MBMissingCBH,Get-MBFunction,Get-MBTFunctionParameter). Leaving it here since it doesn't do any harm.")]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute("PSUseShouldProcessForStateChangingFunctions","",Scope="Function",Target="New-MBCommentBasedHelp",Justification="Function does not change system state. Simply outputs a obj with CommentBasedHelp.")]
+    [CmdletBinding()]
+    param(
+        [parameter(Position=0, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
+        [string[]]$Code,
+        [parameter(Position=1, HelpMessage='Process the script parameters as the source of the comment based help.')]
+        [switch]$ScriptParameters
+    )
+    begin {
+        $FunctionName = $MyInvocation.MyCommand.Name
+        Write-Verbose "$($FunctionName): Begin."
+
+        $CBH_PARAM = @'
+    .PARAMETER %%PARAM%%
+    %%PARAMHELP%%
+'@
+
+        $Codeblock = @()
+
+        $CBHTemplate = @'
+    <#
+    .SYNOPSIS
+    TBD
+
+    .DESCRIPTION
+    TBD
+
+%%PARAMETER%%    .EXAMPLE
+    TBD
+    #>
+'@
+    }
+    process {
+        $Codeblock += $Code
+    }
+    end {
+        $ScriptText = ($Codeblock | Out-String).trim("`r`n")
+        Write-Verbose "$($FunctionName): Attempting to parse parameters."
+        $FuncParams = @{}
+        if ($ScriptParameters) {
+            $FuncParams.ScriptParameters = $true
+        }
+        $AllParams = Get-MBTFunctionParameter @FuncParams -Code $Codeblock | Sort-Object -Property FunctionName
+        $AllFunctions = @($AllParams.FunctionName | Select-Object -unique)
+        If([string]::IsNullOrEmpty($AllFunctions))
+        {
+            Write-Verbose "$($FunctionName): Found no Params in function."
+        } else
+        {
+            foreach ($f in $AllFunctions) {
+                $OutCBH = @{}
+                $OutCBH.FunctionName = $f
+                [string]$OutParams = ''
+                $fparams = @($AllParams | Where-Object {$_.FunctionName -eq $f} | Sort-Object -Property Position)
+                if ($fparams.count -gt 0) {
+                    $fparams | ForEach-Object {
+                        $ParamHelpMessage = if ([string]::IsNullOrEmpty($_.HelpMessage)) { $_.ParameterName + " explanation`n`r`n`r"} else {$_.HelpMessage + "`n`r`n`r"}
+
+                        $OutParams += $CBH_PARAM -replace '%%PARAM%%',$_.ParameterName -replace '%%PARAMHELP%%',$ParamHelpMessage
+                    }
+                }
+                else {
+
+                }
+
+                $OutCBH.'CBH' = $CBHTemplate -replace '%%PARAMETER%%',$OutParams
+
+                New-Object PSObject -Property $OutCBH
+            }
+        }
+
+        Write-Verbose "$($FunctionName): End."
+    }
 }
 
 function New-MBDynamicParameter {
@@ -1115,6 +1332,81 @@ function New-MBDynamicParameter {
     }
 }
 
+function Test-MBPublicFunctionName {
+    <#
+    .SYNOPSIS
+    Tests validity of a function name and path.
+    .DESCRIPTION
+    Tests validity of a function name and path.
+    .PARAMETER Name
+    Name of the function to add. Must use a valid PowerShell verb-action format and be singular.
+    .PARAMETER ShowIssues
+    Displays possible issues with function
+    .LINK
+    https://github.com/zloeber/ModuleBuild
+    .EXAMPLE
+    TBD
+    #>
+
+    [CmdletBinding()]
+    param(
+        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
+        [String]$Name,
+        [parameter(Position = 1)]
+        [switch]$ShowIssues
+    )
+
+    $FunctionOk = $TRUE
+
+    try {
+        $FunctionPath = Split-Path $Name
+        $FunctionFileName = Split-Path $Name -Leaf
+        $FunctionName = ($FunctionFileName -split '\.')[0]
+        Write-Verbose "Function Path: $FunctionPath"
+        Write-Verbose "Function FileName: $FunctionFileName"
+        Write-Verbose "Function Name: $FunctionName"
+    }
+    catch {
+        if ($ShowIssues) {
+            Write-Warning "Function path does not appear to include a path or filename: $Name"
+        }
+        $FunctionOk = $FALSE
+    }
+
+    if ($FunctionName -match '[^a-zA-Z\-]') {
+        if ($ShowIssues) {
+            Write-Warning "Function name has special characters: $Name"
+        }
+        $FunctionOk = $FALSE
+    }
+
+    if (-not $FunctionName.contains('-')) {
+        if ($ShowIssues) {
+            Write-Warning "Function name must be in a verb-noun format: $Name"
+        }
+        $FunctionOk = $FALSE
+    }
+    else {
+        $Verb,$Noun = $FunctionName -split '-'
+        $ValidVerbs = (Get-Verb).verb
+        if ($ValidVerbs -notcontains $Verb) {
+            if ($ShowIssues) {
+                Write-Warning "Function verb is not valid, use 'get-verb' for a list of valid verbs: $Name"
+            }
+            $FunctionOk = $FALSE
+        }
+
+        if (TestMBPlural $Noun) {
+            if ($ShowIssues) {
+                Write-Warning "Function noun is plural and should be singular: $Name"
+            }
+            $FunctionOk = $FALSE
+        }
+    }
+
+    return $FunctionOk
+}
+
 function TestMBPlural {
     [cmdletbinding()]
     Param (
@@ -1126,299 +1418,154 @@ function TestMBPlural {
     $pluralservice.TestMBPlural($Noun)
 }
 
-Function Add-MBMissingCBH {
+## PUBLIC MODULE FUNCTIONS AND DATA ##
+
+function Add-MBPublicFunction {
     <#
-    .SYNOPSIS
-        Create comment based help for a function.
-    .DESCRIPTION
-        Create comment based help for a function.
-    .PARAMETER Code
-        Multi-line or piped lines of code to process.
-    .EXAMPLE
-       PS > $test = Get-Content 'C:\temp\test.ps1' -raw
-       PS > $test | Add-MBMissingCBH | clip
+        .EXTERNALHELP ModuleBuild-help.xml
+        .LINK
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Add-MBPublicFunction.md
+        #>
 
-       Takes C:\temp\test.ps1 as input, creates basic comment based help and puts the result in the clipboard
-       to be pasted elsewhere for review.
-    .NOTES
-       Author: Zachary Loeber
-       Site: http://www.the-little-things.net/
-       Requires: Powershell 3.0
-
-       Version History
-       1.0.0 - Initial release
-       1.0.1 - Updated for ModuleBuild
-    #>
     [CmdletBinding()]
     param(
-        [parameter(Position=0, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
-        [string[]]$Code
+        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
+        [string]$Name,
+        [switch]$Force
     )
+    dynamicparam {
+        # Create dictionary
+        $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
+        $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
 
+        if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
+            try {
+                $LoadedBuildEnv = Get-Content $BuildPath | ConvertFrom-Json
+                $TemplateNames = @((Get-ChildItem -Path $LoadedBuildEnv.FunctionTemplates -Filter '*.tem').BaseName)
+
+                $NewParamSettings = @{
+                    Name = 'TemplateName'
+                    Type = 'string'
+                    ValidateSet = $TemplateNames
+                    HelpMessage = "Use this template file for the new function"
+                }
+
+                # Add new dynamic parameter to dictionary
+                New-MBDynamicParameter @NewParamSettings -Dictionary $DynamicParameters
+            }
+            catch {
+                throw "Unable to load the build file in $BuildPath"
+            }
+        }
+
+        # Return dictionary with dynamic parameters
+        $DynamicParameters
+    }
     begin {
-        # CBH pattern that tells us CBH likely already exists
-        $CBHPattern = "(?ms)(^\s*\<#.*[\.SYNOPSIS|\.DESCRIPTION|\.PARAMETER|\.EXAMPLE|\.NOTES|\.LINK].*?#>)"
-        $Codeblock = @()
+        if ($script:ThisModuleLoaded -eq $true) {
+            Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+        }
+        $FunctionName = $MyInvocation.MyCommand.Name
+        Write-Verbose "$($FunctionName): Begin."
     }
     process {
-        $Codeblock += $Code
+        # Pull in the dynamic parameters first
+        New-MBDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+
+        # Attempt to get the build environment data and create our template lookup table
+        try {
+            $BuildEnvInfo = Get-MBBuildEnvironment
+            $BuildEnvPath = Split-Path (Split-Path ((Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' -ErrorAction:SilentlyContinue | Select-Object -First 1).FullName))
+            $PublicFunctionSrc = Join-Path $BuildEnvPath $BuildEnvInfo.PublicFunctionSource
+            $TemplatePath = Join-Path $BuildEnvPath $BuildEnvInfo.FunctionTemplates
+            $TemplateLookup = @{}
+            Get-ChildItem -Path $TemplatePath -Filter '*.tem' | ForEach-Object {
+                $TemplateLookup.($_.BaseName) = $_.FullName
+            }
+            $BuildEnvVars = (Get-Member -Type 'NoteProperty' -InputObject $LoadedBuildEnv).Name
+        }
+        catch {
+            throw "Unable to find or load a buildenvironment json file!"
+        }
+
+        Write-Verbose "Using public function directory: $PublicFunctionSrc"
+        Write-Verbose "Using function template path: $TemplatePath"
+
+        $TemplateData = Get-Content -Path $TemplateLookup[$TemplateName]
+        $FunctionFullPath = (Join-Path $PublicFunctionSrc $Name) + ".ps1"
+        if ((Test-MBPublicFunctionName $Name -ShowIssues) -or $Force) {
+            Write-Verbose "Adding function to be created: $FunctionFullPath"
+            $FunctionsToCreate += $FunctionFullPath
+        }
     }
     end {
-        $ScriptText = ($Codeblock | Out-String).trim("`r`n")
-        # If no sign of CBH exists then try to generate and insert it
-        if ($ScriptText -notmatch $CBHPattern) {
-            $CBH = @($ScriptText | New-MBCommentBasedHelp)
-
-            if ($CBH.Count -gt 1) {
-                throw 'Too many functions are defined in the input string!'
-            }
-
-            if ($CBH.Count -ne 0) {
-                try {
-                    $currscriptblock = [scriptblock]::Create($ScriptText)
-                    . $currscriptblock
-                    $currfunct = get-command $CBH.FunctionName
-                }
-                catch {
-                    throw $_
-                }
-
-                $UpdatedFunct = 'Function ' + $currfunct.Name + ' {' + "`r`n" + $CBH.CBH + "`r`n" + $currfunct.definition + "`r`n" + '}'
-
-                $UpdatedFunct
+        foreach ($NewFunction in $FunctionsToCreate) {
+            if ((test-path $NewFunction) -and (-not $Force)) {
+                Write-Warning "Function file already exists, skipping: $NewFunction"
             }
             else {
-                Write-Warning 'Unable to generate CBH for the script text!'
-                $ScriptText
-            }
-        }
-        else {
-            Write-Verbose "Comment based help already exists - skipping CBH insertion and returning original script."
-            $ScriptText
-        }
-    }
-}
+                $FunctionFileName = Split-Path $NewFunction -Leaf
+                $FunctionName = ($FunctionFileName -split '\.')[0]
+                Write-Verbose "Function FileName: $FunctionFileName"
+                Write-Verbose "Function Name: $FunctionName"
+                Write-Output "Creating new public function called $FunctionName.ps1 from template: $TemplateName"
 
-function Get-CallerPreference {
-    <#
-    .Synopsis
-       Fetches "Preference" variable values from the caller's scope.
-    .DESCRIPTION
-       Script module functions do not automatically inherit their caller's variables, but they can be
-       obtained through the $PSCmdlet variable in Advanced Functions.  This function is a helper function
-       for any script module Advanced Function; by passing in the values of $ExecutionContext.SessionState
-       and $PSCmdlet, Get-CallerPreference will set the caller's preference variables locally.
-    .PARAMETER Cmdlet
-       The $PSCmdlet object from a script module Advanced Function.
-    .PARAMETER SessionState
-       The $ExecutionContext.SessionState object from a script module Advanced Function.  This is how the
-       Get-CallerPreference function sets variables in its callers' scope, even if that caller is in a different
-       script module.
-    .PARAMETER Name
-       Optional array of parameter names to retrieve from the caller's scope.  Default is to retrieve all
-       Preference variables as defined in the about_Preference_Variables help file (as of PowerShell 4.0)
-       This parameter may also specify names of variables that are not in the about_Preference_Variables
-       help file, and the function will retrieve and set those as well.
-    .EXAMPLE
-       Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
+                # Start by replacing the functionname
+                $NewFunctionOutput = $TemplateData -replace '%%FunctionName%%', $FunctionName
 
-       Imports the default PowerShell preference variables from the caller into the local scope.
-    .EXAMPLE
-       Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState -Name 'ErrorActionPreference','SomeOtherVariable'
-
-       Imports only the ErrorActionPreference and SomeOtherVariable variables into the local scope.
-    .EXAMPLE
-       'ErrorActionPreference','SomeOtherVariable' | Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
-
-       Same as Example 2, but sends variable names to the Name parameter via pipeline input.
-    .INPUTS
-       String
-    .OUTPUTS
-       None.  This function does not produce pipeline output.
-    .LINK
-       about_Preference_Variables
-    #>
-
-    [CmdletBinding(DefaultParameterSetName = 'AllVariables')]
-    param (
-        [Parameter(Mandatory = $true)]
-        [ValidateScript({ $_.GetType().FullName -eq 'System.Management.Automation.PSScriptCmdlet' })]
-        $Cmdlet,
-
-        [Parameter(Mandatory = $true)]
-        [System.Management.Automation.SessionState]$SessionState,
-
-        [Parameter(ParameterSetName = 'Filtered', ValueFromPipeline = $true)]
-        [string[]]$Name
-    )
-
-    begin {
-        $filterHash = @{}
-    }
-    
-    process {
-        if ($null -ne $Name)
-        {
-            foreach ($string in $Name)
-            {
-                $filterHash[$string] = $true
-            }
-        }
-    }
-
-    end {
-        # List of preference variables taken from the about_Preference_Variables help file in PowerShell version 4.0
-
-        $vars = @{
-            'ErrorView' = $null
-            'FormatEnumerationLimit' = $null
-            'LogCommandHealthEvent' = $null
-            'LogCommandLifecycleEvent' = $null
-            'LogEngineHealthEvent' = $null
-            'LogEngineLifecycleEvent' = $null
-            'LogProviderHealthEvent' = $null
-            'LogProviderLifecycleEvent' = $null
-            'MaximumAliasCount' = $null
-            'MaximumDriveCount' = $null
-            'MaximumErrorCount' = $null
-            'MaximumFunctionCount' = $null
-            'MaximumHistoryCount' = $null
-            'MaximumVariableCount' = $null
-            'OFS' = $null
-            'OutputEncoding' = $null
-            'ProgressPreference' = $null
-            'PSDefaultParameterValues' = $null
-            'PSEmailServer' = $null
-            'PSModuleAutoLoadingPreference' = $null
-            'PSSessionApplicationName' = $null
-            'PSSessionConfigurationName' = $null
-            'PSSessionOption' = $null
-
-            'ErrorActionPreference' = 'ErrorAction'
-            'DebugPreference' = 'Debug'
-            'ConfirmPreference' = 'Confirm'
-            'WhatIfPreference' = 'WhatIf'
-            'VerbosePreference' = 'Verbose'
-            'WarningPreference' = 'WarningAction'
-        }
-
-        foreach ($entry in $vars.GetEnumerator()) {
-            if (([string]::IsNullOrEmpty($entry.Value) -or -not $Cmdlet.MyInvocation.BoundParameters.ContainsKey($entry.Value)) -and
-                ($PSCmdlet.ParameterSetName -eq 'AllVariables' -or $filterHash.ContainsKey($entry.Name))) {
-                
-                $variable = $Cmdlet.SessionState.PSVariable.Get($entry.Key)
-                
-                if ($null -ne $variable) {
-                    if ($SessionState -eq $ExecutionContext.SessionState) {
-                        Set-Variable -Scope 1 -Name $variable.Name -Value $variable.Value -Force -Confirm:$false -WhatIf:$false
-                    }
-                    else {
-                        $SessionState.PSVariable.Set($variable.Name, $variable.Value)
-                    }
+                # Next replace any other variables found in our build environment file that exist in the template.
+                $BuildEnvVars | ForEach-Object {
+                    Write-Verbose "   Replacing %%$($_)%% with $($BuildEnvInfo.$_) if found in template..."
+                    $NewFunctionOutput = $NewFunctionOutput -replace "%%$($_)%%", ($BuildEnvInfo.$_ -join ',')
                 }
-            }
-        }
 
-        if ($PSCmdlet.ParameterSetName -eq 'Filtered') {
-            foreach ($varName in $filterHash.Keys) {
-                if (-not $vars.ContainsKey($varName)) {
-                    $variable = $Cmdlet.SessionState.PSVariable.Get($varName)
-                
-                    if ($null -ne $variable)
-                    {
-                        if ($SessionState -eq $ExecutionContext.SessionState)
-                        {
-                            Set-Variable -Scope 1 -Name $variable.Name -Value $variable.Value -Force -Confirm:$false -WhatIf:$false
-                        }
-                        else
-                        {
-                            $SessionState.PSVariable.Set($variable.Name, $variable.Value)
-                        }
-                    }
-                }
+                $NewFunctionOutput | Out-File -FilePath $NewFunction -Force
             }
         }
     }
 }
 
-function Get-MBFunction {
-    <#
-    .SYNOPSIS
-        Enumerates all functions within lines of code.
-    .DESCRIPTION
-        Enumerates all functions within lines of code.
-    .PARAMETER Code
-        Multiline or piped lines of code to process.
-    .PARAMETER Name
-        Name of a function to return. Default is all functions.
-    .EXAMPLE
-        TBD
-    .NOTES
-       Author: Zachary Loeber
-       Site: http://www.the-little-things.net/
-       Requires: Powershell 3.0
 
-       Version History
-       1.0.0 - Initial release
-    .LINK
-        http://www.the-little-things.net
-    #>
+function Get-MBBuildEnvironment {
+    <#
+        .EXTERNALHELP ModuleBuild-help.xml
+        .LINK
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Get-MBBuildEnvironment.md
+        #>
     [CmdletBinding()]
     param(
-        [parameter(Position = 0, Mandatory = $true, ValueFromPipeline=$true, HelpMessage='Lines of code to process.')]
-        [AllowEmptyString()]
-        [string[]]$Code,
-        [parameter(Position=1, HelpMessage='Name of function to process.')]
-        [string]$Name = '*'
+        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
+        [String]$Path
     )
     begin {
-        $ThisFunc = $MyInvocation.MyCommand.Name
-        Write-Verbose "$($ThisFunc): Begin."
-
-        $Codeblock = @()
-        $ParseError = $null
-        $Tokens = $null
-
-        $predicate = {
-            ($args[0] -is [System.Management.Automation.Language.FunctionDefinitionAst]) -and
-            ($args[0].Name -like $name)
+        if ($script:ThisModuleLoaded -eq $true) {
+            Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
         }
     }
     process {
-        $Codeblock += $Code
-    }
-    end {
-        $ScriptText = ($Codeblock | Out-String).trim("`r`n")
-        Write-Verbose "$($ThisFunc): Attempting to parse AST."
-        $AST = [System.Management.Automation.Language.Parser]::ParseInput($ScriptText, [ref]$Tokens, [ref]$ParseError)
+        # If no path was specified take a few guesses
+        if ([string]::IsNullOrEmpty($Path)) {
+            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
 
-        if($ParseError) {
-            throw "$($ThisFunc): Will not work properly with errors in the script, please modify based on the above errors and retry."
+            if ([string]::IsNullOrEmpty($Path)) {
+                throw 'Unable to locate a *.buildenvironment.json file to parse!'
+            }
+        }
+        if (-not (Test-Path $Path)) {
+            throw "Unable to find the file: $Path"
         }
 
-        # First get all blocks
-        $Blocks = $AST.FindAll($predicate, $true)
-
-        Foreach ($Block in $Blocks) {
-            $FunctionProps = @{
-                Name = $Block.Name
-                Definition = $Block.Extent.Text
-                IsEmbedded = $false
-                AST = $Block
-            }
-
-            if (@(Get-MBParentASTType $Block) -contains 'FunctionDefinitionAst') {
-                $FunctionProps.IsEmbedded = $true
-            }
-
-            New-Object -TypeName psobject -Property $FunctionProps
+        try {
+            $LoadedEnv = Get-Content $Path | ConvertFrom-Json
+            $LoadedEnv | Add-Member -Name 'Path' -Value ((Resolve-Path $Path).ToString()) -MemberType 'NoteProperty'
+            $LoadedEnv
         }
-
-        Write-Verbose "$($ThisFunc): End."
+        catch {
+            throw "Unable to load the build file in $Path"
+        }
     }
 }
 
-## PUBLIC MODULE FUNCTIONS AND DATA ##
 
 function Import-MBModulePrivateFunction {
     <#
@@ -1536,108 +1683,99 @@ function Import-MBModulePrivateFunction {
 }
 
 
-function Add-MBPublicFunction {
+function Import-MBModulePublicFunction {
     <#
         .EXTERNALHELP ModuleBuild-help.xml
         .LINK
-            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Add-MBPublicFunction.md
+            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Import-MBModulePublicFunction.md
         #>
 
-    [CmdletBinding()]
+    [CmdletBinding( SupportsShouldProcess = $True, ConfirmImpact = 'High' )]
     param(
         [parameter(Position = 0, ValueFromPipeline = $TRUE)]
-        [string]$Name,
-        [switch]$Force
+        [String]$Path,
+        [parameter(Position = 1, ValueFromPipeline = $TRUE, Mandatory = $TRUE)]
+        [String]$ModulePath,
+        [parameter(Position = 2)]
+        [String]$Name = '*',
+        [parameter(Position = 3)]
+        [Switch]$DoNotAddCBH
     )
-    dynamicparam {
-        # Create dictionary
-        $DynamicParameters = New-Object System.Management.Automation.RuntimeDefinedParameterDictionary
-        $BuildPath = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
-
-        if ((Test-Path $BuildPath) -and ($BuildPath -like "*.buildenvironment.json")) {
-            try {
-                $LoadedBuildEnv = Get-Content $BuildPath | ConvertFrom-Json
-                $TemplateNames = @((Get-ChildItem -Path $LoadedBuildEnv.FunctionTemplates -Filter '*.tem').BaseName)
-
-                $NewParamSettings = @{
-                    Name = 'TemplateName'
-                    Type = 'string'
-                    ValidateSet = $TemplateNames
-                    HelpMessage = "Use this template file for the new function"
-                }
-
-                # Add new dynamic parameter to dictionary
-                New-MBDynamicParameter @NewParamSettings -Dictionary $DynamicParameters
-            }
-            catch {
-                throw "Unable to load the build file in $BuildPath"
-            }
-        }
-
-        # Return dictionary with dynamic parameters
-        $DynamicParameters
-    }
     begin {
         if ($script:ThisModuleLoaded -eq $true) {
             Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
         }
-        $FunctionName = $MyInvocation.MyCommand.Name
-        Write-Verbose "$($FunctionName): Begin."
+        if ($ModulePath -notmatch '.*\.[psm1|psd1]') {
+            throw 'Please provide the full path to a psm1 or psd1 file to process'
+        }
+        else {
+            try {
+                $LoadedModule = Import-Module -Name $ModulePath -Force -PassThru
+                $LoadedFunctions = Get-Command -Module $LoadedModule.Name -CommandType:Function
+            }
+            catch {
+                throw "Unable to import $ModulePath"
+            }
+        }
     }
     process {
-        # Pull in the dynamic parameters first
-        New-MBDynamicParameter -CreateVariables -BoundParameters $PSBoundParameters
+        # If no path was specified take a few guesses
+        if ([string]::IsNullOrEmpty($Path)) {
+            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
 
-        # Attempt to get the build environment data and create our template lookup table
-        try {
-            $BuildEnvInfo = Get-MBBuildEnvironment
-            $BuildEnvPath = Split-Path (Split-Path ((Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' -ErrorAction:SilentlyContinue | Select-Object -First 1).FullName))
-            $PublicFunctionSrc = Join-Path $BuildEnvPath $BuildEnvInfo.PublicFunctionSource
-            $TemplatePath = Join-Path $BuildEnvPath $BuildEnvInfo.FunctionTemplates
-            $TemplateLookup = @{}
-            Get-ChildItem -Path $TemplatePath -Filter '*.tem' | ForEach-Object {
-                $TemplateLookup.($_.BaseName) = $_.FullName
+            if ([string]::IsNullOrEmpty($Path)) {
+                throw 'Unable to locate a *.buildenvironment.json file to parse!'
             }
-            $BuildEnvVars = (Get-Member -Type 'NoteProperty' -InputObject $LoadedBuildEnv).Name
+        }
+        if (-not (Test-Path $Path)) {
+            throw "Unable to find the file: $Path"
+        }
+
+        try {
+            $LoadedBuildEnv = Get-Content $Path | ConvertFrom-Json
+            $ProjectPath = Split-Path (Split-Path $Path)
+            $PublicSrcPath = Join-Path $ProjectPath $LoadedBuildEnv.PublicFunctionSource
         }
         catch {
-            throw "Unable to find or load a buildenvironment json file!"
+            throw "Unable to load the build file in $Path"
         }
 
-        Write-Verbose "Using public function directory: $PublicFunctionSrc"
-        Write-Verbose "Using function template path: $TemplatePath"
+        Foreach ($LoadedFunction in $LoadedFunctions) {
+            if ($LoadedFunction.Name -like $Name) {
+                $NewScriptFile = Join-Path $PublicSrcPath "$($LoadedFunction.Name).ps1"
+                if (-not (Test-Path $NewScriptFile)) {
+                    $NewScript = "function $($LoadedFunction.Name) {"
+                    $NewScript += $LoadedFunction.Definition
+                    $NewScript += '}'
 
-        $TemplateData = Get-Content -Path $TemplateLookup[$TemplateName]
-        $FunctionFullPath = (Join-Path $PublicFunctionSrc $Name) + ".ps1"
-        if ((Test-MBPublicFunctionName $Name -ShowIssues) -or $Force) {
-            Write-Verbose "Adding function to be created: $FunctionFullPath"
-            $FunctionsToCreate += $FunctionFullPath
+                    if ($pscmdlet.ShouldProcess("$($LoadedFunction.Name)", "Import public function $($LoadedFunction.Name) to the project $($LoadedBuildEnv.ModuleToBuild)?")) {
+                        if ($DoNotAddCBH) {
+                            try {
+                                Write-Verbose "Writing public script file to $NewScriptFile"
+                                $NewScript | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
+                            }
+                            catch {
+                                throw "Unable to save file $NewScriptFile"
+                            }
+                        }
+                        else {
+                            try {
+                                $NewScript | Add-MBMissingCBH | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
+                            }
+                            catch {
+                                throw $_
+                            }
+                        }
+                    }
+                }
+                else {
+                    Write-Warning "Skipping the following file as it already exists: $NewScriptFile"
+                }
+            }
         }
     }
     end {
-        foreach ($NewFunction in $FunctionsToCreate) {
-            if ((test-path $NewFunction) -and (-not $Force)) {
-                Write-Warning "Function file already exists, skipping: $NewFunction"
-            }
-            else {
-                $FunctionFileName = Split-Path $NewFunction -Leaf
-                $FunctionName = ($FunctionFileName -split '\.')[0]
-                Write-Verbose "Function FileName: $FunctionFileName"
-                Write-Verbose "Function Name: $FunctionName"
-                Write-Output "Creating new public function called $FunctionName.ps1 from template: $TemplateName"
-
-                # Start by replacing the functionname
-                $NewFunctionOutput = $TemplateData -replace '%%FunctionName%%', $FunctionName
-
-                # Next replace any other variables found in our build environment file that exist in the template.
-                $BuildEnvVars | ForEach-Object {
-                    Write-Verbose "   Replacing %%$($_)%% with $($BuildEnvInfo.$_) if found in template..."
-                    $NewFunctionOutput = $NewFunctionOutput -replace "%%$($_)%%", ($BuildEnvInfo.$_ -join ',')
-                }
-
-                $NewFunctionOutput | Out-File -FilePath $NewFunction -Force
-            }
-        }
+        Remove-Module -Name $LoadedModule.Name
     }
 }
 
@@ -1760,144 +1898,6 @@ Enjoy!
             Remove-Module Plaster -Force
         } Catch {
             $PSCmdlet.ThrowTerminatingError()
-        }
-    }
-}
-
-
-function Import-MBModulePublicFunction {
-    <#
-        .EXTERNALHELP ModuleBuild-help.xml
-        .LINK
-            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Import-MBModulePublicFunction.md
-        #>
-
-    [CmdletBinding( SupportsShouldProcess = $True, ConfirmImpact = 'High' )]
-    param(
-        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
-        [String]$Path,
-        [parameter(Position = 1, ValueFromPipeline = $TRUE, Mandatory = $TRUE)]
-        [String]$ModulePath,
-        [parameter(Position = 2)]
-        [String]$Name = '*',
-        [parameter(Position = 3)]
-        [Switch]$DoNotAddCBH
-    )
-    begin {
-        if ($script:ThisModuleLoaded -eq $true) {
-            Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
-        }
-        if ($ModulePath -notmatch '.*\.[psm1|psd1]') {
-            throw 'Please provide the full path to a psm1 or psd1 file to process'
-        }
-        else {
-            try {
-                $LoadedModule = Import-Module -Name $ModulePath -Force -PassThru
-                $LoadedFunctions = Get-Command -Module $LoadedModule.Name -CommandType:Function
-            }
-            catch {
-                throw "Unable to import $ModulePath"
-            }
-        }
-    }
-    process {
-        # If no path was specified take a few guesses
-        if ([string]::IsNullOrEmpty($Path)) {
-            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
-
-            if ([string]::IsNullOrEmpty($Path)) {
-                throw 'Unable to locate a *.buildenvironment.json file to parse!'
-            }
-        }
-        if (-not (Test-Path $Path)) {
-            throw "Unable to find the file: $Path"
-        }
-
-        try {
-            $LoadedBuildEnv = Get-Content $Path | ConvertFrom-Json
-            $ProjectPath = Split-Path (Split-Path $Path)
-            $PublicSrcPath = Join-Path $ProjectPath $LoadedBuildEnv.PublicFunctionSource
-        }
-        catch {
-            throw "Unable to load the build file in $Path"
-        }
-
-        Foreach ($LoadedFunction in $LoadedFunctions) {
-            if ($LoadedFunction.Name -like $Name) {
-                $NewScriptFile = Join-Path $PublicSrcPath "$($LoadedFunction.Name).ps1"
-                if (-not (Test-Path $NewScriptFile)) {
-                    $NewScript = "function $($LoadedFunction.Name) {"
-                    $NewScript += $LoadedFunction.Definition
-                    $NewScript += '}'
-
-                    if ($pscmdlet.ShouldProcess("$($LoadedFunction.Name)", "Import public function $($LoadedFunction.Name) to the project $($LoadedBuildEnv.ModuleToBuild)?")) {
-                        if ($DoNotAddCBH) {
-                            try {
-                                Write-Verbose "Writing public script file to $NewScriptFile"
-                                $NewScript | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
-                            }
-                            catch {
-                                throw "Unable to save file $NewScriptFile"
-                            }
-                        }
-                        else {
-                            try {
-                                $NewScript | Add-MBMissingCBH | Out-File -FilePath $NewScriptFile -Encoding:utf8 -Confirm:$false
-                            }
-                            catch {
-                                throw $_
-                            }
-                        }
-                    }
-                }
-                else {
-                    Write-Warning "Skipping the following file as it already exists: $NewScriptFile"
-                }
-            }
-        }
-    }
-    end {
-        Remove-Module -Name $LoadedModule.Name
-    }
-}
-
-
-function Get-MBBuildEnvironment {
-    <#
-        .EXTERNALHELP ModuleBuild-help.xml
-        .LINK
-            https://github.com/zloeber/ModuleBuild/tree/master/release/0.3.0/docs/Get-MBBuildEnvironment.md
-        #>
-    [CmdletBinding()]
-    param(
-        [parameter(Position = 0, ValueFromPipeline = $TRUE)]
-        [String]$Path
-    )
-    begin {
-        if ($script:ThisModuleLoaded -eq $true) {
-            Get-CallerPreference -Cmdlet $PSCmdlet -SessionState $ExecutionContext.SessionState
-        }
-    }
-    process {
-        # If no path was specified take a few guesses
-        if ([string]::IsNullOrEmpty($Path)) {
-            $Path = (Get-ChildItem -File -Filter "*.buildenvironment.json" -Path '.\','..\','.\build\' | Select-Object -First 1).FullName
-
-            if ([string]::IsNullOrEmpty($Path)) {
-                throw 'Unable to locate a *.buildenvironment.json file to parse!'
-            }
-        }
-        if (-not (Test-Path $Path)) {
-            throw "Unable to find the file: $Path"
-        }
-
-        try {
-            $LoadedEnv = Get-Content $Path | ConvertFrom-Json
-            $LoadedEnv | Add-Member -Name 'Path' -Value ((Resolve-Path $Path).ToString()) -MemberType 'NoteProperty'
-            $LoadedEnv
-        }
-        catch {
-            throw "Unable to load the build file in $Path"
         }
     }
 }
