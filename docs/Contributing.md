@@ -1,6 +1,6 @@
 # Contributing to ModuleBuild
 
-Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloeber/ModuleBuild)
+Project Site: [https://github.com/ModuleBuild/ModuleBuild](https://github.com/ModuleBuild/ModuleBuild)
 
 There are some important things to be aware of if you plan on contributing to this project.
 

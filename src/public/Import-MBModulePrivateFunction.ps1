@@ -25,7 +25,7 @@ function Import-MBModulePrivateFunction {
     Files, in regex pattern format, that will be ignored in this import.
 
     .LINK
-    https://github.com/zloeber/ModuleBuild
+    https://github.com/ModuleBuild/ModuleBuild
 
     .EXAMPLE
     Import-MBModulePrivateFunction -ModulePath 'C:\Temp\PSCloudFlare\PSCloudFlare.psd1'

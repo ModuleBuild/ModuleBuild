@@ -98,13 +98,13 @@ PrivateData = @{
         Tags = 'scaffold','Module','Invoke-Build'
 
         # A URL to the license for this module.
-        LicenseUri = 'https://github.com/zloeber/ModuleBuild/raw/master/LICENSE.md'
+        LicenseUri = 'https://github.com/ModuleBuild/ModuleBuild/raw/master/LICENSE.md'
 
         # A URL to the main website for this project.
-        ProjectUri = 'https://github.com/zloeber/ModuleBuild'
+        ProjectUri = 'https://github.com/ModuleBuild/ModuleBuild'
 
         # A URL to an icon representing this module.
-        IconUri = 'https://github.com/zloeber/ModuleBuild/raw/master/src/other/powershell-project.png'
+        IconUri = 'https://github.com/ModuleBuild/ModuleBuild/raw/master/src/other/powershell-project.png'
 
         # ReleaseNotes of this module
         ReleaseNotes = '0.3.1 release'

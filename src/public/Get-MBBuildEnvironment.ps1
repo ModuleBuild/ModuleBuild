@@ -10,7 +10,7 @@ function Get-MBBuildEnvironment {
     Specifies the path to a buildenvironment.json file.
 
     .LINK
-    https://github.com/zloeber/ModuleBuild
+    https://github.com/ModuleBuild/ModuleBuild
 
     .EXAMPLE
     Get-MBBuildEnvironment

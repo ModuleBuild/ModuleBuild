@@ -1,6 +1,6 @@
 ﻿use_directory_urls: false
 site_author: Zachary Loeber
-copyright: ModuleBuild is licensed under <a href='https://github.com/zloeber/ModuleBuild/blob/master/License.md'>this</a> license
+copyright: ModuleBuild is licensed under <a href='https://github.com/ModuleBuild/ModuleBuild/blob/master/License.md'>this</a> license
 theme: readthedocs
 site_name: ModuleBuild Docs
 pages:
@@ -28,5 +28,5 @@ pages:
   - 10 - Converting To ModuleBuild: Usage/10 - Converting To ModuleBuild.md
   - 11 - Module Plugins: Usage/11 - Module Plugins.md
   - 12 - Writing Pester tests: Usage/12 - Writing Pester tests.md
-repo_url: https://github.com/zloeber/ModuleBuild
+repo_url: https://github.com/ModuleBuild/ModuleBuild
 

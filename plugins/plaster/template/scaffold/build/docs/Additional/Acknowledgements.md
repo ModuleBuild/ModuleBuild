@@ -4,4 +4,4 @@ Project Site: [<%=$PLASTER_PARAM_ModuleWebsite%>](<%=$PLASTER_PARAM_ModuleWebsit
 
 This project owes some acknowledgements to other projects. Here are some other authors or projects which have made this project possible. If you believe you or a project should be included in this list please let us know.
 
-[ModuleBuild](https://github.com/zloeber/ModuleBuild) - A PowerShell module build framework.
+[ModuleBuild](https://github.com/ModuleBuild/ModuleBuild) - A PowerShell module build framework.

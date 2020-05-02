@@ -9,7 +9,7 @@ function Test-MBPublicFunctionName {
     .PARAMETER ShowIssues
     Displays possible issues with function
     .LINK
-    https://github.com/zloeber/ModuleBuild
+    https://github.com/ModuleBuild/ModuleBuild
     .EXAMPLE
     TBD
     #>

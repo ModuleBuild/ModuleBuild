@@ -1,7 +1,7 @@
 ﻿---
 external help file: ModuleBuild-help.xml
 Module Name: ModuleBuild
-online version: https://github.com/zloeber/ModuleBuild
+online version: https://github.com/ModuleBuild/ModuleBuild
 schema: 2.0.0
 ---
 
@@ -57,5 +57,5 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## RELATED LINKS
 
-[https://github.com/zloeber/ModuleBuild](https://github.com/zloeber/ModuleBuild)
+[https://github.com/ModuleBuild/ModuleBuild](https://github.com/ModuleBuild/ModuleBuild)
 

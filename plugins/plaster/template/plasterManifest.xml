@@ -4,7 +4,7 @@
   templateType="Project" xmlns="http://www.microsoft.com/schemas/PowerShell/Plaster/v1">
   <metadata>
     <name>ModuleBuild</name>
-    <id>2ff2f6d2-93f9-4aec-a353-a293d107aaf0</id>
+    <id>163403c5-2eed-41a0-9d17-434bb09b9ba9</id>
     <version>0.0.1</version>
     <title>New ModuleBuild Project</title>
     <description>Create a new PowerShell Module with a ModuleBuild wrapper</description>
@@ -164,21 +164,21 @@
   </parameters>
   <content>
     <newModuleManifest
-      description="${PLASTER_PARAM_ModuleDescription}"
-      copyright="(c) ${PLASTER_Year} ${PLASTER_PARAM_ModuleCompanyName}. All rights reserved."
-      tags="${PLASTER_PARAM_ModuleTags}"
-      companyName="${PLASTER_PARAM_ModuleCompanyName}"
+      iconUri="${PLASTER_PARAM_ModuleWebsite}/raw/master/src/other/powershell-project.png"
       author="${PLASTER_PARAM_ModuleAuthor}"
-      licenseUri="${PLASTER_PARAM_ModuleWebsite}/raw/master/LICENSE.md"
-      projectUri="${PLASTER_PARAM_ModuleWebsite}"
+      tags="${PLASTER_PARAM_ModuleTags}"
       rootModule="${PLASTER_PARAM_ModuleName}.psm1"
       variablesToExport=""
-      aliasesToExport=""
-      iconUri="${PLASTER_PARAM_ModuleWebsite}/raw/master/src/other/powershell-project.png"
       functionsToExport="*"
-      moduleVersion="${PLASTER_PARAM_ModuleVersion}"
+      description="${PLASTER_PARAM_ModuleDescription}"
       encoding="UTF8-NoBOM"
-      destination="${PLASTER_PARAM_ModuleName}.psd1" />
+      copyright="(c) ${PLASTER_Year} ${PLASTER_PARAM_ModuleCompanyName}. All rights reserved."
+      companyName="${PLASTER_PARAM_ModuleCompanyName}"
+      licenseUri="${PLASTER_PARAM_ModuleWebsite}/raw/master/LICENSE.md"
+      destination="${PLASTER_PARAM_ModuleName}.psd1"
+      moduleVersion="${PLASTER_PARAM_ModuleVersion}"
+      aliasesToExport=""
+      projectUri="${PLASTER_PARAM_ModuleWebsite}" />
     <templateFile
       source="scaffold\gitignore"
       destination=".gitignore" />
