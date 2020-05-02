@@ -18,7 +18,7 @@ Powershell Gallery (PS 5.0, Preferred method)
 `install-module ModuleBuild -Scope:CurrentUser`
 
 Manual Installation
-`iex (New-Object Net.WebClient).DownloadString("https://github.com/zloeber/ModuleBuild/raw/master/Install.ps1")`
+`iex (New-Object Net.WebClient).DownloadString("https://github.com/ModuleBuild/ModuleBuild/raw/master/Install.ps1")`
 
 Or clone this repository to your local machine, extract, go to the .\releases\ModuleBuild directory
 and import the module to your session to test, but not install this module.
@@ -53,14 +53,16 @@ Studio Code and ensure that the PowerShell extension is installed.
 * [Visual Studio Code](https://code.visualstudio.com/)
 * [PowerShell Extension](https://marketplace.visualstudio.com/items?itemName=ms-vscode.PowerShell)
 
-More contributing information can be found [here](https://github.com/zloeber/ModuleBuild/blob/master/docs/Contributing.md).
+More contributing information can be found [here](https://github.com/ModuleBuild/ModuleBuild/blob/master/docs/Contributing.md).
 
 This module is tested with the PowerShell testing framework Pester. To run all tests, just start the included build script with the test param `.\Build.ps1 -test`.
 
-## Other Information
+## Authors
 
-**Authors:**
-- [Zachary Loeber](https://www.the-little-things.net)
+- [Zachary Loeber](https://github.com/zloeber)
+
 - [Justin Perdok](https://github.com/justin-p)
 
-**Website:** https://github.com/zloeber/ModuleBuild
+## Links
+
+[Website](https://github.com/ModuleBuild/ModuleBuild)

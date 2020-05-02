@@ -1,7 +1,7 @@
 # ModuleBuild
 A scaffolding framework which can be used to kickstart a generic PowerShell module project.
 
-Project Site: [https://github.com/zloeber/ModuleBuild](https://github.com/zloeber/ModuleBuild)
+Project Site: [https://github.com/ModuleBuild/ModuleBuild](https://github.com/ModuleBuild/ModuleBuild)
 
 ## What is ModuleBuild?
 A scaffolding framework which can be used to kickstart a generic PowerShell module project with an Invoke-Build backend for regular deployments and other automated tasks.

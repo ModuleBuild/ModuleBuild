@@ -50,7 +50,7 @@ if ($Script:BuildEnv.OptionTranscriptEnabled) {
 #Synopsis: Validate system requirements are met
 task ValidateRequirements {
     Write-Description White 'Validating System Requirements for Build' -accent
-    assert ($PSVersionTable.PSVersion.Major.ToString() -eq '5') 'Powershell 5 is required for this build to function properly (you can comment this assert out if you are able to work around this requirement)'
+    assert ($PSVersionTable.PSVersion.Major.ToString() -ge '5') 'Powershell 5 or greater is required for this build to function properly.'
 }
 
 # Synopsis: Run pre-build scripts (such as other builds)
@@ -59,7 +59,7 @@ task PreBuildTasks {
     $BuildToolPath = Join-Path $BuildRoot $Script:BuildEnv.BuildToolFolder
     $PreBuildPath = Join-Path $BuildToolPath 'startup'
     # Dot source any pre build scripts.
-    Get-ChildItem -Path $PreBuildPath -Recurse -Filter "*.ps1" -File | Foreach {
+    Get-ChildItem -Path $PreBuildPath -Recurse -Filter "*.ps1" -File | ForEach-Object {
         Write-Description White "Dot sourcing pre-build script file: $($_.Name)" -level 2
         . $_.FullName
     }

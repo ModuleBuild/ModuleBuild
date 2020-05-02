@@ -9,7 +9,7 @@ function Add-MBPublicFunction {
     .PARAMETER Force
     Ignore function name best practices warnings.
     .LINK
-    https://github.com/zloeber/ModuleBuild
+    https://github.com/ModuleBuild/ModuleBuild
     .EXAMPLE
     Add-MBPublicFunction -Name 'New-AwesomeFunction' -TemplateName:PlainPublicFunction
     #>

@@ -19,7 +19,7 @@ function Import-MBModulePublicFunction {
     Do not attempt to find and insert comment based help into the function.
 
     .LINK
-    https://github.com/zloeber/ModuleBuild
+    https://github.com/ModuleBuild/ModuleBuild
 
     .EXAMPLE
     Import-MBModulePrivateFunction -ModulePath 'C:\Temp\PSCloudFlare\release\PSCloudFlare\PSCloudFlare.psd1' -force

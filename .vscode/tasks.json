@@ -18,10 +18,10 @@
                 "command": "powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File ${workspaceRoot}\\Build.ps1 -BuildModule"
             },
             "linux": {
-                "command": "/usr/bin/powershell -NoProfile -File ${workspaceRoot}\\Build.ps1 -BuildModule"
+                "command": "pwsh -NoProfile -File ${workspaceRoot}/Build.ps1 -BuildModule"
             },
             "osx": {
-                "command": "/usr/local/bin/powershell -NoProfile -File ${workspaceRoot}\\Build.ps1 -BuildModule"
+                "command": "pwsh -NoProfile -File ${workspaceRoot}/Build.ps1 -BuildModule"
             },
             "group": {
                 "kind": "build",
@@ -39,10 +39,10 @@
                 "command": "powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File ${workspaceRoot}\\Build.ps1 -Test"
             },
             "linux": {
-                "command": "/usr/bin/powershell -NoProfile -File ${workspaceRoot}\\Build.ps1 -Test"
+                "command": "pwsh -NoProfile -File ${workspaceRoot}/Build.ps1 -Test"
             },
             "osx": {
-                "command": "/usr/local/bin/powershell -NoProfile -File ${workspaceRoot}\\Build.ps1 -Test"
+                "command": "pwsh -NoProfile -File ${workspaceRoot}/Build.ps1 -Test"
             },
             "group": {
                 "kind": "build",
@@ -60,10 +60,10 @@
                 "command": "powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File ${workspaceRoot}\\Build.ps1 -TestBuildAndInstallModule"
             },
             "linux": {
-                "command": "/usr/bin/powershell -NoProfile -File ${workspaceRoot}\\Build.ps1  -TestBuildAndInstallModule"
+                "command": "pwsh -NoProfile -File ${workspaceRoot}/Build.ps1  -TestBuildAndInstallModule"
             },
             "osx": {
-                "command": "/usr/local/bin/powershell -NoProfile -File ${workspaceRoot}\\Build.ps1 -TestBuildAndInstallModule"
+                "command": "pwsh -NoProfile -File ${workspaceRoot}/Build.ps1 -TestBuildAndInstallModule"
             },
             "group": {
                 "kind": "build",
@@ -81,10 +81,10 @@
                 "command": "powershell.exe -NoLogo -NoProfile -ExecutionPolicy Bypass -File ${workspaceRoot}\\Build.ps1 -AddMissingCBH"
             },
             "linux": {
-                "command": "/usr/bin/powershell -NoProfile -File ${workspaceRoot}\\Build.ps1 -AddMissingCBH"
+                "command": "pwsh -NoProfile -File ${workspaceRoot}/Build.ps1 -AddMissingCBH"
             },
             "osx": {
-                "command": "/usr/local/bin/powershell -NoProfile -File ${workspaceRoot}\\Build.ps1 -AddMissingCBH"
+                "command": "pwsh -NoProfile -File ${workspaceRoot}/Build.ps1 -AddMissingCBH"
             },
             "group": {
                 "kind": "build",

@@ -13,7 +13,7 @@ function Initialize-MBModuleBuild {
     If specified, will import a source module manifest file for module information.
 
     .LINK
-    https://github.com/zloeber/ModuleBuild
+    https://github.com/ModuleBuild/ModuleBuild
 
     .EXAMPLE
     PS> Initialize-MBModuleBuild -Path C:\Work\NewModule

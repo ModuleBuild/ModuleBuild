@@ -17,9 +17,9 @@ if ((Get-Variable 'BuildEnv' -ErrorAction:SilentlyContinue) -eq $null) {
         Encoding = 'utf8'
         ModuleToBuild = 'ModuleBuild'
         ModuleVersion = '0.3.0'
-        ModuleWebsite = 'https://github.com/zloeber/ModuleBuild'
+        ModuleWebsite = 'https://github.com/ModuleBuild/ModuleBuild'
         ModuleCopyright = "(c) $((get-date).Year.ToString()) Zachary Loeber. All rights reserved."
-        ModuleLicenseURI = 'https://github.com/zloeber/ModuleBuild/LICENSE.md'
+        ModuleLicenseURI = 'https://github.com/ModuleBuild/ModuleBuild/LICENSE.md'
         ModuleTags = 'scaffold, Module, Invoke-Build' -split ','
         ModuleAuthor = 'Zachary Loeber'
         ModuleDescription = 'A scaffolding framework which can be used to kickstart a generic PowerShell module project. '

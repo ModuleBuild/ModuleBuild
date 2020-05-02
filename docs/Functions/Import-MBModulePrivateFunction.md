@@ -1,7 +1,7 @@
 ﻿---
 external help file: ModuleBuild-help.xml
 Module Name: ModuleBuild
-online version: https://github.com/zloeber/ModuleBuild
+online version: https://github.com/ModuleBuild/ModuleBuild
 schema: 2.0.0
 ---
 
@@ -172,5 +172,5 @@ Be very careful before importing everything as any wayward functions might get i
 
 ## RELATED LINKS
 
-[https://github.com/zloeber/ModuleBuild](https://github.com/zloeber/ModuleBuild)
+[https://github.com/ModuleBuild/ModuleBuild](https://github.com/ModuleBuild/ModuleBuild)
 

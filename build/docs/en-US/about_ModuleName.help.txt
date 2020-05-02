@@ -16,4 +16,4 @@ KEYWORDS
     scaffold, Module, Invoke-Build
 
 SEE ALSO
-    https://github.com/zloeber/ModuleBuild
+    https://github.com/ModuleBuild/ModuleBuild
